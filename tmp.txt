@@ -1,0 +1,11 @@
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY  'MysqlPassword';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+
+FLUSH PRIVILEGES;
+
+
+nohup  java -Xms1024m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/root/my_data/Nbug-admin.hprof -jar  Nbug-admin.jar --spring.profiles.active=prod >> /root/my_data/Nbug-admin.log 2>&1 &
+
+
+nohup  java -Xms1024m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/root/my_data/Nbug-front.hprof -jar Nbug-front.jar --spring.profiles.active=prod >> /root/my_data/Nbug-front.log 2>&1 &
