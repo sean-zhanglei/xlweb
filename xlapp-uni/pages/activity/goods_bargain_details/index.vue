@@ -815,7 +815,7 @@
 	}
 
 	.go {
-		color: #E93323;
+		color: #55aa00;
         text-align: center;
 		font-size: 28rpx;
 		margin-top: 26rpx;
@@ -1065,7 +1065,7 @@
 	}
 
 	.bargain .header .time .red {
-		color: #fc4141;
+		color: #55aa00;
 	}
 
 	.bargain .header .people {
@@ -1187,7 +1187,7 @@
 		height: 100%;
 		transition: width 0.6s ease;
 		border-radius: 20rpx;
-		background-image: linear-gradient(to right, #ffa363 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #55aa00 100%);
 	}
 
 	.bargain .money {
@@ -1453,7 +1453,7 @@
 					font-size: 22rpx;
 					padding: 2rpx 8rpx;
 					border-radius: 30rpx;
-					background-color: #E93323;
+					background-color: #55aa00;
 					color: #fff;
 				}
 
@@ -1465,7 +1465,7 @@
 					position: absolute;
 					bottom: -54rpx;
 					left: 14rpx;
-					border-color: #E93323 transparent transparent;
+					border-color: #55aa00 transparent transparent;
 				}
 			}
 

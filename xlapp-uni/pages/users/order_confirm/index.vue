@@ -1030,10 +1030,7 @@
 
 	.order-submission .allAddress {
 		width: 100%;
-		background: linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: -webkit-linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: -moz-linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
+		background: linear-gradient(to bottom, #55aa00 0%, #f5f5f5 100%);
 		padding: 100rpx 30rpx 0 30rpx;
 	}
 

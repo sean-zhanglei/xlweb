@@ -564,8 +564,8 @@
 		line-height: 86rpx;
 		margin: 0 auto;
 		font-size: 32rpx;
-		color: #E93323 ;
-		border: 1px solid #E93323;
+		color: #55aa00 ;
+		border: 1px solid #55aa00;
 	}
 	.relative{
 		position: relative;
@@ -582,7 +582,7 @@
 	.status{
 		display: flex;
 		width: 750rpx;
-		// background-color: #E93323;
+		// background-color: #55aa00;
 		height: var(--status-bar-height);
 	}
 	

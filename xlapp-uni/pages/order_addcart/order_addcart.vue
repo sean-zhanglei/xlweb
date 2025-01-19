@@ -1035,7 +1035,7 @@
 
 	.shoppingCart .list .item .picTxt .text .money {
 		font-size: 32rpx;
-		color: #E93323;
+		color: #55aa00;
 		margin-top: 28rpx;
 		font-weight: 600;
 	}

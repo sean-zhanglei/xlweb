@@ -1154,7 +1154,7 @@
 		height: 110rpx;
 		padding: 0 30rpx;
 		box-sizing: border-box;
-		background-color: #E93323;
+		background-color: #55aa00;
 	}
 
 	.product-con .nav .money {
@@ -1287,7 +1287,7 @@
 
 	.product-con .footer .bnt .buy {
 		border-radius: 0 50rpx 50rpx 0;
-		background-image: linear-gradient(to right, #fa6514 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #55aa00 100%);
 	}
 
 	.setCollectBox {

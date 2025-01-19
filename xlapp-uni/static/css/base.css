@@ -5,16 +5,16 @@
 }
 
 .bg-color {
-	background-color: #E93323 !important
+	background-color: #55aa00 !important
 }
 
 .icon-color {
-	color: #E93323
+	color: #55aa00
 }
 
 .cart-color {
-	color: #E93323 !important;
-	border: 1px solid #E93323 !important
+	color: #55aa00 !important;
+	border: 1px solid #55aa00 !important
 }
 
 .padding20 {
@@ -226,8 +226,8 @@ radio .wx-radio-input {
 }
 
 radio .wx-radio-input.wx-radio-input-checked {
-	border: 1px solid #E93323 !important;
-	background-color: #E93323 !important
+	border: 1px solid #55aa00 !important;
+	background-color: #55aa00 !important
 }
 
 radio .uni-radio-input {
@@ -237,8 +237,8 @@ radio .uni-radio-input {
 }
 
 radio .uni-radio-input.uni-radio-input-checked {
-	border: 1px solid #E93323 !important;
-	background-color: #E93323 !important
+	border: 1px solid #55aa00 !important;
+	background-color: #55aa00 !important
 }
 
 checkbox .wx-checkbox-input {
@@ -249,8 +249,8 @@ checkbox .wx-checkbox-input {
 }
 
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-	border: 1px solid #E93323 !important;
-	background-color: #E93323 !important;
+	border: 1px solid #55aa00 !important;
+	background-color: #55aa00 !important;
 	color: #fff!important;
 	margin-right: 0 !important;
 }
@@ -266,8 +266,8 @@ checkbox .uni-checkbox-input {
 }
 
 checkbox .uni-checkbox-input.uni-checkbox-input-checked {
-	border: 1px solid #E93323 !important;
-	background-color: #E93323 !important;
+	border: 1px solid #55aa00 !important;
+	background-color: #55aa00 !important;
 	color: #fff!important
 }
 

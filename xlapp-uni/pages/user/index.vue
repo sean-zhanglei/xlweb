@@ -413,7 +413,7 @@
 		}
 
 		.head {
-			background: linear-gradient(360deg, rgba(255, 121, 49, 0) 0%, rgba(248, 74, 29, 0.82) 39%, #E93323 100%);
+			background: linear-gradient(360deg, rgba(255, 121, 49, 0) 0%, rgba(85, 170, 127, 0.8) 39%, #55aa00 100%);
 			// padding: 0 30rpx;
 
 			.user-card {

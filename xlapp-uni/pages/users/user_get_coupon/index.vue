@@ -211,8 +211,8 @@
 	}
 
 	.nav .acea-row.on {
-		border-bottom-color: #E93323;
-		color: #E93323;
+		border-bottom-color: #55aa00;
+		color: #55aa00;
 	}
 
 	.condition .line-title {

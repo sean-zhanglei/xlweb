@@ -188,7 +188,7 @@
 								context.restore();
 								
 								context.setFontSize(72);
-								context.setFillStyle('#fc4141');
+								context.setFillStyle('#55aa00');
 								context.fillText(price, 250, 210);
 								
 								context.setFontSize(32);

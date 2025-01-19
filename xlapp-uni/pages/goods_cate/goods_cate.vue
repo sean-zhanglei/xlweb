@@ -192,10 +192,10 @@
 	
 	.productSort .aside .item.on {
 		background-color: #fff;
-		border-left: 4rpx solid #fc4141;
+		border-left: 4rpx solid #55aa00;
 		width: 100%;
 		text-align: center;
-		color: #fc4141;
+		color: #55aa00;
 		font-weight: bold;
 	}
 	

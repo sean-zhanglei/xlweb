@@ -1,6 +1,9 @@
 <template>
 	<view>
 		<view class="page-index" :class="{'bgf':navIndex >0}">
+		    <!-- #ifdef APP || MP-WEIXIN -->
+				<view :style="{height:statusBarHeight,backgroundColor:$theme-color}"></view>
+		    <!-- #endif -->
 			<!-- #ifdef H5||APP||MP-WEIXIN -->
 			<view class="header">
 				<view class="serch-wrapper flex">
@@ -966,7 +969,7 @@
 			padding: 28rpx 30rpx;
 
 			.serch-wrapper {
-				margin-top: var(--status-bar-height);
+				/*margin-top: var(--status-bar-height);*/
 				align-items: center;
 				
 				/* #ifdef MP-WEIXIN */
@@ -976,13 +979,13 @@
 
 				.logo {
 					width: 118rpx;
-					height: 42rpx;
+					height: 58rpx;
 					margin-right: 24rpx;
 				}
 
 				image {
-					width: 118rpx;
-					height: 42rpx;
+					width: 58rpx;
+					height: 58rpx;
 				}
 
 				.input {
@@ -1023,12 +1026,13 @@
 			background-color: $theme-color;
 
 			.serch-wrapper {
+				margin-top: var(--status-bar-height);
 				height: 100%;
 				align-items: center;
 				padding: 0 50rpx 0 53rpx;
 
 				image {
-					width: 118rpx;
+					width: 42rpx;
 					height: 42rpx;
 					margin-right: 30rpx;
 				}
@@ -1371,7 +1375,7 @@
 		/* #endif */
 		width: 100%;
 		height: 304rpx;
-		background: linear-gradient(180deg, #E93323 0%, #F5F5F5 100%, #751A12 100%);
+		background: linear-gradient(180deg, #55aa00 0%, #F5F5F5 100%, #00aa00 100%);
 		// border-radius: 0 0 30rpx 30rpx;
 
 

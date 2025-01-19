@@ -145,7 +145,7 @@
 	}
 
 	.red {
-		color: #fc4141;
+		color: #55aa00;
 		margin: 0 4rpx;
 	}
 
@@ -157,6 +157,6 @@
 		border-radius: 6px;
 		background: #fff;
 		font-size: 24rpx; */
-		color: #E93323;
+		color: #55aa00;
 	}
 </style>

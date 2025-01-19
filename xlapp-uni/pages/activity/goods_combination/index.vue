@@ -190,7 +190,7 @@
 
 <style lang="scss">
 	page {
-		background-color: #E93323 !important;
+		background-color: #55aa00 !important;
 	}
 </style>
 <style lang="scss" scoped>
