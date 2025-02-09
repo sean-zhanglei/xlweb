@@ -45,7 +45,7 @@
 			return {
 				bgColor: {
 					'bgColor': '#fff',
-					'Color': '#55aa00',
+					'Color': '#009600',
 					'width': '44rpx',
 					'timeTxtwidth': '16rpx',
 					'isDay': true

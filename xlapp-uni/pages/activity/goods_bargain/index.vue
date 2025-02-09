@@ -96,7 +96,7 @@
 		data() {
 			return {
 				bgColor: {
-					'bgColor': '#55aa00',
+					'bgColor': '#009600',
 					'Color': '#fff',
 					'width': '44rpx',
 					'timeTxtwidth': '16rpx',
@@ -221,7 +221,7 @@
 
 <style lang="scss">
 	page {
-		background-color: #55aa00 !important;
+		background-color: #009600 !important;
 	}
 </style>
 <style lang="scss" scoped>
@@ -369,7 +369,7 @@
 		line-height: 52rpx;
 		right: 24rpx;
 		bottom: 30rpx;
-		background: linear-gradient(90deg, #55aa7f 0%, #55aa00 100%);
+		background: linear-gradient(90deg, #55aa7f 0%, #009600 100%);
 	}
 
 	.bargain-list .list .item .cutBnt .iconfont {

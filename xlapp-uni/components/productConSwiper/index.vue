@@ -1,6 +1,6 @@
 <template>
 	<view class='product-bg'>
-		<swiper :indicator-dots="indicatorDots" indicator-active-color="#55aa00" :autoplay="autoplay"
+		<swiper :indicator-dots="indicatorDots" indicator-active-color="#009600" :autoplay="autoplay"
 			:circular="circular" :interval="interval" :duration="duration" @change="change">
 			
 			<swiper-item v-if="videoline">

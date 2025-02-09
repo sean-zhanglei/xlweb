@@ -86,7 +86,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background: #55aa7f !important;
 	}
 
 	.home .homeCon .iconfont {

@@ -1030,7 +1030,7 @@
 
 	.order-submission .allAddress {
 		width: 100%;
-		background: linear-gradient(to bottom, #55aa00 0%, #f5f5f5 100%);
+		background: linear-gradient(to bottom, #009600 0%, #f5f5f5 100%);
 		padding: 100rpx 30rpx 0 30rpx;
 	}
 
@@ -1051,7 +1051,7 @@
 	.order-submission .allAddress .nav .item.on::before {
 		position: absolute;
 		bottom: 0;
-		content: "快递配送";
+		content: "团购商家配送";
 		font-size: 28rpx;
 		display: block;
 		height: 0;
@@ -1092,7 +1092,7 @@
 	}
 
 	.order-submission .allAddress .nav .item:nth-of-type(1).on2::before {
-		content: "快递配送";
+		content: "团购商家配送";
 		border-width: 0 60rpx 60rpx 0;
 		border-radius: 14rpx 36rpx 0 0;
 	}

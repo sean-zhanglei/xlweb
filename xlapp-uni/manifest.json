@@ -160,7 +160,7 @@
     },
     "h5" : {
         "devServer" : {
-            "https" : false
+            "https" : true
         },
         "router" : {
             "mode" : "hash",
@@ -168,7 +168,11 @@
         },
         "domain" : "",
         "sdkConfigs" : {
-            "maps" : {}
+            "maps" : {
+                "tencent" : {
+                    "key" : "TYRBZ-7FMA3-X6D3F-OPTX7-LP3KV-CMFWS"
+                }
+            }
         },
         "optimization" : {
             "treeShaking" : {

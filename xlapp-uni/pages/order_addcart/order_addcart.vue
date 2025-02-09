@@ -1,7 +1,10 @@
 <template>
 	<view>
+		<!-- #ifdef APP || MP || MP-WEIXIN -->
+			<view class="header-status" :style="'height:' + (topHeight)"></view>
+		<!-- #endif -->
 		<view class='shoppingCart copy-data'>
-			<view class='labelNav acea-row row-around'>
+			<view class='labelNav acea-row row-around' :style="'margin-right:' + (searchMargin)">
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>100%正品保证</view>
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>所有商品精挑细选</view>
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>售后无忧</view>
@@ -141,7 +144,7 @@
 </template>
 
 <script>
-	let sysHeight = 0
+	let app = getApp();
 	import {
 		getCartList,
 		getCartCounts,
@@ -175,6 +178,8 @@
 		},
 		data() {
 			return {
+				topHeight: '',
+				searchMargin: '',
 				cartCount: 0,
 				goodsHidden: false,
 				footerswitch: true,
@@ -212,13 +217,21 @@
 				attrTxt: '请选择', //属性页面提示
 				cartId: 0,
 				product_id: 0,
-				sysHeight: sysHeight,
 				canShow: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
 		onLoad: function(options) {
 			let that = this;
+			// #ifdef MP
+			this.topHeight = app.globalData.statusBarHeight + 'px';
+			this.searchMargin = app.globalData.mbPaddingRight + 'px';
+			// #endif
+			
+			// #ifndef MP
+			this.topHeight = '0rpx';
+			this.searchMargin = '30rpx'; // 30rpx
+			// #endif
 			if (that.isLogin == false) {
 				toLogin();
 			}
@@ -880,6 +893,14 @@
 </script>
 
 <style scoped lang="scss">
+	.header-status {
+		position: fixed;
+		top: 0px;
+		width: 100%;
+		z-index: 999;
+		background-color:$theme-color;
+	}
+	
 	.invalidClas {
 		position: relative;
 		z-index: 111;
@@ -904,8 +925,6 @@
 	}
 
 	.shoppingCart .labelNav {
-		position: sticky;
-		height: 178rpx;
 		padding: 30rpx 30rpx 0 30rpx;
 		font-size: 22rpx;
 		color: #fff;
@@ -917,11 +936,11 @@
 		z-index: 5;
 		top: 0;
 
+		/* #ifdef H5 */
+		height: 178rpx;
+		/* #endif */
 		/* #ifdef MP-WEIXIN */
-		// top: calc(44px + 88rpx);
-		height: calc(178rpx + 44px + 45rpx);
-		padding-top: calc(44px + 50rpx);
-		// background-color: #282828;
+		height: calc(178rpx + 47rpx + 45rpx);
 		/* #endif */
 	}
 
@@ -1035,7 +1054,7 @@
 
 	.shoppingCart .list .item .picTxt .text .money {
 		font-size: 32rpx;
-		color: #55aa00;
+		color: #009600;
 		margin-top: 28rpx;
 		font-weight: 600;
 	}
@@ -1052,7 +1071,7 @@
 		width: 66rpx;
 		text-align: center;
 		height: 100%;
-		line-height: 44rpx;
+		line-height: 47rpx;
 		font-size: 28rpx;
 		color: #a4a4a4;
 	}
@@ -1235,13 +1254,13 @@
 
 	.my_nav {
 		/* #ifdef MP-WEIXIN */
-		top: calc(44px + 88rpx + 50rpx) !important;
+		top: calc(47rpx + 88rpx + 50rpx) !important;
 		// background-color: #00aaff;
 		/* #endif */
 	}
 	.my_nav_top{
 		/* #ifdef MP-WEIXIN */
-		margin-top: calc(44px + 88rpx + 30rpx + 105rpx) !important;
+		margin-top: calc(47rpx + 88rpx + 30rpx + 105rpx) !important;
 		// background-color: #00aaff;
 		/* #endif */
 	}

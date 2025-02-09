@@ -400,7 +400,7 @@
 		/* #ifdef MP */
 		height: 300rpx;
 		/* #endif */
-		background: rgba(233, 51, 35, 1);
+		background: linear-gradient(180deg, #009600 0%, #F5F5F5 100%, #00aa00 100%);
 		border-radius: 0 0 50rpx 50rpx;
 	}
 </style>

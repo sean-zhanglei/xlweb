@@ -1,20 +1,23 @@
 @charset "UTF-8";
 
-.font-color,.font-color-red {
+.font-color{
+	color: #009600!important
+}
+.font-color-red {
 	color: #E93323!important
 }
 
 .bg-color {
-	background-color: #55aa00 !important
+	background-color: #009600 !important
 }
 
 .icon-color {
-	color: #55aa00
+	color: #009600
 }
 
 .cart-color {
-	color: #55aa00 !important;
-	border: 1px solid #55aa00 !important
+	color: #009600 !important;
+	border: 1px solid #009600 !important
 }
 
 .padding20 {
@@ -226,8 +229,8 @@ radio .wx-radio-input {
 }
 
 radio .wx-radio-input.wx-radio-input-checked {
-	border: 1px solid #55aa00 !important;
-	background-color: #55aa00 !important
+	border: 1px solid #009600 !important;
+	background-color: #009600 !important
 }
 
 radio .uni-radio-input {
@@ -237,8 +240,8 @@ radio .uni-radio-input {
 }
 
 radio .uni-radio-input.uni-radio-input-checked {
-	border: 1px solid #55aa00 !important;
-	background-color: #55aa00 !important
+	border: 1px solid #009600 !important;
+	background-color: #009600 !important
 }
 
 checkbox .wx-checkbox-input {
@@ -249,8 +252,8 @@ checkbox .wx-checkbox-input {
 }
 
 checkbox .wx-checkbox-input.wx-checkbox-input-checked {
-	border: 1px solid #55aa00 !important;
-	background-color: #55aa00 !important;
+	border: 1px solid #009600 !important;
+	background-color: #009600 !important;
 	color: #fff!important;
 	margin-right: 0 !important;
 }
@@ -266,8 +269,8 @@ checkbox .uni-checkbox-input {
 }
 
 checkbox .uni-checkbox-input.uni-checkbox-input-checked {
-	border: 1px solid #55aa00 !important;
-	background-color: #55aa00 !important;
+	border: 1px solid #009600 !important;
+	background-color: #009600 !important;
 	color: #fff!important
 }
 

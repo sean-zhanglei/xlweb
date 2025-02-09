@@ -385,7 +385,7 @@
 
 	.support {
 		width: 219rpx;
-		height: 74rpx;
+		height: 219rpx;
 		margin: 54rpx auto;
 		display: block;
 	}
@@ -413,7 +413,7 @@
 		}
 
 		.head {
-			background: linear-gradient(360deg, rgba(255, 121, 49, 0) 0%, rgba(85, 170, 127, 0.8) 39%, #55aa00 100%);
+			background: linear-gradient(360deg, rgba(255, 121, 49, 0) 0%, rgba(85, 170, 127, 0.8) 39%, #009600 100%);
 			// padding: 0 30rpx;
 
 			.user-card {

@@ -167,7 +167,7 @@
 			color: #999999;
 	
 			&.on {
-				border-bottom-color: #55aa00;
+				border-bottom-color: #009600;
 				color: #282828;
 			}
 		}

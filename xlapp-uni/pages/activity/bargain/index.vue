@@ -75,7 +75,7 @@
 			return {
 				bgColor:{
 					'bgColor': '',
-					'Color': '#55aa00',
+					'Color': '#009600',
 					'width': '40rpx',
 					'timeTxtwidth': '28rpx',
 					'isDay': false
@@ -235,7 +235,7 @@
 		height: 36rpx;
 		line-height: 36rpx;
 		.styleAll {
-			color: #55aa00;
+			color: #009600;
 			font-size:24rpx;
 		}
 	}

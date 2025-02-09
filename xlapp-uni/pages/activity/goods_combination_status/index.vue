@@ -686,7 +686,7 @@
 			position: absolute;
 			width: 72rpx;
 			height: 30rpx;
-			background-color: #55aa00;
+			background-color: #009600;
 			border-radius: 15rpx;
 			font-size: 20rpx;
 			line-height: 30rpx;
@@ -824,7 +824,7 @@
 	}
 
 	.group-con .wrapper .title .name .timeTxt {
-		color: #55aa00;
+		color: #009600;
 	}
 
 	.group-con .wrapper .title .name .time .styleAll {
@@ -835,7 +835,7 @@
 		font-weight: bold;
 		display: inline-block;
 		vertical-align: middle;
-		color: #55aa00;
+		color: #009600;
 		padding: 2rpx 5rpx;
 	}
 
@@ -870,7 +870,7 @@
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
-		border: 2rpx solid #55aa00;
+		border: 2rpx solid #009600;
 	}
 
 	.group-con .wrapper .list .pictrue img.img-none {
@@ -975,9 +975,9 @@
 		border-radius: 0 18rpx 18rpx 0;
 		font-size: 20rpx;
 		color: #fff;
-		background-image: linear-gradient(to right, #55aa7f 0%, #55aa00 100%);
-		background-image: -webkit-linear-gradient(to right, #55aa7f 0%, #55aa00 100%);
-		background-image: -moz-linear-gradient(to right, #55aa7f 0%, #55aa00 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
+		background-image: -webkit-linear-gradient(to right, #55aa7f 0%, #009600 100%);
+		background-image: -moz-linear-gradient(to right, #55aa7f 0%, #009600 100%);
 	}
 
 	.group-con .group-recommend .list .item .name {

@@ -425,7 +425,7 @@
 
 	.my-order .nav .item.on {
 		// font-weight: bold;
-		// border-bottom: 5rpx solid #55aa00;
+		// border-bottom: 5rpx solid #009600;
 		/* #ifdef H5 || MP */
 		font-weight: bold;
 		/* #endif */
