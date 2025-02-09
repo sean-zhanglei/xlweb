@@ -5,7 +5,7 @@ import Layout from '@/layout'
 const mobileRouter = {
   path: '/mobile',
   component: Layout,
-  redirect: '/mobile/index',
+  redirect: '/dashboard',
   name: 'Mobile',
   alwaysShow: true,
   meta: {
@@ -55,6 +55,12 @@ const mobileRouter = {
       name: 'productAdd',
       meta: { title: '添加商品', icon: '' }
     },
+    {
+      path: 'productManage',
+      component: () => import('@/views/mobile/productManage/index.vue'),
+      name: 'productManage',
+      meta: { title: '商品管理', icon: '' }
+    }
   ]
 }
 
