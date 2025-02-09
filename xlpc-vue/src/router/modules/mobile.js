@@ -48,7 +48,13 @@ const mobileRouter = {
       component: () => import('@/views/mobile/orderStatistics/Statistics.vue'),
       name: 'OrderStatisticsDetail',
       meta: { title: '订单数据统计' }
-    }
+    },
+    {
+      path: 'productAdd',
+      component: () => import('@/views/mobile/productAdd/index.vue'),
+      name: 'productAdd',
+      meta: { title: '添加商品', icon: '' }
+    },
   ]
 }
 
