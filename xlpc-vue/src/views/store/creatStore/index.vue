@@ -9,7 +9,7 @@
           <!--<el-step title="规格设置" />-->
         </el-steps>
       </div>
-      <el-form ref="formValidate" v-loading="fullscreenLoading" class="formValidate mt20" :rules="ruleValidate" :model="formValidate" label-width="120px" @submit.native.prevent>
+      <el-form label-position="top" ref="formValidate" v-loading="fullscreenLoading" class="formValidate mt20" :rules="ruleValidate" :model="formValidate" label-width="120px" @submit.native.prevent>
         <el-row v-show="currentTab === 0" :gutter="24">
           <!-- 商品信息-->
           <el-col v-bind="grid2">
@@ -71,7 +71,7 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :xs="18" :sm="18" :md="18" :lg="12" :xl="12">
+          <el-col :xs="12" :sm="12" :md="18" :lg="12" :xl="12">
             <el-form-item label="运费模板：" prop="tempId">
               <el-select v-model="formValidate.tempId" placeholder="请选择" class="mr20" :disabled="isDisabled" style="width:100%;">
                   <el-option
@@ -83,8 +83,10 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :xs="6" :sm="6" :md="6" :lg="12" :xl="12">
-            <el-button v-show="!isDisabled" class="mr15" @click="addTem">运费模板</el-button>
+          <el-col :xs="12" :sm="12" :md="6" :lg="12" :xl="12">
+            <el-form-item label="设置：">
+              <el-button size="medium"  v-show="!isDisabled" class="mr15" @click="addTem">运费模板</el-button>
+            </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="商品规格：" props="specType">
@@ -1206,8 +1208,8 @@
           let list = response.list;
           let arr = [],arr1 = [];
           const listArr = [{ name: '是否热卖', value: 'isGood' }];
-          let typeLists = [ 
-            { name: '', value: 'isHot',type:'2' },   //热门榜单 
+          let typeLists = [
+            { name: '', value: 'isHot',type:'2' },   //热门榜单
             { name: '', value: 'isBenefit' ,type:'4'}, //促销单品
             { name: '', value: 'isBest',type:'1' }, //精品推荐
             { name: '', value: 'isNew',type:'3' }]; //首发新品

@@ -161,121 +161,121 @@
           <!-- 批量设置-->
           <el-col v-if="formValidate.attr.length>0 && formValidate.specType && !isDisabled" :span="24" class="noForm">
             <el-form-item label="批量设置：">
-              <el-table :data="oneFormBatch" border class="tabNumWidth" size="mini">
-                <el-table-column align="center" label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1','pi')">
-                      <div v-if="scope.row.image" class="pictrue tabPic"><img :src="scope.row.image"></div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
+              <el-card v-for="(rowBatch, index) in oneFormBatch" :key="index" class="card-item">
+                <div class="card-content">
+                  <div class="card-header">
+                    <span class="card-title">规格</span>
+                  </div>
+                  <div class="card-body">
+                    <div style="display: flex;">
+                      <div style="width:40%;">图片</div>
+                      <div style="width:60%;" class="upLoadPicBox" @click="modalPicTap('1','pi')">
+                        <div v-if="rowBatch.image" class="pictrue tabPic"><img :src="rowBatch.image"></div>
+                        <div v-else class="upLoad tabPic">
+                          <i class="el-icon-camera cameraIconfont" />
+                        </div>
                       </div>
                     </div>
-                  </template>
-                </el-table-column>
-                <el-table-column v-for="(item,iii) in attrValue" :key="iii" :label="formThead[iii].title" align="center" min-width="120">
-                  <template slot-scope="scope">
-                    <el-input v-model="scope.row[iii]" maxlength="9" min="0.01" class="priceBox" @blur="keyupEvent(iii, scope.row[iii], scope.$index, 1)"/>
-                  </template>
-                </el-table-column>
-                <template v-if="formValidate.isSub">
-                  <el-table-column align="center" label="一级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.brokerage" type="number" :min="0" :max="scope.row.price" class="priceBox" />
-                    </template>
-                  </el-table-column>
-                  <el-table-column align="center" label="二级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.brokerageTwo" type="number" :min="0" :max="scope.row.price" class="priceBox" />
-                    </template>
-                  </el-table-column>
-                </template>
-                <el-table-column align="center" label="操作" min-width="80">
-                  <template>
-                    <el-button type="text" class="submission" @click="batchAdd">批量添加</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
+                    <div style="display: flex;" v-for="(row0,key0) in attrValue" :key="key0">
+                      <div style="width:40%;">{{ formThead[key0].title }}</div>
+                      <el-input style="width:60%;" v-model="rowBatch[key0]" maxlength="9" min="0.01" class="priceBox" @blur="keyupEvent(key0, rowBatch[key0], index, 1)" />
+                    </div>
+
+                    <div style="display: flex;" v-if="formValidate.isSub">
+                      <div style="width:40%;">一级返佣(元)</div>
+                      <el-input style="width:60%;" :disabled="isDisabled" v-model="rowBatch.brokerage" type="number" :min="0" :max="rowBatch.price" class="priceBox" />
+                      <div style="width:40%;">二级返佣(元)</div>
+                      <el-input style="width:60%;" :disabled="isDisabled" v-model="rowBatch.brokerageTwo" type="number" :min="0" :max="rowBatch.price" class="priceBox" />
+                    </div>
+
+                    <el-button style="align: right;" type="text" class="submission" @click="batchAdd">批量添加</el-button>
+                  </div>
+                </div>
+              </el-card>
             </el-form-item>
           </el-col>
           <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
             <!-- 单规格表格-->
-            <el-form-item v-if="formValidate.specType === false">
-              <el-table :data="OneattrValue" border class="tabNumWidth" size="mini">
-                <el-table-column align="center" label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1', 'dan', 'pi')">
-                      <div v-if="formValidate.image" class="pictrue tabPic"><img :src="scope.row.image"></div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
+            <el-form-item label="商品属性：" v-if="formValidate.specType === false">
+              <el-card v-for="(row, index) in OneattrValue" :key="index" class="card-item">
+                <div class="card-content">
+                  <div class="card-header">
+                    <span class="card-title">规格</span>
+                  </div>
+                  <div class="card-body">
+                    <div style="display: flex;">
+                      <div style="width:40%;">图片</div>
+                      <div style="width:60%;" class="upLoadPicBox" @click="modalPicTap('1', 'dan', 'pi')">
+                        <div v-if="formValidate.image" class="pictrue tabPic"><img :src="row.image"></div>
+                        <div v-else class="upLoad tabPic">
+                          <i class="el-icon-camera cameraIconfont" />
+                        </div>
                       </div>
                     </div>
-                  </template>
-                </el-table-column>
-                <el-table-column v-for="(item,iii) in attrValue" :key="iii" :label="formThead[iii].title" align="center" min-width="120">
-                  <template slot-scope="scope">
-                    <el-input :disabled="isDisabled" v-model="scope.row[iii]" maxlength="9" min="0.01" class="priceBox" @blur="keyupEvent(iii, scope.row[iii], scope.$index, 2)" />
-                  </template>
-                </el-table-column>
-                <template v-if="formValidate.isSub">
-                  <el-table-column align="center" label="一级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input :disabled="isDisabled" v-model="scope.row.brokerage" type="number" :min="0" class="priceBox" />
-                    </template>
-                  </el-table-column>
-                  <el-table-column align="center" label="二级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input :disabled="isDisabled" v-model="scope.row.brokerageTwo" type="number" :min="0" class="priceBox" />
-                    </template>
-                  </el-table-column>
-                </template>
-              </el-table>
+                    <div style="display: flex;" v-for="(item,key) in attrValue" :key="key">
+                      <div style="width:40%;">{{ formThead[key].title }}</div>
+                      <el-input style="width:60%;" :disabled="isDisabled" v-model="row[key]" maxlength="9" min="0.01" class="priceBox" @blur="keyupEvent(key, row[key], index, 2)" />
+                    </div>
+
+                    <div style="display: flex;" v-if="formValidate.isSub">
+                      <div style="width:40%;">一级返佣(元)</div>
+                      <el-input style="width:60%;" :disabled="isDisabled" v-model="row.brokerage" type="number" :min="0" class="priceBox" />
+                      <div style="width:40%;">二级返佣(元)</div>
+                      <el-input style="width:60%;" :disabled="isDisabled" v-model="row.brokerageTwo" type="number" :min="0" class="priceBox" />
+                    </div>
+                  </div>
+                </div>
+              </el-card>
             </el-form-item>
             <el-form-item label="全部sku：" v-if="$route.params.id && showAll">
               <el-button type="default" @click="showAllSku()" :disabled="isDisabled">展示</el-button>
             </el-form-item>
             <!-- 多规格表格-->
-            <el-form-item v-if="formValidate.attr.length>0 && formValidate.specType" label="商品属性：" class="labeltop" :class="isDisabled?'disLabel':'disLabelmoren'">
-              <el-table :data="ManyAttrValue" border class="tabNumWidth" size="mini">
-                <template v-if="manyTabDate">
-                  <el-table-column v-for="(item,iii) in manyTabDate" :key="iii" align="center" :label="manyTabTit[iii].title" min-width="80">
-                    <template slot-scope="scope">
-                      <span class="priceBox" v-text="scope.row[iii]"/>
-                    </template>
-                  </el-table-column>
-                </template>
-                <el-table-column align="center" label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1','duo',scope.$index)">
-                      <div v-if="scope.row.image" class="pictrue tabPic"><img :src="scope.row.image"></div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
-                      </div>
+            <!-- <el-form-item label="商品属性：" v-if="formValidate.attr.length>0 && formValidate.specType" class="labeltop" :class="isDisabled?'disLabel':'disLabelmoren'"> -->
+            <el-form-item label="商品属性：" v-if="formValidate.attr.length>0 && formValidate.specType">
+              <template>
+                <el-card v-for="(row, index) in ManyAttrValue" :key="index" class="card-item">
+                  <div class="card-content">
+                    <div class="card-header">
+                      <span class="card-title">规格{{index + 1}}</span>
                     </div>
-                  </template>
-                </el-table-column>
-                <el-table-column v-for="(item,iii) in attrValue" :key="iii" :label="formThead[iii].title" align="center" min-width="120">
-                  <template slot-scope="scope">
-<!--                    <span>scope.row:{{scope.row}}</span>-->
-                    <el-input :disabled="isDisabled" maxlength="9" min="0.01"
-                               v-model="scope.row[iii]" class="priceBox" @blur="keyupEvent(iii, scope.row[iii], scope.$index, 3)" />
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="一级返佣(元)" min-width="120" v-if="formValidate.isSub">
-                  <template slot-scope="scope">
-                    <el-input :disabled="isDisabled" v-model="scope.row.brokerage" type="number" :min="0" :max="scope.row.price" class="priceBox" />
-                  </template>
-                </el-table-column>
-                <el-table-column align="center" label="二级返佣(元)" min-width="120" v-if="formValidate.isSub">
-                  <template slot-scope="scope">
-                    <el-input :disabled="isDisabled" v-model="scope.row.brokerageTwo" type="number" :min="0" :max="scope.row.price" class="priceBox" />
-                  </template>
-                </el-table-column>
-                <el-table-column v-if="!isDisabled" key="3" align="center" label="操作" min-width="80">
-                  <template slot-scope="scope">
-                    <el-button type="text" class="submission" @click="delAttrTable(scope.$index)">删除</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
+                    <div class="card-body">
+                      <template v-if="manyTabDate">
+                        <div style="display: flex;" v-for="(row0,key0) in manyTabDate" :key="key0">
+                          <div style="width:40%;">{{ manyTabTit[key0].title }}</div>
+                          <span style="width:60%;" class="priceBox" v-text="row[key0]"/>
+                        </div>
+                      </template>
+                      <div style="display: flex;">
+                        <div style="width:40%;">图片</div>
+                        <div style="width:60%;" class="upLoadPicBox" @click="modalPicTap('1','duo',index)">
+                          <div v-if="row.image" class="pictrue tabPic"><img :src="row.image"></div>
+                          <div v-else class="upLoad tabPic">
+                            <i class="el-icon-camera cameraIconfont" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div style="display: flex;" v-for="(row1,key1) in attrValue" :key="key1">
+                        <div style="width:40%;">{{ formThead[key1].title }}</div>
+                        <el-input style="width:60%;" :disabled="isDisabled" maxlength="9" min="0.01"
+                                      v-model="row[key1]" class="priceBox" @blur="keyupEvent(key1, row[key1], index, 3)" />
+                      </div>
+
+                      <div style="display: flex;" v-if="formValidate.isSub">
+                        <div style="width:40%;">一级返佣(元)</div>
+                        <el-input style="width:60%;" :disabled="isDisabled" v-model="row.brokerage" type="number" :min="0" :max="row.price" class="priceBox" />
+                        <div style="width:40%;">二级返佣(元)</div>
+                        <el-input style="width:60%;" :disabled="isDisabled" v-model="row.brokerageTwo" type="number" :min="0" :max="row.price" class="priceBox" />
+                      </div>
+
+                      <template v-if="!isDisabled">
+                        <el-button type="text" class="submission" @click="delAttrTable(index)">删除</el-button>
+                      </template>
+                    </div>
+                  </div>
+                </el-card>
+              </template>
             </el-form-item>
           </el-col>
         </el-row>
@@ -462,6 +462,7 @@
         active: 0,
         OneattrValue: [Object.assign({}, defaultObj.attrValue[0])], // 单规格
         ManyAttrValue: [Object.assign({}, defaultObj.attrValue[0])], // 多规格
+        oneFormBatch: [Object.assign({}, defaultObj.attrValue[0])], // 批量设置
         ruleList: [],
         merCateList: [], // 商户分类筛选
         shippingList: [], // 运费模板
@@ -548,11 +549,11 @@
         delete obj.image
         return obj
       },
-      oneFormBatch() {
-        const obj = [Object.assign({}, defaultObj.attrValue[0])]
-        delete obj[0].barCode
-        return obj
-      }
+      // oneFormBatch() {
+      //   const obj = [Object.assign({}, defaultObj.attrValue[0])]
+      //   delete obj[0].barCode
+      //   return obj
+      // }
     },
     watch: {
       'formValidate.attr': {
@@ -838,8 +839,6 @@
       },
       // 批量添加
       batchAdd() {
-        // if (!this.oneFormBatch[0].pic || !this.oneFormBatch[0].price || !this.oneFormBatch[0].cost || !this.oneFormBatch[0].ot_price ||
-        //     !this.oneFormBatch[0].stock || !this.oneFormBatch[0].bar_code) return this.$Message.warning('请填写完整的批量设置内容！');
         for (const val of this.ManyAttrValue) {
           this.$set(val, 'image', this.oneFormBatch[0].image)
           this.$set(val, 'price', this.oneFormBatch[0].price)
@@ -1233,6 +1232,29 @@
   }
 </script>
 <style scoped lang="scss">
+  .card-item {
+    margin-bottom: 10px;
+  }
+
+  .card-content {
+    padding: 2px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .card-body {
+    font-size: 14px;
+  }
   .disLabel{
     ::v-deep.el-form-item__label{
       margin-left: 36px !important;
