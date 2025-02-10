@@ -129,10 +129,10 @@
         </el-table-column>
         <el-table-column label="操作" min-width="150" fixed="right" align="center">
           <template slot-scope="scope">
-            <router-link :to="{path: '/store/list/creatProduct/' + scope.row.id + '/1'}">
+            <router-link :to="{path: '/mobile/productAdd/' + scope.row.id + '/1'}">
               <el-button type="text" size="small" class="mr10" v-hasPermi="['admin:product:info']">详情</el-button>
             </router-link>
-            <router-link :to="{path: '/store/list/creatProduct/' + scope.row.id}">
+            <router-link :to="{path: '/mobile/productAdd/' + scope.row.id}">
               <el-button type="text" size="small" class="mr10" v-if="tableFrom.type !== '5' && tableFrom.type !== '1'" v-hasPermi="['admin:product:update']">编辑</el-button>
             </router-link>
             <el-button  v-if="tableFrom.type === '5'" type="text" size="small" @click="handleRestore(scope.row.id, scope.$index)" v-hasPermi="['admin:product:restore']">恢复商品</el-button>

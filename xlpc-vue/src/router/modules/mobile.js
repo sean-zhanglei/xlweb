@@ -50,7 +50,7 @@ const mobileRouter = {
       meta: { title: '订单数据统计' }
     },
     {
-      path: 'productAdd',
+      path: 'productAdd/:id?/:isDisabled?',
       component: () => import('@/views/mobile/productAdd/index.vue'),
       name: 'productAdd',
       meta: { title: '添加商品', icon: '' }

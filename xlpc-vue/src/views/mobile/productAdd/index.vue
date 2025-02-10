@@ -1124,7 +1124,7 @@
             this.$route.params.id?productUpdateApi(this.formValidate).then(async res => {
               this.$message.success('编辑成功');
               setTimeout(() => {
-                this.$router.push({ path: '/store/index' });
+                this.$router.push({ path: '/mobile/productManage' });
               }, 500);
               this.fullscreenLoading = false
             }).catch(res => {
@@ -1132,7 +1132,7 @@
             }):productCreateApi(this.formValidate).then(async res => {
               this.$message.success('新增成功');
               setTimeout(() => {
-                this.$router.push({ path: '/store/index' });
+                this.$router.push({ path: '/mobile/productManage' });
               }, 500);
               this.fullscreenLoading = false
             }).catch(res => {
