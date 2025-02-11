@@ -233,31 +233,6 @@ export function productExportApi(params) {
 }
 
 /**
- * 商品复制 99Api
- * @param pram
- */
-export function importProductApi(params) {
-  return request({
-    url: `/admin/store/product/importProduct`,
-    method: 'post',
-    params
-  })
-}
-
-
-/**
- * 商品复制 一号通
- * @param pram
- */
-export function copyProductApi(data) {
-  return request({
-    url: `/admin/store/product/copy/product`,
-    method: 'post',
-    data
-  })
-}
-
-/**
  * 恢复
  * @param pram
  */
@@ -277,17 +252,6 @@ export function productExcelApi(params) {
     url: `/admin/export/excel/product`,
     method: 'get',
     params
-  })
-}
-
-/**
- * 商品列表 获取复制商品配置
- * @param pram
- */
-export function copyConfigApi() {
-  return request({
-    url: `/admin/store/product/copy/config`,
-    method: 'post'
   })
 }
 

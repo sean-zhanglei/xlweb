@@ -32,15 +32,6 @@ const operationRouter = {
       }
     },
     {
-      path: 'onePass',
-      name: 'onePass',
-      component: () => import('@/views/sms/smsConfig'),
-      meta: {
-        title: '一号通',
-        icon: 'clipboard'
-      }
-    },
-    {
       path: 'roleManager',
       name: 'RoleManager',
       component: () => import('@/views/systemSetting/administratorAuthority'),
@@ -67,42 +58,6 @@ const operationRouter = {
           component: () => import('@/views/systemSetting/administratorAuthority/permissionRules'),
           name: 'promiseRules',
           meta: { title: '权限规则', icon: '' }
-        }
-      ]
-    },
-    {
-      path: 'systemSms',
-      component: () => import('@/views/sms'),
-      name: 'systemSms',
-      meta: {
-        title: '短信设置',
-        icon: 'clipboard',
-        roles: ['admin']
-      },
-      children: [
-        {
-          path: 'config',
-          component: () => import('@/views/sms/smsConfig'),
-          name: 'SmsConfig',
-          meta: { title: '短信账户', noCache: true }
-        },
-        {
-          path: 'template',
-          component: () => import('@/views/sms/smsTemplate'),
-          name: 'SmsTemplate',
-          meta: { title: '短信模板', noCache: true, activeMenu: `/operation/onePass` }
-        },
-        {
-          path: 'pay',
-          component: () => import('@/views/sms/smsPay'),
-          name: 'SmsPay',
-          meta: { title: '短信购买', noCache: true, activeMenu: `/operation/onePass` }
-        },
-        {
-          path: 'message',
-          component: () => import('@/views/sms/smsMessage'),
-          name: 'SmsMessage',
-          meta: { title: '短信开关', noCache: true }
         }
       ]
     },

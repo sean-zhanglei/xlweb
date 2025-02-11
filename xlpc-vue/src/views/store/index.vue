@@ -20,7 +20,6 @@
         <router-link :to=" { path:'/store/list/creatProduct' } ">
           <el-button size="small" type="primary" class="mr10" v-hasPermi="['admin:product:save']">添加商品</el-button>
         </router-link>
-        <el-button size="small" type="success" class="mr10" @click="onCopy" v-hasPermi="['admin:product:save']">商品采集</el-button>
         <el-button size="small" icon="el-icon-upload2" @click="exports" v-hasPermi="['admin:export:excel:product']">导出</el-button>
       </div>
       <el-table
@@ -68,9 +67,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" 
-        prop="storeName" 
-        min-width="300" 
+        <el-table-column label="商品名称"
+        prop="storeName"
+        min-width="300"
         :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
@@ -97,7 +96,7 @@
           min-width="70"
           align="center"
         />
-        
+
         <el-table-column
           label="添加时间"
           min-width="120"
@@ -112,7 +111,7 @@
           min-width="80"
           fixed="right"
         >
-          <template slot-scope="scope" 
+          <template slot-scope="scope"
           v-if="checkPermi(['admin:product:up','admin:product:down'])">
             <el-switch
               :disabled="Number(tableFrom.type) > 2"
@@ -150,26 +149,16 @@
         />
       </div>
     </el-card>
-    <el-dialog
-      title="复制淘宝、天猫、京东、苏宁"
-      :visible.sync="dialogVisible"
-      :close-on-click-modal="false"
-      width="1200px"
-      class="taoBaoModal"
-      :before-close="handleClose">
-      <tao-bao v-if="dialogVisible" @handleCloseMod="handleCloseMod"></tao-bao>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { productLstApi, productDeleteApi, categoryApi, putOnShellApi, offShellApi, productHeadersApi, productExportApi, restoreApi, productExcelApi } from '@/api/store'
 import { getToken } from '@/utils/auth'
-import taoBao from './taoBao'
 import { checkPermi } from "@/utils/permission"; // 权限判断函数
 export default {
   name: 'ProductList',
-  components: { taoBao },
+  components: { },
   data() {
     return {
       props: {
@@ -194,8 +183,7 @@ export default {
       },
       categoryList: [],
       merCateList: [],
-      objectUrl: process.env.VUE_APP_BASE_API,
-      dialogVisible: false,
+      objectUrl: process.env.VUE_APP_BASE_API
     }
   },
   mounted() {
@@ -219,18 +207,6 @@ export default {
     seachList() {
       this.tableFrom.page = 1
       this.getList()
-    },
-    handleClose() {
-      this.dialogVisible = false
-    },
-    handleCloseMod(item){
-      this.dialogVisible = item
-      this.goodHeade();
-      this.getList();
-    },
-    // 复制
-    onCopy(){
-      this.dialogVisible = true
     },
     // 导出
     exports () {
@@ -301,7 +277,7 @@ export default {
           row.isShow = !row.isShow
         })
     },
-   
+
   }
 }
 </script>
@@ -310,9 +286,6 @@ export default {
    .el-table__body {
     width: 100%;
     table-layout: fixed !important;
-  }
-  .taoBaoModal{
-  //  z-index: 3333 !important;
   }
   .demo-table-expand{
     ::v-deep label{
