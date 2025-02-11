@@ -55,14 +55,6 @@ export function expressList(data) {
   })
 }
 
-// 同步物流公司
-export function expressSyncApi() {
-  return request({
-    url: '/admin/express/sync/express',
-    method: 'post'
-  })
-}
-
 // 物流公司修改状态
 export function expressUpdateShow(data) {
   return request({
