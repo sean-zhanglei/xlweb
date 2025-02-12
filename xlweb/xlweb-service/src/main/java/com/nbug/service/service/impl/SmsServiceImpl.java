@@ -131,7 +131,7 @@ public class SmsServiceImpl implements SmsService {
         SendSmsVo smsVo = new SendSmsVo();
         smsVo.setMobile(phone);
         smsVo.setTemplateKey(msgTempKey);
-        smsVo.setParam(JSONObject.toJSONString(mapPram));
+        smsVo.setContent(JSONObject.toJSONString(mapPram));
         return sendCode(smsVo);
     }
 
