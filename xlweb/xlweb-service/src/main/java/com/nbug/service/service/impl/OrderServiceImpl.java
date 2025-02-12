@@ -187,8 +187,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // 发送短信
         SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-        Integer tempId = Integer.valueOf(smsTemplate.getTempId());
-        systemAdminList.forEach(admin -> smsService.sendCreateOrderNotice(admin.getPhone(), orderNo, admin.getRealName(), tempId));
+        systemAdminList.forEach(admin -> smsService.sendCreateOrderNotice(admin.getPhone(), orderNo, admin.getRealName(), smsTemplate.getTempKey()));
     }
 
     /**
@@ -323,10 +322,9 @@ public class OrderServiceImpl implements OrderService {
                 List<SystemAdmin> systemAdminList = systemAdminService.findIsSmsList();
                 if (CollUtil.isNotEmpty(systemAdminList)) {
                     SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-                    Integer tempId = Integer.valueOf(smsTemplate.getTempId());
                     // 发送短信
                     systemAdminList.forEach(admin -> {
-                        smsService.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), tempId);
+                        smsService.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey());
                     });
                 }
             }
@@ -348,7 +346,6 @@ public class OrderServiceImpl implements OrderService {
         SystemNotification notification = systemNotificationService.getByMark(NotifyConstants.APPLY_ORDER_REFUND_ADMIN_MARK);
         List<SystemAdmin> systemAdminList = systemAdminService.findIsSmsList();
         SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-        Integer tempId = Integer.valueOf(smsTemplate.getTempId());
         List<StoreOrder> orderList = CollUtil.newArrayList();
         for (OrderRefundApplyRequest request : applyList) {
             StoreOrder storeOrder = storeOrderService.getById(request.getId());
@@ -383,7 +380,7 @@ public class OrderServiceImpl implements OrderService {
             // 发送用户退款管理员提醒短信
             if (notification.getIsSms().equals(1) && CollUtil.isNotEmpty(systemAdminList)) {
                 // 发送短信
-                systemAdminList.forEach(admin -> smsService.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), tempId));
+                systemAdminList.forEach(admin -> smsService.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()));
             }
         }
 

@@ -6,8 +6,8 @@ package com.nbug.common.constants;
  */
 public class SmsConstants {
 
-    /** 接口异常错误码 */
-    public static final Integer SMS_ERROR_CODE = 400;
+    /** 接口正常码 */
+    public static final Integer SMS_SUCCESS_CODE = 200;
 
     /** 短信发送队列key */
     public static final String SMS_SEND_KEY = "sms_send_list";
@@ -22,7 +22,6 @@ public class SmsConstants {
      */
     /** 验证码 */
     public static final String SMS_CONFIG_VERIFICATION_CODE = "verificationCode";
-//    public static final Integer SMS_CONFIG_VERIFICATION_CODE_TEMP_ID = 518076;
     /** 验证码模板ID */
     public static final Integer SMS_CONFIG_VERIFICATION_CODE_TEMP_ID = 538393;
 
@@ -95,7 +94,4 @@ public class SmsConstants {
     public static final int SMS_CONFIG_TYPE_PRICE_REVISION_SWITCH = 9;
     /** 订单未支付 */
     public static final int SMS_CONFIG_TYPE_ORDER_PAY_FALSE = 10;
-
-    /** 发送短信参数模板 */
-    public static final String SMS_COMMON_PARAM_FORMAT = "param[{}]";
 }

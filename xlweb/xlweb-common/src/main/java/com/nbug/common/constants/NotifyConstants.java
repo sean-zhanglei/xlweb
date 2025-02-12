@@ -6,6 +6,8 @@ package com.nbug.common.constants;
  */
 public class NotifyConstants {
 
+    /** 验证码标记*/
+    public static final String VALIDATE_CODE_MARK = "verificationCode";
     /** 支付成功标记*/
     public static final String PAY_SUCCESS_MARK = "paySuccess";
     /** 发货标记 */
