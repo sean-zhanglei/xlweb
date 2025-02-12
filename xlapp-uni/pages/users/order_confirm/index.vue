@@ -3,12 +3,27 @@
 		<view class='order-submission'>
 			<view class="allAddress" :style="store_self_mention ? '':'padding-top:10rpx;'">
 				<view class="nav acea-row">
-					<view class="item font-color" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
-						v-if='store_self_mention'></view>
 					<view class="item font-color" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)"
 						v-if='store_self_mention'></view>
+					<view class="item font-color" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
+						v-if='store_self_mention'></view>
 				</view>
-				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0' :style="store_self_mention ? '':'border-top-left-radius: 14rpx;border-top-right-radius: 14rpx;'">
+				<view class='address acea-row row-between-wrapper' v-if='shippingType == 1' @tap="showStoreList">
+					<block v-if="storeList.length>0">
+						<view class='addressCon'>
+							<view class='name'>{{system_store.name}}
+								<text class='phone'>{{system_store.phone}}</text>
+							</view>
+							<view class="line1"> {{system_store.address}}{{", " + system_store.detailedAddress}}
+							</view>
+						</view>
+						<view class='iconfont icon-jiantou'></view>
+					</block>
+					<block v-else>
+						<view>暂无门店信息</view>
+					</block>
+				</view>
+				<view class='address acea-row row-between-wrapper' v-else @tap='onAddress' :style="store_self_mention ? '':'border-top-left-radius: 14rpx;border-top-right-radius: 14rpx;'">
 					<view class='addressCon' v-if="addressInfo.realName">
 						<view class='name'>{{addressInfo.realName}}
 							<text class='phone'>{{addressInfo.phone}}</text>
@@ -23,21 +38,6 @@
 						<view class='setaddress'>设置收货地址</view>
 					</view>
 					<view class='iconfont icon-jiantou'></view>
-				</view>
-				<view class='address acea-row row-between-wrapper' v-else @tap="showStoreList">
-					<block v-if="storeList.length>0">
-						<view class='addressCon'>
-							<view class='name'>{{system_store.name}}
-								<text class='phone'>{{system_store.phone}}</text>
-							</view>
-							<view class="line1"> {{system_store.address}}{{", " + system_store.detailedAddress}}
-							</view>
-						</view>
-						<view class='iconfont icon-jiantou'></view>
-					</block>
-					<block v-else>
-						<view>暂无门店信息</view>
-					</block>
 				</view>
 				<view class='line'>
 					<image src='/static/images/line.jpg'></image>
@@ -67,19 +67,12 @@
 							</checkbox-group>
 						</view>
 					</view>
-					<!-- <view class='item acea-row row-between-wrapper'
+					<view class='item acea-row row-between-wrapper'
 						v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId">
 						<view>会员优惠</view>
 						<view class='discount'>-￥{{priceGroup.vipPrice}}</view>
-					</view> -->
-					<view class='item acea-row row-between-wrapper' v-if='shippingType==0'>
-						<view>快递费用</view>
-						<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
-							+￥{{orderInfoVo.freightFee}}
-						</view>
-						<view class='discount' v-else>免运费</view>
 					</view>
-					<view v-else>
+					<view v-if='shippingType==1'>
 						<view class="item acea-row row-between-wrapper">
 							<view>联系人</view>
 							<view class="discount textR">
@@ -95,10 +88,17 @@
 							</view>
 						</view>
 					</view>
+					<view class='item acea-row row-between-wrapper' v-else>
+						<view>快递费用</view>
+						<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
+							+￥{{orderInfoVo.freightFee}}
+						</view>
+						<view class='discount' v-else>免运费</view>
+					</view>
 					<!-- <view class='item acea-row row-between-wrapper' wx:else>
-		      <view>自提门店</view>
-		      <view class='discount'>{{system_store.name}}</view>
-		    </view> -->
+						<view>自提门店</view>
+						<view class='discount'>{{system_store.name}}</view>
+					</view> -->
 					<view class='item' v-if="textareaStatus">
 						<view>备注信息</view>
 						<textarea v-if="coupon.coupon===false" placeholder-class='placeholder' @input='bindHideKeyboard'
@@ -261,7 +261,7 @@
 				status: 0,
 				is_address: false,
 				toPay: false, //修复进入支付时页面隐藏从新刷新页面
-				shippingType: 0,
+				shippingType: 1,
 				system_store: {},
 				storePostage: 0,
 				contacts: '',
@@ -324,6 +324,7 @@
 			if (this.isLogin) {
 				//this.getaddressInfo();
 				this.getloadPreOrder();
+				this.getList();
 			} else {
 				toLogin();
 			}
@@ -1051,7 +1052,7 @@
 	.order-submission .allAddress .nav .item.on::before {
 		position: absolute;
 		bottom: 0;
-		content: "团购商家配送";
+		content: "到店自提";
 		font-size: 28rpx;
 		display: block;
 		height: 0;
@@ -1066,7 +1067,7 @@
 	}
 
 	.order-submission .allAddress .nav .item:nth-of-type(2).on::before {
-		content: "到店自提";
+		content: "团购商家配送";
 		border-width: 0 0 80rpx 20rpx;
 		border-radius: 36rpx 14rpx 0 0;
 	}
@@ -1078,7 +1079,7 @@
 	.order-submission .allAddress .nav .item.on2::before {
 		position: absolute;
 		bottom: 0;
-		content: "到店自提";
+		content: "团购商家配送";
 		font-size: 28rpx;
 		display: block;
 		height: 0;
@@ -1092,7 +1093,7 @@
 	}
 
 	.order-submission .allAddress .nav .item:nth-of-type(1).on2::before {
-		content: "团购商家配送";
+		content: "到店自提";
 		border-width: 0 60rpx 60rpx 0;
 		border-radius: 14rpx 36rpx 0 0;
 	}

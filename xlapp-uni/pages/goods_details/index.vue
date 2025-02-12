@@ -279,7 +279,7 @@
 	import {
 		toLogin
 	} from '@/libs/login.js';
-	import {computeUser} from "@/api/user.js";
+	// import {computeUser} from "@/api/user.js";
 	import {
 		mapGetters
 	} from "vuex";
@@ -429,7 +429,7 @@
 			}
 			that.navH = app.globalData.navHeight;
 			// #ifdef H5
-			computeUser();
+			// computeUser(); 已废除
 			// #endif
 			// #ifdef MP || APP-PLUS
 			// 小程序链接进入获取绑定关系id
