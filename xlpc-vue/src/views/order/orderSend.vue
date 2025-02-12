@@ -103,7 +103,7 @@
     data() {
       return {
         formItem: {
-          type: '1',
+          type: '2',
           expressRecordType: '1',
           expressId: '',
           expressCode: '',
