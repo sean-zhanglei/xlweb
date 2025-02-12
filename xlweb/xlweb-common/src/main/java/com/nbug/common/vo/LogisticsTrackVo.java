@@ -7,14 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 一号通物流轨迹对象
+ * 物流轨迹对象
 
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="OnePassLogisticsTrackVo对象", description = "一号通物流轨迹对象")
-public class OnePassLogisticsTrackVo {
+@ApiModel(value="LogisticsTrackVo对象", description = "物流轨迹对象")
+public class LogisticsTrackVo {
 
     private static final long serialVersionUID=1L;
 

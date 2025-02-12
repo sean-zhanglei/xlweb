@@ -1,39 +1,27 @@
 package com.nbug.service.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.nbug.common.request.SmsApplyTempRequest;
-import com.nbug.common.request.SmsModifySignRequest;
 import com.nbug.common.utils.XlwebUtil;
 import com.nbug.common.utils.RedisUtil;
 import com.nbug.common.utils.RestTemplateUtil;
 import com.nbug.common.utils.ValidateFormUtil;
-import com.nbug.common.vo.MyRecord;
-import com.nbug.common.request.PageParamRequest;
 import com.nbug.common.constants.Constants;
-import com.nbug.common.constants.OnePassConstants;
 import com.nbug.common.constants.SmsConstants;
 import com.nbug.common.exception.XlwebException;
-import com.nbug.common.vo.OnePassLoginVo;
 import com.nbug.common.vo.SendSmsVo;
 import com.nbug.service.service.*;
-import com.nbug.service.util.OnePassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * SmsServiceImpl 接口实现
@@ -56,12 +44,6 @@ public class SmsServiceImpl implements SmsService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private OnePassUtil onePassUtil;
-
-    @Autowired
-    private OnePassService onePassService;
 
     private static final Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 
@@ -127,18 +109,9 @@ public class SmsServiceImpl implements SmsService {
      * @param sendSmsVo 短信参数
      */
     private Boolean sendCode(SendSmsVo sendSmsVo) {
-        String result;
         try {
-            String token = onePassUtil.getToken();
-            HashMap<String, String> header = onePassUtil.getCommonHeader(token);
-
-            Map<String, Object> map = (Map<String, Object>) JSONObject.parseObject(sendSmsVo.getParam());
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("phone", sendSmsVo.getMobile());
-            param.add("temp_id", sendSmsVo.getTemplate());
-            map.entrySet().stream().forEach(entry -> param.add(StrUtil.format(SmsConstants.SMS_COMMON_PARAM_FORMAT, entry.getKey()), entry.getValue()));
-            System.out.println("============发送短信=========header = " + header);
-            result = restTemplateUtil.postFromUrlencoded(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_API_SEND_URI, param, header);
+            String result = "";
+            System.out.println("============发送短信=========");
             checkResult(result);
         } catch (Exception e) {
             //接口请求异常，需要重新发送
@@ -160,10 +133,9 @@ public class SmsServiceImpl implements SmsService {
         if (StrUtil.isBlank(phone) || msgTempId <= 0) {
             return false;
         }
-        OnePassLoginVo loginVo = onePassUtil.getLoginVo();
         SendSmsVo smsVo = new SendSmsVo();
-        smsVo.setUid(loginVo.getAccount());
-        smsVo.setToken(loginVo.getSecret());
+        // smsVo.setUid();
+        // smsVo.setToken();
         smsVo.setMobile(phone);
         smsVo.setTemplate(msgTempId);
         smsVo.setParam(JSONObject.toJSONString(mapPram));
@@ -182,10 +154,9 @@ public class SmsServiceImpl implements SmsService {
         if (StrUtil.isBlank(phone) || StrUtil.isBlank(tempKey) || msgTempId <= 0) {
             return false;
         }
-        OnePassLoginVo loginVo = onePassUtil.getLoginVo();
         SendSmsVo smsVo = new SendSmsVo();
-        smsVo.setUid(loginVo.getAccount());
-        smsVo.setToken(loginVo.getSecret());
+        // smsVo.setUid();
+        // smsVo.setToken();
         smsVo.setMobile(phone);
         smsVo.setTemplate(msgTempId);
         smsVo.setParam(JSONObject.toJSONString(mapPram));
@@ -193,150 +164,16 @@ public class SmsServiceImpl implements SmsService {
     }
 
     /**
-     * 修改签名
-     */
-    @Override
-    public Boolean modifySign(SmsModifySignRequest request) {
-        ValidateFormUtil.isPhoneException(request.getPhone());
-        String token = onePassUtil.getToken();
-        HashMap<String, String> header = onePassUtil.getCommonHeader(token);
-
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("sign", request.getSign());
-        map.add("phone", request.getPhone());
-        map.add("verify_code", request.getCode());
-
-        onePassUtil.postFrom(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_SMS_MODIFY_URI, map, header);
-        return Boolean.TRUE;
-    }
-
-    /**
-     * 短信模板
-     */
-    @Override
-    public MyRecord temps(PageParamRequest pageParamRequest) {
-        String token = onePassUtil.getToken();
-        HashMap<String, String> header = onePassUtil.getCommonHeader(token);
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-        param.add("page", pageParamRequest.getPage());
-        param.add("limit", pageParamRequest.getLimit());
-        param.add("temp_type", 0);// 查询所有类型模板
-        JSONObject post = postFrom(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_TEMP_LIST_URI, param, header);
-        JSONObject jsonObject = post.getJSONObject("data");
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
-        MyRecord myRecord = new MyRecord();
-        if (CollUtil.isEmpty(jsonArray)) {
-            return myRecord.set("count", 0);
-        }
-        List<MyRecord> recordList = jsonArray.stream().map(i -> {
-            MyRecord record = new MyRecord();
-            record.setColums((JSONObject) i);
-            switch (record.getInt("temp_type")) {
-                case 1:
-                    record.set("type", "验证码");
-                    break;
-                case 2:
-                    record.set("type", "通知");
-                    break;
-                case 3:
-                    record.set("type", "营销短信");
-                    break;
-            }
-            return record;
-        }).collect(Collectors.toList());
-
-        myRecord.set("count", recordList.size());
-        myRecord.set("data", recordList);
-        return myRecord;
-    }
-
-    /**
-     * 申请模板消息
-     */
-    @Override
-    public Boolean applyTempMessage(SmsApplyTempRequest request) {
-        String token = onePassUtil.getToken();
-        HashMap<String, String> header = onePassUtil.getCommonHeader(token);
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-        param.add("title", request.getTitle());
-        param.add("content", request.getContent());
-        param.add("type", request.getType());
-
-        onePassUtil.postFrom(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_TEMP_APPLY_URI, param, header);
-        return Boolean.TRUE;
-    }
-
-    /**
-     * 模板申请记录
-     *
-     * @param type (1=验证码 2=通知 3=推广)
-     */
-    @Override
-    public MyRecord applys(Integer type, PageParamRequest pageParamRequest) {
-        String token = onePassUtil.getToken();
-        HashMap<String, String> header = onePassUtil.getCommonHeader(token);
-        MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-        param.add("page", pageParamRequest.getPage());
-        param.add("limit", pageParamRequest.getLimit());
-        if (ObjectUtil.isNotNull(type)) {
-            param.add("temp_type", type);
-        }
-
-        JSONObject post = onePassUtil.postFrom(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_APPLYS_LIST_URI, param, header);
-        JSONObject jsonObject = post.getJSONObject("data");
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
-        MyRecord myRecord = new MyRecord();
-        if (CollUtil.isEmpty(jsonArray)) {
-            return myRecord.set("count", 0);
-        }
-        List<MyRecord> recordList = jsonArray.stream().map(i -> {
-            MyRecord record = new MyRecord();
-            record.setColums((JSONObject) i);
-            switch (record.getInt("temp_type")) {
-                case 1:
-                    record.set("type", "验证码");
-                    break;
-                case 2:
-                    record.set("type", "通知");
-                    break;
-                case 3:
-                    record.set("type", "营销短信");
-                    break;
-            }
-            return record;
-        }).collect(Collectors.toList());
-
-        myRecord.set("count", recordList.size());
-        myRecord.set("data", recordList);
-        return myRecord;
-    }
-
-    /**
      * 发送公共验证码
      *
      * @param phone 手机号
      * @return Boolean
-     * 1.校验后台是否配置一号通
-     * 2.一号通是否剩余短信条数
+     * 1.校验后台是否配置短信
      * 3.发送短信
      */
     @Override
     public Boolean sendCommonCode(String phone) {
         ValidateFormUtil.isPhone(phone,"手机号码错误");
-        Boolean checkAccount = onePassService.checkAccount();
-        if (!checkAccount) {
-            throw new XlwebException("发送短信请先登录一号通账号");
-        }
-        JSONObject info = onePassService.info();
-        JSONObject smsObject = info.getJSONObject("sms");
-        Integer open = smsObject.getInteger("open");
-        if (!open.equals(1)) {
-            throw new XlwebException("发送短信请先开通一号通账号服务");
-        }
-        if (smsObject.getInteger("num") <= 0) {
-            throw new XlwebException("一号通账号服务余量不足");
-        }
-
         return sendSms(phone, SmsConstants.SMS_CONFIG_TYPE_VERIFICATION_CODE, null);
     }
 
@@ -565,18 +402,10 @@ public class SmsServiceImpl implements SmsService {
      */
     private Boolean commonSendSms(SendSmsVo sendSmsVo) {
         try {
-            String result;
-            String token = onePassUtil.getToken();
-            HashMap<String, String> header = onePassUtil.getCommonHeader(token);
+            String result = "";
 
-            Map<String, Object> map = (Map<String, Object>) JSONObject.parseObject(sendSmsVo.getContent());
-            MultiValueMap<String, Object> param = new LinkedMultiValueMap<>();
-            param.add("phone", sendSmsVo.getMobile());
-            param.add("temp_id", sendSmsVo.getTemplate());
+            logger.info("============发送短信=========header = ");
 
-            map.forEach((key, value) -> param.add(StrUtil.format(SmsConstants.SMS_COMMON_PARAM_FORMAT, key), value));
-            logger.info("============发送短信=========header = " + header);
-            result = restTemplateUtil.postFromUrlencoded(OnePassConstants.ONE_PASS_API_URL + OnePassConstants.ONE_PASS_API_SEND_URI, param, header);
             checkResult(result);
         } catch (Exception e) {
             e.printStackTrace();

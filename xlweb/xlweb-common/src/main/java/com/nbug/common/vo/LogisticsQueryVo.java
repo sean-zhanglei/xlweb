@@ -9,14 +9,14 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * 一号通物流查询结果对象
+ * 物流查询结果对象
 
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="OnePassLogisticsQueryVo对象", description = "一号通物流查询结果对象")
-public class OnePassLogisticsQueryVo {
+@ApiModel(value="LogisticsQueryVo对象", description = "物流查询结果对象")
+public class LogisticsQueryVo {
 
     private static final long serialVersionUID=1L;
 
@@ -33,6 +33,6 @@ public class OnePassLogisticsQueryVo {
     private String num;
 
     @ApiModelProperty(value = "物流详情")
-    private List<OnePassLogisticsTrackVo> content;
+    private List<LogisticsTrackVo> content;
 
 }

@@ -20,6 +20,7 @@ public class SendSmsVo {
     // 发送参数
     private String param;
 
+    // 发送内容
     private String content;
 
 }

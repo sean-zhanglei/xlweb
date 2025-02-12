@@ -106,18 +106,6 @@ public interface StoreProductService extends IService<StoreProduct> {
     boolean doProductStock(StoreProductStockRequest storeProductStockRequest);
 
     /**
-     * 获取复制商品配置
-     */
-    MyRecord copyConfig();
-
-    /**
-     * 复制平台商品
-     * @param url 商品链接
-     * @return
-     */
-    MyRecord copyProduct(String url);
-
-    /**
      * 添加/扣减库存
      * @param id 商品id
      * @param num 数量

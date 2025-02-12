@@ -1,7 +1,5 @@
 package com.nbug.service.service;
 
-import com.nbug.common.request.SmsApplyTempRequest;
-import com.nbug.common.request.SmsModifySignRequest;
 import com.nbug.common.vo.MyRecord;
 import com.nbug.common.request.PageParamRequest;
 
@@ -12,28 +10,6 @@ import java.math.BigDecimal;
 
  */
 public interface SmsService {
-
-    /**
-     * 修改签名
-     */
-    Boolean modifySign(SmsModifySignRequest request);
-
-    /**
-     * 短信模板
-     */
-    MyRecord temps(PageParamRequest pageParamRequest);
-
-    /**
-     * 申请模板消息
-     */
-    Boolean applyTempMessage(SmsApplyTempRequest request);
-
-    /**
-     * 模板申请记录
-     *
-     * @param type (1=验证码 2=通知 3=推广)
-     */
-    MyRecord applys(Integer type, PageParamRequest pageParamRequest);
 
     /**
      * 发送公共验证码

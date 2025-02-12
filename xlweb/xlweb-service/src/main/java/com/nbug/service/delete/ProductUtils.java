@@ -494,11 +494,11 @@ public class ProductUtils {
     }
 
     /**
-     * 一号通复制商品转公共商品参数
-     * @param jsonObject 一号通复制商品
+     * 复制商品转公共商品参数
+     * @param jsonObject 复制商品
      *
      */
-    public static StoreProductRequest onePassCopyTransition(com.alibaba.fastjson.JSONObject jsonObject) {
+    public static StoreProductRequest CopyTransition(com.alibaba.fastjson.JSONObject jsonObject) {
         if (null == jsonObject) return null;
 
         StoreProductRequest productRequest = new StoreProductRequest();
