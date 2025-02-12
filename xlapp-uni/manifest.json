@@ -1,7 +1,7 @@
 {
-    "name" : "西来XL团购",
+    "name" : "西来XL果蔬优选团购",
     "appid" : "__UNI__EA0120D",
-    "description" : "西来XL团购，你身边的胖东来DL，各类新鲜蔬菜、水果应有尽有，在这儿一定有你想要的健康、实惠和相因（便宜）",
+    "description" : "西来XL果蔬优选团购，你身边的胖东来DL，家附近的菜篮子，在这儿一定有你想要的健康、实惠和相因（便宜），速团！",
     "versionName" : "1.0.0",
     "versionCode" : 1001,
     "transformPx" : false,
@@ -182,7 +182,7 @@
         "async" : {
             "timeout" : 200000
         },
-        "title" : "西来XL团购"
+        "title" : "西来XL果蔬优选团购"
     },
     "plus" : {
         "statusbar" : {
