@@ -250,7 +250,7 @@ export default {
 				ctx.setFontSize(28);
 				ctx.setFillStyle('#999');
 				ctx.fillText('长按或扫描查看', 490, 1030 + contentHh);
-				ctx.draw(true, function() {
+				ctx.draw(true, function(res) {
 					uni.canvasToTempFilePath({
 						canvasId: 'firstCanvas',
 						fileType: 'png',

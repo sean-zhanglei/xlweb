@@ -565,7 +565,7 @@
 			},
 			// 生成二维码；
 			make() {
-				let href = location.protocol + '//' + location.host +
+				let href = window.location.href.split('/pages')[0] +
 					'/pages/activity/goods_combination_status/index?id=' + this.pinkId + "&spread=" + this.uid;
 				uQRCode.make({
 					canvasId: 'qrcode',

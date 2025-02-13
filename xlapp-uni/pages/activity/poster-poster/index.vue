@@ -118,7 +118,8 @@
 			},
 			// 生成二维码；
 			make(uid) {
-				let href = location.protocol + '//' + window.location.host + '/pages/activity/goods_combination_status/index?id=' + this.id + "&spread=" + uid;
+				let href = window.location.href.split('/pages')[0] +
+				 '/pages/activity/goods_combination_status/index?id=' + this.id + "&spread=" + uid;
 				uQRCode.make({
 					canvasId: 'qrcode',
 					text: href,

@@ -537,9 +537,7 @@
 			},
 			// 生成二维码；
 			make() {
-				let href = window.location.protocol +
-					"//" +
-					window.location.host +
+				let href = window.location.href.split('/pages')[0] +
 					'/pages/activity/goods_bargain_details/index?id=' + this.id + '&startBargainUid=' + this
 					.uid + '&spid=' + this.uid + '&storeBargainId=' + this.storeBargainId;
 				uQRCode.make({
