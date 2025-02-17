@@ -6,5 +6,6 @@ from .cart_api_client import CartAPIClient
 from .order_api_client import OrderAPIClient
 from .coupon_api_client import CouponAPIClient
 from .main_api_client import MainAPIClient
+from .api_client_base import APIClientBase
 
-__all__ = ['AddressAPIClient', 'ProductAPIClient', 'CartAPIClient', 'OrderAPIClient', 'CouponAPIClient', 'MainAPIClient']
+__all__ = ['AddressAPIClient', 'ProductAPIClient', 'CartAPIClient', 'OrderAPIClient', 'CouponAPIClient', 'MainAPIClient', 'APIClientBase']

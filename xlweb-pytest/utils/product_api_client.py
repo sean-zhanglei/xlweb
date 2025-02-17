@@ -1,6 +1,16 @@
 from .api_client_base import APIClientBase
 
 class ProductAPIClient(APIClientBase):
+    
+    def get_product_category(self):
+        """
+        获取商品分类
+        :return: 响应对象
+        """
+        url = "/api/front/category"
+        params = {}
+        response = self._send_request("GET", url, params=params)
+        return response
     def get_product_list(self, page=1, page_size=10):
         """
         获取商品列表
