@@ -1,5 +1,6 @@
 package com.nbug.common.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class YlyPrintRequest {
     private String Phone;
     private String Address;
     private String Note;
+    private Integer shippingType;
+    private String deliveryTime;
+    private String pickupTime;
     private List<YlyPrintRequestGoods> Goods;
     private String Amount;      // 合计
     private String Discount;    // 优惠

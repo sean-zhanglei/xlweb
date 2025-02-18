@@ -79,6 +79,9 @@ public class YlyPrintServiceImpl implements YlyPrintService {
         ylyPrintRequest.setPhone(exitOrder.getUserPhone());
         ylyPrintRequest.setAddress(exitOrder.getUserAddress());
         ylyPrintRequest.setNote(exitOrder.getMark());
+        ylyPrintRequest.setShippingType(exitOrder.getShippingType());
+        ylyPrintRequest.setDeliveryTime(exitOrder.getDeliveryTime());
+        ylyPrintRequest.setPickupTime(exitOrder.getPickupTime());
 
         ylyPrintRequest.setGoods(goods);
         ylyPrintRequest.setAmount(exitOrder.getProTotalPrice().toString());
