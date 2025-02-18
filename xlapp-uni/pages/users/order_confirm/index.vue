@@ -87,14 +87,47 @@
 									@blur='phone'></input>
 							</view>
 						</view>
-					</view>
-					<view class='item acea-row row-between-wrapper' v-else>
-						<view>快递费用</view>
-						<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
-							+￥{{orderInfoVo.freightFee}}
+						<view class="item acea-row row-between-wrapper">
+							<view>自提时间</view>
+							<view>
+								<!-- 下拉列表 自提时间 -->
+								<view @click="toggleDropdown" class="select-box">
+									{{ selectedOptionPickup }}
+								  <view class="arrow" :class="{ 'arrow-up': isDropdownVisible }"></view>
+								</view>
+								<view class="dropdown" v-if="isDropdownVisible">
+								  <view v-for="(option, index) in optionsPickup" :key="index" @click="selectOptionPickup(index)">
+									{{ option.name }}
+								  </view>
+								</view>
+							</view>
 						</view>
-						<view class='discount' v-else>免运费</view>
 					</view>
+					<view v-else>
+						<view class='item acea-row row-between-wrapper'>
+							<view>配送时间</view>
+							<view>
+								<!-- 下拉列表 配送时间 -->
+								<view @click="toggleDropdown" class="select-box">
+									{{ selectedOptionDelivery }}
+								  <view class="arrow" :class="{ 'arrow-up': isDropdownVisible }"></view>
+								</view>
+								<view class="dropdown" v-if="isDropdownVisible">
+								  <view v-for="(option, index) in optionsDelivery" :key="index" @click="selectOptionDelivery(index)">
+									{{ option.name }}
+								  </view>
+								</view>
+							</view>
+						</view>
+						<view class='item acea-row row-between-wrapper'>
+							<view>快递费用</view>
+							<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
+								+￥{{orderInfoVo.freightFee}}
+							</view>
+							<view class='discount' v-else>免运费</view>
+						</view>
+					</view>
+					
 					<!-- <view class='item acea-row row-between-wrapper' wx:else>
 						<view>自提门店</view>
 						<view class='discount'>{{system_store.name}}</view>
@@ -290,7 +323,36 @@
 				orderInfoVo: {},
 				addressList: [], //地址列表数据
 				orderProNum: 0,
-				preOrderNo: '' //预下单订单号
+				preOrderNo: '',//预下单订单号
+				// 下拉列表是否可见
+				isDropdownVisible: false,
+				// 选中的选项
+				selectedOptionDelivery: '',
+				selectedOptionPickup: '',
+				optionsDelivery: [
+					{
+						id : 1,
+						name: "10:00 - 12:00"
+					},
+					{
+						id : 2,
+						name: "18:00 - 22:00"
+					},
+				],
+				optionsPickup: [
+					{
+						id : 1,
+						name: "10:00 - 13:00"
+					},
+					{
+						id : 2,
+						name: "13:00 - 18:00"
+					},
+					{
+						id : 3,
+						name: "18:00 - 22:00"
+					}
+				]
 			};
 		},
 		computed: mapGetters(['isLogin', 'systemPlatform', 'productType']),
@@ -924,6 +986,11 @@
 							title: '请填写联系人或联系人电话'
 						});
 					}
+					if (that.selectedOptionPickup == "") {
+						return that.$util.Tips({
+							title: '请选择自提时间'
+						});
+					}
 					if (!/^1(3|4|5|7|8|9|6)\d{9}$/.test(that.contactsTel)) {
 						return that.$util.Tips({
 							title: '请填写正确的手机号'
@@ -937,6 +1004,12 @@
 					if (that.storeList.length == 0) return that.$util.Tips({
 						title: '暂无门店,请选择其他方式'
 					});
+				} else {
+					if (that.selectedOptionDelivery == "") {
+						return that.$util.Tips({
+							title: '请选择配送时间'
+						});
+					}
 				}
 				data = {
 					realName: that.contacts,
@@ -949,7 +1022,9 @@
 					mark: that.mark,
 					storeId: that.system_store.id || 0,
 					shippingType: that.$util.$h.Add(that.shippingType, 1),
-					payChannel: that.payChannel||'weixinh5'
+					payChannel: that.payChannel||'weixinh5',
+					deliveryTime: that.selectedOptionDelivery,
+					pickupTime: that.selectedOptionPickup
 
 				};
 				if (data.payType == 'yue' && parseFloat(that.userInfo.nowMoney) < parseFloat(that.totalPrice))
@@ -968,6 +1043,20 @@
 				// #ifndef MP
 				that.payment(data);
 				// #endif
+			},
+			// 切换下拉列表的显示状态
+			toggleDropdown() {
+			  this.isDropdownVisible = !this.isDropdownVisible;
+			},
+			// 选择选项的方法
+			selectOptionDelivery(index) {
+			  this.selectedOptionDelivery = this.optionsDelivery[index].name;
+			  this.isDropdownVisible = false;
+			},
+			// 选择选项的方法
+			selectOptionPickup(index) {
+			  this.selectedOptionPickup = this.optionsPickup[index].name;
+			  this.isDropdownVisible = false;
 			}
 		}
 	}
@@ -1267,5 +1356,38 @@
 
 	.footer .transparent {
 		opacity: 0
+	}
+	
+	.select-box {
+	  padding: 20rpx 40rpx 20rpx 10rpx;
+	  border: 2rpx solid #ccc;
+	  position: relative;
+	}
+	.arrow {
+	  position: absolute;
+	  right: 10rpx;
+	  top: 50%;
+	  transform: translateY(-50%);
+	  width: 0;
+	  height: 0;
+	  border-left: 10rpx solid transparent;
+	  border-right: 10rpx solid transparent;
+	  border-top: 10rpx solid #333;
+	}
+	.arrow-up {
+	  border-bottom: 10rpx solid #333;
+	  border-top: none;
+	}
+	
+	.dropdown {
+	  border: 2rpx solid #ccc;
+	  border-top: none;
+	}
+	.dropdown view {
+	  padding: 10rpx;
+	  cursor: pointer;
+	}
+	.dropdown view:hover {
+	  background-color: #f0f0f0;
 	}
 </style>

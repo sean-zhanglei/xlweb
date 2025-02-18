@@ -922,6 +922,9 @@ public class OrderServiceImpl implements OrderService {
         String verifyCode = "";
         String userAddressStr = "";
         if (request.getShippingType() == 1) { // 快递配送
+            if (ObjectUtil.isNull(request.getDeliveryTime())) {
+                throw new XlwebException("请选择配送时间");
+            }
             if (request.getAddressId() <= 0) throw new XlwebException("请选择收货地址");
             UserAddress userAddress = userAddressService.getById(request.getAddressId());
             if (ObjectUtil.isNull(userAddress) || userAddress.getIsDel()) {
@@ -933,6 +936,9 @@ public class OrderServiceImpl implements OrderService {
         }else if (request.getShippingType() == 2) { // 到店自提
             if (StringUtils.isBlank(request.getRealName()) || StringUtils.isBlank(request.getPhone())) {
                 throw new XlwebException("请填写姓名和电话");
+            }
+            if (ObjectUtil.isNull(request.getPickupTime())) {
+                throw new XlwebException("请选择自提时间");
             }
             // 自提开关是否打开
             String storeSelfMention = systemConfigService.getValueByKey(SysConfigConstants.CONFIG_KEY_STORE_SELF_MENTION);
@@ -1064,7 +1070,11 @@ public class OrderServiceImpl implements OrderService {
         if (request.getShippingType() == 2) {
             storeOrder.setVerifyCode(verifyCode);
             storeOrder.setStoreId(request.getStoreId());
+            storeOrder.setPickupTime(request.getPickupTime());
+        } else {
+            storeOrder.setDeliveryTime(request.getDeliveryTime());
         }
+
         storeOrder.setTotalNum(orderInfoVo.getOrderProNum());
         storeOrder.setCouponId(Optional.ofNullable(request.getCouponId()).orElse(0));
 
