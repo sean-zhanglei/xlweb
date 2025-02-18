@@ -8,8 +8,9 @@
         </div>
         <div class="bnt" @click="storeCancellation">立即核销</div>
       </div>
-      <div class="scan" v-if="isWeixin">
-        <img src="../../../assets/imgs/scan.gif" @click="openQRCode" />
+      <div class="scan">
+        <qr-code-scanner @verify-code-event="handleVerifyCodeEvent" />
+        <!-- <img src="../../../assets/imgs/scan.gif" @click="openQRCode" /> -->
       </div>
     </div>
     <WriteOff
@@ -22,8 +23,9 @@
   </div>
 </template>
 <script>
+  import QrCodeScanner from "@/components/QrCodeScanner";
   import WriteOff from "../components/WriteOff";
-  import { wechatEvevt } from "@/libs/wechat";
+  // import { wechatEvevt } from "@/libs/wechat";
   // import { orderVerific } from "@api/order";
   import { writeUpdateApi, writeConfirmApi } from '@/api/order'
   const NAME = "OrderCancellation";
@@ -31,12 +33,13 @@
   export default {
     name: NAME,
     components: {
-      WriteOff
+      WriteOff,
+      QrCodeScanner
     },
     props: {},
     data: function() {
       return {
-        isWeixin: this.$wechat.isWeixin(),
+        // isWeixin: this.$wechat.isWeixin(),
         iShidden: true,
         orderInfo: null,
         verify_code: ""
@@ -46,6 +49,9 @@
       import('@/assets/js/media_750')
     },
     methods: {
+      handleVerifyCodeEvent(res) {
+        this.verify_code = res;
+      },
       cancel: function(res) {
         this.iShidden = res;
       },
@@ -78,36 +84,36 @@
             return this.$dialog.error(res.message);
           });
       },
-      openQRCode: function() {
-        let that = this;
-        wechatEvevt("scanQRCode", {
-          needResult: 1,
-          scanType: ["qrCode", "barCode"]
-        })
-          .then(res => {
-            if (res.resultStr) {
-              that.verify_code = res.resultStr;
-              that.storeCancellation();
-            } else that.$dialog.error("没有扫描到什么！");
-          })
-          .catch(res => {
-            if (res.is_ready) {
-              res.wx.scanQRCode({
-                needResult: 1,
-                scanType: ["qrCode", "barCode"],
-                success: function(res) {
-                  that.verify_code = res.resultStr;
-                  that.storeCancellation();
-                },
-                fail: function(res) {
-                  if (res.errMsg == "scanQRCode:permission denied") {
-                    that.$dialog.error("没有权限");
-                  }
-                }
-              });
-            }
-          });
-      }
+      // openQRCode: function() {
+      //   let that = this;
+      //   wechatEvevt("scanQRCode", {
+      //     needResult: 1,
+      //     scanType: ["qrCode", "barCode"]
+      //   })
+      //     .then(res => {
+      //       if (res.resultStr) {
+      //         that.verify_code = res.resultStr;
+      //         that.storeCancellation();
+      //       } else that.$dialog.error("没有扫描到什么！");
+      //     })
+      //     .catch(res => {
+      //       if (res.is_ready) {
+      //         res.wx.scanQRCode({
+      //           needResult: 1,
+      //           scanType: ["qrCode", "barCode"],
+      //           success: function(res) {
+      //             that.verify_code = res.resultStr;
+      //             that.storeCancellation();
+      //           },
+      //           fail: function(res) {
+      //             if (res.errMsg == "scanQRCode:permission denied") {
+      //               that.$dialog.error("没有权限");
+      //             }
+      //           }
+      //         });
+      //       }
+      //     });
+      // }
     }
   };
 </script>
@@ -153,8 +159,8 @@
   }
   .OrderCancellation .scan {
     width: 3rem;
-    height: 3rem;
-    margin: 1.1rem auto 0 auto;
+    height: 6rem;
+    margin: 0.3rem auto 0.3rem auto;
     background-color: #f5f5f5;
   }
   .OrderCancellation .scan img {
