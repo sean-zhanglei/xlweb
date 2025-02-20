@@ -169,8 +169,10 @@
         "domain" : "",
         "sdkConfigs" : {
             "maps" : {
-                "tencent" : {
-                    "key" : "TYRBZ-7FMA3-X6D3F-OPTX7-LP3KV-CMFWS"
+                "amap" : {
+                    "key" : "6569dac63731a94f7008fd72fd4e2989",
+                    "securityJsCode" : "72aea4428340f72d3a178815d8c99188",
+                    "serviceHost" : "https://xl.nbug.top/_AMapService/"
                 }
             }
         },
