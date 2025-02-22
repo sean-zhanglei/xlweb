@@ -107,6 +107,9 @@
 				bargain: false, //是否是砍价
 				combination: false, //是否是拼团
 				secKill: false, //是否是秒杀
+				// 预设的坐标点（桂林翠岛菜鸟驿站）
+				targetLatitude: 30.71312,
+				targetLongitude: 104.18545
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -260,10 +263,47 @@
 			},
 			chooseLocation: function () {
 				uni.chooseLocation({
+					latitude: this.targetLatitude,
+					longitude: this.targetLongitude,
 					success: (res) => {
-						this.$set(this.userAddress,'detail',res.address.replace(/.+?(省|市|自治区|自治州|县|区)/g,''));
+						// 选择的地址坐标
+						const selectedLatitude = res.latitude;
+						const selectedLongitude = res.longitude;
+
+						// 计算距离
+						const distance = this.calculateDistance(
+							selectedLatitude,
+							selectedLongitude,
+							this.targetLatitude,
+							this.targetLongitude
+						);
+
+						// 判断距离是否超过5km
+						if (distance > 5) {
+							uni.showToast({
+								title: '超出配送5KM范围，请重新选择',
+								icon: 'none',
+								duration:2000
+							});
+						} else {
+							this.$set(this.userAddress,'detail',res.address.replace(/.+?(省|市|自治区|自治州|县|区)/g,''));
+						}
 					}
 				})
+			},
+			calculateDistance(lat1, lon1, lat2, lon2) {
+				const R = 6371; // 地球半径，单位：km
+				const dLat = this.deg2rad(lat2 - lat1);
+				const dLon = this.deg2rad(lon2 - lon1);
+				const a =
+					Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+					Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+					Math.sin(dLon / 2) * Math.sin(dLon / 2);
+				const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+				return R * c;
+			},
+			deg2rad(deg) {
+				return deg * (Math.PI / 180);
 			},
 			// 导入共享地址（小程序）
 			getWxAddress: function() {
@@ -284,7 +324,8 @@
 									realName: res.userName,
 									postCode: res.postalCode,
 									phone: res.telNumber,
-									detail: res.detailInfo,
+									// detail: res.detailInfo,
+									detail:	'请选择详细地址',
 									id: 0
 								}).then(res => {
 									setTimeout(function() {
@@ -372,7 +413,8 @@
 								district: userInfo.countryName,
 								cityId: 0
 							},
-							detail: userInfo.detailInfo,
+							// detail: userInfo.detailInfo,
+							detail:	'请选择详细地址',
 							isDefault: 1,
 							postCode: userInfo.postalCode
 						})

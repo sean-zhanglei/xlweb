@@ -11,7 +11,7 @@
 				<view class='item borRadius14' v-for="(item,index) in addressList" :key="index">
 					<view class='address' @click='goOrder(item.id)'>
 						<view class='consignee'>收货人：{{item.realName}}<text class='phone'>{{item.phone}}</text></view>
-						<view>收货地址：{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
+						<view>收货地址：{{item.province}}{{item.city}}{{item.district}}（{{item.detail}}）</view>
 					</view>
 					<view class='operation acea-row row-between-wrapper'>
 						<!-- #ifndef MP -->
@@ -165,7 +165,8 @@
 									realName: res.userName,
 									postCode: res.postalCode,
 									phone: res.telNumber,
-									detail: res.detailInfo,
+									// detail: res.detailInfo,
+									detail: '请选择详细地址',
 									id: 0
 									//type: 1//区别城市id（导入微信地址无城市id需要后台自己查找）;
 								}).then(res => {
@@ -225,7 +226,8 @@
 								district: userInfo.countryName,
 								cityId: 0
 							},
-							detail: userInfo.detailInfo,
+							// detail: userInfo.detailInfo,
+							detail:	'请选择详细地址',
 							postCode: userInfo.postalCode,
 							isDefault: true
 						})
