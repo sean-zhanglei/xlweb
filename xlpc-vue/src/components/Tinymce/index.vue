@@ -108,6 +108,7 @@ export default {
         link_title: false,
         convert_urls: false, //防止路径被转化为相对路径
         nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        content_style: 'img {width: 100% !important;}',
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value)

@@ -3,6 +3,7 @@ package com.nbug.service.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -40,6 +41,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -100,9 +103,6 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
 
     @Autowired
     private TransactionTemplate transactionTemplate;
-
-    @Autowired
-    private OnePassService onePassService;
 
     @Autowired
     private UserTokenService userTokenService;
@@ -984,7 +984,7 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             if (StrUtil.isNotBlank(user.getPhone())) {
                 SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
                 // 发送改价短信提醒
-                smsService.sendOrderEditPriceNotice(user.getPhone(), existOrder.getOrderId(), request.getPayPrice(), Integer.valueOf(smsTemplate.getTempId()));
+                smsService.sendOrderEditPriceNotice(user.getPhone(), existOrder.getOrderId(), request.getPayPrice(), smsTemplate.getTempKey());
             }
         }
 
@@ -1492,7 +1492,7 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
                 if (voList.size() > 1) {
                     proName = proName.concat("等");
                 }
-                smsService.sendOrderDeliverNotice(user.getPhone(), user.getNickname(), proName, storeOrder.getOrderId(), Integer.valueOf(smsTemplate.getTempId()));
+                smsService.sendOrderDeliverNotice(user.getPhone(), user.getNickname(), proName, storeOrder.getOrderId(), smsTemplate.getTempKey());
             }
         }
 
@@ -1599,8 +1599,20 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             record.set("net", express.getNetName());// 收件网点名称(部分快递公司必选)
         }
 
-        MyRecord myRecord = onePassService.expressDump(record);
+        MyRecord myRecord = expressDump(record);
         storeOrder.setDeliveryId(myRecord.getStr("kuaidinum"));
+    }
+
+    /**
+     * 电子面单
+     * @param record 电子面单参数
+     * @return
+     */
+    public MyRecord expressDump(MyRecord record) {
+        // TODO 后续对接电子面单厂家
+        MyRecord myRecord = new MyRecord();
+        JSONObject jsonObject = new JSONObject();
+        return myRecord.setColums(jsonObject);
     }
 
     /**

@@ -118,7 +118,8 @@
 			},
 			// 生成二维码；
 			make(uid) {
-				let href = location.protocol + '//' + window.location.host + '/pages/activity/goods_combination_status/index?id=' + this.id + "&spread=" + uid;
+				let href = window.location.href.split('/pages')[0] +
+				 '/pages/activity/goods_combination_status/index?id=' + this.id + "&spread=" + uid;
 				uQRCode.make({
 					canvasId: 'qrcode',
 					text: href,
@@ -188,7 +189,7 @@
 								context.restore();
 								
 								context.setFontSize(72);
-								context.setFillStyle('#fc4141');
+								context.setFillStyle('#009600');
 								context.fillText(price, 250, 210);
 								
 								context.setFontSize(32);

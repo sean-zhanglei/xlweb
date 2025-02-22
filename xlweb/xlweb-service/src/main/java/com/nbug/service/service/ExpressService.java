@@ -35,11 +35,6 @@ public interface ExpressService extends IService<Express> {
     Boolean updateExpressShow(ExpressUpdateShowRequest expressRequest);
 
     /**
-     * 同步快递公司
-     */
-    Boolean syncExpress();
-
-    /**
      * 查询全部快递公司
      * @param type 类型：normal-普通，elec-电子面单
      */

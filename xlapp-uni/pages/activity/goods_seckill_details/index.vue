@@ -324,11 +324,13 @@
 				},
 			});
 			// #ifndef APP-PLUS
-			this.navH = app.globalData.navHeight
+			this.navH = app.globalData.navH;
 			// #endif
+			
 			// #ifdef APP-PLUS
-			this.navH = 90
+			this.navH = app.globalData.navHeight;
 			// #endif
+			
 			// #ifdef MP
 			let menuButtonInfo = uni.getMenuButtonBoundingClientRect()
 			this.meunHeight = menuButtonInfo.height
@@ -1154,7 +1156,7 @@
 		height: 110rpx;
 		padding: 0 30rpx;
 		box-sizing: border-box;
-		background-color: #E93323;
+		background-color: #009600;
 	}
 
 	.product-con .nav .money {
@@ -1287,7 +1289,7 @@
 
 	.product-con .footer .bnt .buy {
 		border-radius: 0 50rpx 50rpx 0;
-		background-image: linear-gradient(to right, #fa6514 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 	}
 
 	.setCollectBox {

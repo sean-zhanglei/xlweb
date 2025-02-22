@@ -1,20 +1,23 @@
 <template>
 	<view>
 		<view class="page-index" :class="{'bgf':navIndex >0}">
-			<!-- #ifdef H5||APP||MP-WEIXIN -->
-			<view class="header">
+		    <!-- #ifdef APP || MP || MP-WEIXIN -->
+				<view class="header-status" :style="'height:' + (topHeight)"></view>
+		    <!-- #endif -->
+			<!-- #ifdef H5 || APP || MP || MP-WEIXIN -->
+			<view class="header mp-header" :style="'padding-top:'+ (searchPadding) + ';padding-bottom:'+ (searchPadding) + ';height:' + (searchHeight) + ';top:' + (topHeight)">
 				<view class="serch-wrapper flex">
 					<view class="logo">
 						<image :src="logoUrl" mode=""></image>
 					</view>
-					<navigator url="/pages/goods_search/index" class="input" hover-class="none"><text
+					<navigator url="/pages/goods_search/index" class="input" :style="'margin-right:'+(searchMargin)" hover-class="none"><text
 							class="iconfont icon-xiazai5"></text>
 						搜索商品</navigator>
 				</view>
 			</view>
 			<!-- #endif -->
 			<!-- 首页展示 -->
-			<view class="page_content" :style="'margin-top:'+(marTop)+'px;'" v-if="navIndex == 0">
+			<view class="page_content" :style="'margin-top:'+(marTop)" v-if="navIndex == 0">
 				<view class="mp-bg"></view>
 				<!-- banner -->
 				<view class="swiper" v-if="imgUrls.length">
@@ -102,7 +105,7 @@
 
 				<!-- 首页推荐 -->
 				<!-- :class="iSshowH?'on':''" -->
-				<view class="sticky-box" :style="'top:'+(marTop)+'px;'">
+				<view class="sticky-box" :style="'top:'+(marTop)">
 					<scroll-view class="scroll-view_H" style="width: 100%;" scroll-x="true" scroll-with-animation
 						:scroll-left="tabsScrollLeft" @scroll="scroll">
 						<view class="tab nav-bd" id="tab_list">
@@ -153,7 +156,6 @@
 <script>
 	import Auth from '@/libs/wechat';
 	import Cache from '../../utils/cache';
-	var statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 	let app = getApp();
 	import {
 		getIndexData,
@@ -237,12 +239,14 @@
 		},
 		data() {
 			return {
-				pageHeight: 0,
+				searchHeight: '',
+				searchPadding: '',
+				searchMargin: '',
+				topHeight: '',
 				loaded: false,
 				loading: false,
 				isAuto: false, //没有授权的不会自动授权
 				isShowAuth: false, //是否隐藏授权
-				statusBarHeight: statusBarHeight,
 				navIndex: 0,
 				navTop: [],
 				followUrl: "",
@@ -264,7 +268,7 @@
 				duration: 500,
 				window: false,
 				iShidden: false,
-				navH: "",
+				// navH: "",
 				newGoodsBananr: '',
 				couponList: [],
 				liveList: [],
@@ -276,7 +280,7 @@
 					pic: '/static/images/hot_003.png'
 				}],
 				ProductNavindex: 0,
-				marTop: 0,
+				marTop: '',
 				childID: 0,
 				loadend: false,
 				loadTitle: '加载更多',
@@ -286,7 +290,7 @@
 					page: 1,
 					limit: 10,
 				},
-				is_switch: true,
+				is_switch: false,
 				hotPage: 1,
 				hotLimit: 10,
 				hotScroll: false,
@@ -303,7 +307,7 @@
 				tempArr: [], //精品推荐临时数组
 				roll: [], // 新闻简报
 				site_name: '', //首页title
-				iSshowH: false,
+				iSshowH: true,
 				configApi: {}, //分享类容配置
 				spikeList: [], // 秒杀
 				point: '',
@@ -347,24 +351,33 @@
 					} catch {}
 				}
 			});
-			let self = this
+			let self = this;
+			
 			// #ifdef MP
-			// 获取小程序头部高度
-			this.navH = app.globalData.navHeight;
-			let info = uni.createSelectorQuery().select(".mp-header");
-			info.boundingClientRect(function(data) {
-				self.marTop = data.height
-				self.poTop = Number(data.height) + 84
-			}).exec()
+			
+			this.marTop = app.globalData.mbAllHeight + app.globalData.statusBarHeight + 'px';
+			this.topHeight = app.globalData.statusBarHeight + 'px';
+			
+			this.searchHeight = app.globalData.mbAllHeight + 'px';
+			this.searchPadding = app.globalData.mbTopHeight + 'px';
+			this.searchMargin = app.globalData.mbPaddingRight + 'px';
 			// #endif
+			
 			// #ifndef MP
-			this.navH = 0;
+			this.marTop = '78rpx';
+			this.topHeight = '0rpx';
+			
+			this.searchHeight = '78rpx'; // 58 + 2 * 10
+			this.searchPadding = '10rpx';
+			this.searchMargin = '30rpx'; // 30rpx
 			// #endif
+			
 			this.isLogin && silenceBindingSpread();
 			// Promise.all([this.getAllCategory(), this.getIndexConfig()
 			// 	// , this.setVisit()
 			// ]);
 			this.getIndexConfig();
+			
 			// #ifdef MP
 			this.getTemlIds()
 			// #endif
@@ -595,8 +608,8 @@
 				getGroomList(type, this.params).then(({
 					data
 				}) => {
-					this.iSshowH = false
-					this.loading = false
+					// this.iSshowH = false
+					// this.loading = false
 					this.goodScroll = data.list.length >= this.params.limit
 					this.params.page++
 					this.tempArr = this.tempArr.concat(data.list)
@@ -666,6 +679,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+		
 		/* #ifdef H5 */
 		background-color: #fff;
 		/* #endif */
@@ -951,44 +965,47 @@
 		}
 	}
 
+	.header-status {
+		position: fixed;
+		top: 0px;
+		width: 100%;
+		z-index: 999;
+		background-color:$theme-color;
+	}
 	.page-index {
 		display: flex;
 		flex-direction: column;
 		min-height: 100%;
 		background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
 
+		/* #ifdef H5 */
 		.header {
-			position: sticky;
-			top: 0;
+			position: fixed;
 			z-index: 200000;
 			width: 100%;
+			padding-left: 30rpx;
+			// padding-right: 30rpx;
+			
 			background-color: $theme-color;
-			padding: 28rpx 30rpx;
 
 			.serch-wrapper {
-				margin-top: var(--status-bar-height);
 				align-items: center;
-				
-				/* #ifdef MP-WEIXIN */
-				width: 75%;
-				/* #endif */
-
 
 				.logo {
-					width: 118rpx;
-					height: 42rpx;
+					width: 58rpx;
+					height: 58rpx;
 					margin-right: 24rpx;
 				}
 
 				image {
-					width: 118rpx;
-					height: 42rpx;
+					width: 58rpx;
+					height: 58rpx;
 				}
 
 				.input {
 					display: flex;
 					align-items: center;
-					width: 546rpx;
+					width: 100%;
 					height: 58rpx;
 					padding: 0 0 0 30rpx;
 					background: rgba(247, 247, 247, 1);
@@ -1009,37 +1026,36 @@
 				padding-top: 24rpx;
 			}
 		}
-
-		/* #ifdef MP||APP */
+		/* #endif */
+		
+		/* #ifdef MP || APP || MP-WEIXIN */
 		.mp-header {
 			z-index: 999;
-			position: fixed;
-			left: 0;
-			top: 0;
 			width: 100%;
-			/* #ifdef H5||APP */
-			padding-bottom: 20rpx;
-			/* #endif */
+			position: fixed;
+			padding-left: 30rpx;
+			padding-right: 30rpx;
+			
 			background-color: $theme-color;
 
 			.serch-wrapper {
-				height: 100%;
 				align-items: center;
-				padding: 0 50rpx 0 53rpx;
 
+				.logo {
+					width: 58rpx;
+					height: 58rpx;
+					margin-right: 24rpx;
+				}
 				image {
-					width: 118rpx;
-					height: 42rpx;
-					margin-right: 30rpx;
+					width: 58rpx;
+					height: 58rpx;
 				}
 
 				.input {
 					display: flex;
 					align-items: center;
-					/* #ifdef MP||APP */
-					width: 305rpx;
-					/* #endif */
-					height: 50rpx;
+					width: 100%;
+					height: 58rpx;
 					padding: 0 0 0 30rpx;
 					background: rgba(247, 247, 247, 1);
 					border: 1px solid rgba(241, 241, 241, 1);
@@ -1366,12 +1382,9 @@
 	.mp-bg {
 		position: absolute;
 		left: 0;
-		/* #ifdef H5 */
-		top: 98rpx;
-		/* #endif */
 		width: 100%;
 		height: 304rpx;
-		background: linear-gradient(180deg, #E93323 0%, #F5F5F5 100%, #751A12 100%);
+		background: linear-gradient(180deg, #009600 0%, #F5F5F5 100%, #00aa00 100%);
 		// border-radius: 0 0 30rpx 30rpx;
 
 

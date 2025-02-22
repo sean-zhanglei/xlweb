@@ -201,7 +201,7 @@ public class RequestMethod {
         return example;
     }
 
-    public String printerSetVoice(String access_token, String machine_code, String content, String is_file, String aid, String origin_id) throws Exception {
+    public String printerSetVoice(String access_token, String machine_code, String content, String is_file, String aid) throws Exception {
         if (CCIsNull(ClientId, ClientSecret)) {
             String timestamp = Utils.getTimestamp();
             String signMD5 = ClientId + timestamp + ClientSecret;
@@ -212,7 +212,6 @@ public class RequestMethod {
             paramMap.put("content", content);
             paramMap.put("is_file", is_file);
             paramMap.put("aid", aid);
-            paramMap.put("origin_id", origin_id);
             paramMap.put("client_id", ClientId);
             paramMap.put("timestamp", timestamp);
             paramMap.put("id", UUID.randomUUID().toString());

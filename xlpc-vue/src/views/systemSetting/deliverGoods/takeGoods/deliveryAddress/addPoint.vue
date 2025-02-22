@@ -149,13 +149,36 @@
       this.getKey();
     },
     mounted(){
+
+      // 地图获取选中地址
       window.addEventListener('message', function (event) {
         // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
-        var loc = event.data;
-        if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-          window.parent.selectAdderss(loc);
+
+        if(event && event.data) {
+          // 防止其他应用也会向该页面post信息，需判断
+          if (event.data && event.data.module === 'locationPicker' || event.origin.includes("apis.map.qq.com")) {
+            // 腾讯地图
+            var loc = {
+              latlng:{
+                lat: event.data.latlng.lat,
+                lng: event.data.latlng.lng
+              }
+            };
+            window.parent.selectAdderss(loc);
+          } else if (event.origin.includes("m.amap.com")) {
+              // 高德地图
+              let lat = event.data.location.split(',')[0];
+              let lng = event.data.location.split(',')[1];
+              var loc = {
+                latlng:{
+                  lat: lat,
+                  lng: lng
+                }
+              };
+              window.parent.selectAdderss(loc);
+          }
         }
-      }, false);
+        }, false);
       window.selectAdderss = this.selectAdderss;
     },
     methods:{
@@ -249,6 +272,14 @@
       //查找位置
       onSearch () {
         this.modalMap = true;
+        this.$nextTick(() => {
+          // 高德地图获取选中地址
+          let amap_iframe = document.getElementById('mapPage').contentWindow;
+          window.document.getElementById('mapPage').onload = function(){
+            amap_iframe.postMessage('amap_select_point','https://m.amap.com/picker/');
+          };
+        });
+
       },
       // 选择经纬度
       selectAdderss (data) {
@@ -259,8 +290,19 @@
       getKey () {
         const _pram = { id: 74 };
         configInfo(_pram).then(async res => {
+          let app = res.tengxun_app;
           let keys = res.tengxun_map_key;
-          this.keyUrl = `https://apis.map.qq.com/tools/locpicker?type=1&key=${keys}&referer=myapp`;
+          let jscode = res.amap_jscode;
+          if ('' != app && undefined != app && '' != keys && undefined != keys) {
+            // 腾讯地图
+            this.keyUrl =`https://apis.map.qq.com/tools/locpicker?type=1&key=${keys}&referer=${app}`;
+          } else if ('' != keys && undefined != keys && '' != jscode && undefined != jscode) {
+            // 高德地图
+            this.keyUrl = `https://m.amap.com/picker/?key=${keys}&jscode=${jscode}`;
+          } else {
+            // 默认
+            this.keyUrl = `https://apis.map.qq.com/tools/locpicker?type=1&key=${keys}&referer=myapp`;
+          }
         })
       },
       getCityList() {

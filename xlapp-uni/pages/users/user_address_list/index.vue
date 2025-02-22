@@ -471,7 +471,7 @@
 	.status_1{
 		display: flex;
 		width: 750rpx;
-		// background-color: #E93323;
+		// background-color: #009600;
 		height: var(--status-bar-height);
 	}
 </style>

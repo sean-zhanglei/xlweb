@@ -537,9 +537,7 @@
 			},
 			// 生成二维码；
 			make() {
-				let href = window.location.protocol +
-					"//" +
-					window.location.host +
+				let href = window.location.href.split('/pages')[0] +
 					'/pages/activity/goods_bargain_details/index?id=' + this.id + '&startBargainUid=' + this
 					.uid + '&spid=' + this.uid + '&storeBargainId=' + this.storeBargainId;
 				uQRCode.make({
@@ -815,7 +813,7 @@
 	}
 
 	.go {
-		color: #E93323;
+		color: #009600;
         text-align: center;
 		font-size: 28rpx;
 		margin-top: 26rpx;
@@ -1065,7 +1063,7 @@
 	}
 
 	.bargain .header .time .red {
-		color: #fc4141;
+		color: #009600;
 	}
 
 	.bargain .header .people {
@@ -1187,7 +1185,7 @@
 		height: 100%;
 		transition: width 0.6s ease;
 		border-radius: 20rpx;
-		background-image: linear-gradient(to right, #ffa363 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 	}
 
 	.bargain .money {
@@ -1453,7 +1451,7 @@
 					font-size: 22rpx;
 					padding: 2rpx 8rpx;
 					border-radius: 30rpx;
-					background-color: #E93323;
+					background-color: #009600;
 					color: #fff;
 				}
 
@@ -1465,7 +1463,7 @@
 					position: absolute;
 					bottom: -54rpx;
 					left: 14rpx;
-					border-color: #E93323 transparent transparent;
+					border-color: #009600 transparent transparent;
 				}
 			}
 

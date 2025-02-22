@@ -141,7 +141,6 @@ utils 自定义工具js 独立命名，一般不用新建文件夹
 │   │         └──creatStore          # 添加商品
 │   │         └──storeAttr           # 商品规格
 │   │         └──sort                # 商品分类
-│   │         └──taoBao              # 复制商品
 │   │         └──storeComment        # 商品评论
 │   │    └──order                    # 订单管理
 │   │    └──marketing                # 营销

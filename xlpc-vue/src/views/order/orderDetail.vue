@@ -18,6 +18,7 @@
           <div class="description-term">{{orderDatalist.statusStr.key === 'toBeWrittenOff'?'提货人': '收货人'}}：{{orderDatalist.realName}}</div>
           <div class="description-term">{{orderDatalist.statusStr.key === 'toBeWrittenOff'?'提货电话': '收货电话'}}：{{orderDatalist.userPhone}}</div>
           <div class="description-term" v-if="orderDatalist.statusStr.key !== 'toBeWrittenOff'">{{orderDatalist.statusStr.key === 'toBeWrittenOff'?'提货地址': '收货地址'}}：{{orderDatalist.userAddress}}</div>
+          <div class="description-term" v-if="orderDatalist.shippingType">{{orderDatalist.shippingType === 2 ?'自提时间': '配送时间'}}：{{orderDatalist.shippingType === 2 ? orderDatalist.pickupTime : orderDatalist.deliveryTime}}</div>
         </div>
         <el-divider></el-divider>
         <div class="title">订单信息</div>

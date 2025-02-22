@@ -15,7 +15,7 @@
 			
 		</view>
 		<view class='conter'>
-			<scroll-view scroll-y="true" :scroll-into-view="toView" :style='"height:"+height+"rpx;margin-top: 96rpx;"' @scroll="scroll"
+			<scroll-view scroll-y="true" :scroll-into-view="toView" :style='"height:"+height+"rpx;margin-top: 78rpx;"' @scroll="scroll"
 			 scroll-with-animation='true'>
 				<block v-for="(item,index) in productList" :key="index">
 					
@@ -76,10 +76,9 @@
 				//设置商品列表高度
 				uni.getSystemInfo({
 					success: function(res) {
-						that.height = (res.windowHeight) * (750 / res.windowWidth) - 98;
+						that.height = (res.windowHeight) * (750 / res.windowWidth) - 78;
 					},
 				});
-				let height = 0;
 				let hightArr = [];
 				for (let i = 0; i < len; i++) {
 					//获取元素所在位置
@@ -134,8 +133,13 @@
 </script>
 
 <style scoped lang="scss">
+	.productSort {
+		overflow: hidden;
+	}
 	.productSort .header {
+		/* #ifdef MP */
 		margin-top:var(--status-bar-height);
+		/* #endif */
 		height: 78rpx;
 		background-color: #fff;
 		position: fixed;
@@ -178,9 +182,13 @@
 		background-color: #f7f7f7;
 		overflow-y: scroll;
 		overflow-x: hidden;
-		
+		/* #ifdef H5 */
+		margin-top: 78rpx;
+		/* #endif */
 		height: auto;
-		margin-top: 96rpx;
+		/* #ifdef MP */
+		margin-top: calc(78rpx + var(--status-bar-height));
+		/* #endif */
 	}
 	
 	.productSort .aside .item {
@@ -192,15 +200,20 @@
 	
 	.productSort .aside .item.on {
 		background-color: #fff;
-		border-left: 4rpx solid #fc4141;
+		border-left: 4rpx solid #009600;
 		width: 100%;
 		text-align: center;
-		color: #fc4141;
+		color: #009600;
 		font-weight: bold;
 	}
 	
 	.productSort .conter {
-		margin: 96rpx 0 0 180rpx;
+		/* #ifdef MP */
+		margin: calc(78rpx + var(--status-bar-height)) 0 0 180rpx;
+		/* #endif */
+		/* #ifdef H5 */
+		margin: 78rpx 0 0 180rpx;
+		/* #endif */
 		padding: 0 14rpx;
 		background-color: #fff;
 	}

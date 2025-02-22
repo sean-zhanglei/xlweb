@@ -69,6 +69,7 @@ Vue.use(VueAwesomeSwiper)
 Vue.use(plugins)
 Vue.use(directive)
 
+
 Vue.component('attrFrom', attrFrom)
 Vue.component('UploadIndex', UploadIndex)
 Vue.component('SelfUpload', SelfUpload)

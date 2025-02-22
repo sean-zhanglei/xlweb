@@ -1,7 +1,7 @@
 package com.nbug.service.util.yly;
 
 class UtilUrl {
-    public static String baseUrl = "https://open-api.10ss.net/";
+    public static String baseUrl = "https://open-api.10ss.net/v2/";
 
     public static String openType = baseUrl + "oauth/authorize";
 

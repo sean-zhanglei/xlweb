@@ -197,6 +197,12 @@ public class StoreOrderDetailInfoResponse implements Serializable {
     @ApiModelProperty(value = "订单详情")
     private List<OrderInfoResponse> orderInfoList;
 
+    @ApiModelProperty(value = "配送时间")
+    private String deliveryTime;
+
+    @ApiModelProperty(value = "自提时间")
+    private String pickupTime;
+
 //    @ApiModelProperty(value = "订单ID")
 //    private Integer id;
 //

@@ -73,16 +73,34 @@
 				}
 			}
 			// #endif
+			
 			// 获取导航高度；
-			uni.getSystemInfo({
-				success: function(res) {
-					that.globalData.navHeight = res.statusBarHeight * (750 / res.windowWidth) + 91;
-				}
-			});
+			let systemInfo = uni.getSystemInfoSync();
+			
+			// 状态栏高度px
+			that.globalData.statusBarHeight = systemInfo.statusBarHeight;
+			
 			// #ifdef MP
 			let menuButtonInfo = uni.getMenuButtonBoundingClientRect();
-			that.globalData.navH = menuButtonInfo.top * 2 + menuButtonInfo.height / 2;
+			// 小程序胶囊+边框的高度px
+			that.globalData.mbAllHeight = (menuButtonInfo.top - that.globalData.statusBarHeight) * 2 + menuButtonInfo.height;
+			// 小程序胶囊左侧占用的宽度px
+			that.globalData.mbPaddingRight = (systemInfo.windowWidth - menuButtonInfo.right) + menuButtonInfo.width;
+			// 小程序胶囊高度+状态栏高度px
+			that.globalData.navH = that.globalData.statusBarHeight + that.globalData.mbHeight;
+			// 小程序胶囊上边框的高度
+			that.globalData.mbTopHeight = menuButtonInfo.top - that.globalData.statusBarHeight;
+			// 小程序胶囊的高度
+			that.globalData.mbHeight = menuButtonInfo.height;
+			
 			// #endif
+			
+			// #ifndef MP
+			// rpxCalcIncludeWidth = 750rpx page.jsonx自定义
+			// systemInfo.statusBarHeight px
+			that.globalData.navHeight = systemInfo.statusBarHeight * (750 / systemInfo.windowWidth) + 78;
+			// #endif
+			
 
 			// #ifdef H5			
 			let snsapiBase = 'snsapi_base';

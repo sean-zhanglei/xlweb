@@ -34,11 +34,11 @@
           <p><span class="iconfont iconxiaochengxu"></span> 小程序经营类目：生活服务 > 百货/超市/便利店</p>
           <p><span class="iconfont icongongzhonghao"></span> 公众号经营类目：IT科技/互联网|电子商务，IT科技/IT软件与服务</p>
         </div>
-        <el-table 
-        :data="levelLists" 
-        ref="table" 
-        class="mt25" 
-        size="small" 
+        <el-table
+        :data="levelLists"
+        ref="table"
+        class="mt25"
+        size="small"
         v-loading="loadingList"
         :header-cell-style=" {fontWeight:'bold'}">
           <el-table-column label="ID" prop="id" width="80"></el-table-column>
@@ -111,16 +111,16 @@
           <el-form-item label="模板名" v-if="form.name">
             <el-input v-model="form.name" disabled></el-input>
           </el-form-item>
-          <el-form-item label="模板ID" v-if="form.tempId">
-            <el-input v-model="form.tempId"></el-input>
+          <el-form-item label="模板ID">
+            <el-input v-model="form.tempId" disabled></el-input>
           </el-form-item>
-          <el-form-item label="模板编号" v-if="form.tempKey"> 
+          <el-form-item label="模板编号">
             <el-input v-model="form.tempKey" disabled></el-input>
           </el-form-item>
-          <el-form-item label="模板说明" v-if="form.title"> 
+          <el-form-item label="模板说明">
             <el-input v-model="form.title" disabled></el-input>
           </el-form-item>
-          <el-form-item label="模板内容" v-if="form.content"> 
+          <el-form-item label="模板内容">
             <el-input v-model="form.content" disabled></el-input>
           </el-form-item>
           <el-form-item label="状态">

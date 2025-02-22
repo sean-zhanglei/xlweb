@@ -85,27 +85,6 @@
       </div>
       <ECharts :options="polar"></ECharts>
     </div>
-    <!--<div class="public-wrapper">-->
-      <!--<div class="title">-->
-        <!--<span class="iconfont icon-xiangxishuju"></span>详细数据-->
-      <!--</div>-->
-      <!--<div class="nav acea-row row-between-wrapper">-->
-        <!--<div class="data">日期</div>-->
-        <!--<div class="browse">订单量</div>-->
-        <!--<div class="turnover">成交额</div>-->
-      <!--</div>-->
-      <!--<div class="conter">-->
-        <!--<div-->
-          <!--class="item acea-row row-between-wrapper"-->
-          <!--v-for="(item, index) in list"-->
-          <!--:key="index"-->
-        <!--&gt;-->
-          <!--<div class="data">{{ item.time }}</div>-->
-          <!--<div class="browse">{{ item.count }}</div>-->
-          <!--<div class="turnover">{{ item.price }}</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
     <statistics-data :list="list"></statistics-data>
     <div class="calendar-wrapper" :class="current === true ? 'on' : ''">
       <div class="calendar">
@@ -328,7 +307,7 @@ export default {
       this.filter.page = 1;
       this.loaded = false;
       this.loading = false;
-      this.getIndex();
+      // this.getIndex();
       this.getInfo();
     },
     setType: function(type) {

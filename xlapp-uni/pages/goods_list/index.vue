@@ -92,7 +92,7 @@
 		data() {
 			return {
 				productList: [],
-				is_switch: true,
+				is_switch: false,
 				where: {
 					keyword: '',
 					priceOrder: '',

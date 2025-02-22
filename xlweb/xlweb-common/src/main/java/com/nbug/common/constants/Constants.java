@@ -224,6 +224,18 @@ public class Constants {
     //验证码过期时间
     public static final String CONFIG_KEY_SMS_CODE_EXPIRE = "sms_code_expire";
 
+    //短信EndPoint
+    public static final String CONFIG_KEY_SMS_ENDPOINT = "sms_endpoint";
+
+    //短信AccessKey Id
+    public static final String CONFIG_KEY_SMS_ACCESSKEY_ID = "sms_accesskey_id";
+
+    //短信AccessKey Secret
+    public static final String CONFIG_KEY_SMS_ACCESSKEY_SECRET = "sms_accesskey_secret";
+
+    //短信签名
+    public static final String CONFIG_KEY_SMS_SIGN_NAME = "sms_sign_name";
+
 
     //config配置的formId
     public static final int CONFIG_FORM_ID_INDEX = 133; //首页配置

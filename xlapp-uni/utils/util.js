@@ -250,7 +250,7 @@ export default {
 				ctx.setFontSize(28);
 				ctx.setFillStyle('#999');
 				ctx.fillText('长按或扫描查看', 490, 1030 + contentHh);
-				ctx.draw(true, function() {
+				ctx.draw(true, function(res) {
 					uni.canvasToTempFilePath({
 						canvasId: 'firstCanvas',
 						fileType: 'png',
@@ -346,11 +346,11 @@ export default {
 				context.save();
 
 				context.setFontSize(14*rain);
-				context.setFillStyle('#fc4141');
+				context.setFillStyle('#009600');
 				context.fillText('￥', 157*rain, 145*rain);
 
 				context.setFontSize(24*rain);
-				context.setFillStyle('#fc4141');
+				context.setFillStyle('#009600');
 				context.fillText(price, 170*rain, 145*rain);
 
 				context.setFontSize(10*rain);

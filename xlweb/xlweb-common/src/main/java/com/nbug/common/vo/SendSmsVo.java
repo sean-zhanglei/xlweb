@@ -14,12 +14,16 @@ public class SendSmsVo {
     // 待发送短信手机号
     private String mobile;
 
-    // 模版id
-    private Integer template;
+    // 模版Id 已废弃
+    private Integer templateId;
 
-    // 发送参数
+    // 模版Key
+    private String templateKey;
+
+    // 发送参数 短信模版
     private String param;
 
+    // 发送内容 短信参数
     private String content;
 
 }

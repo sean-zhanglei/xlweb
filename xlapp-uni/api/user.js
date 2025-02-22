@@ -440,12 +440,12 @@ export function spreadPeoCount() {
 }
 
 /*
-统计
+统计  已废除
 *
 */
-export function computeUser(){
+/* export function computeUser(){
 	uni.request({
-	    url: document.location.protocol + '//shop.nbug.top/index.php/admin/server.upgrade_api/updatewebinfo',
+	    url: document.location.protocol + '//xl.nbug.top/index.php/admin/server.upgrade_api/updatewebinfo',
 		method:'POST',
 		data: {
 	        host:window.location.host,
@@ -457,4 +457,4 @@ export function computeUser(){
 		dataType:'json',
 	    success: (res) => {}
 	});
-}
+} */

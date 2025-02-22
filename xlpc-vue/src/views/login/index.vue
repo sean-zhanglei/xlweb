@@ -362,6 +362,9 @@ export default {
     align-items: center;
     height: 100vh;
     overflow: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 
     &-container{
       flex: 1;

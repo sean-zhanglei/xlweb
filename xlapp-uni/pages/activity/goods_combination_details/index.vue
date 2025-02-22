@@ -408,7 +408,7 @@
 			this.navH = app.globalData.navHeight;
 			// #endif
 			// #ifndef MP
-			this.navH = 96;
+			this.navH = app.globalData.navH;
 			// #endif
 			//设置商品列表高度
 			uni.getSystemInfo({
@@ -1483,7 +1483,7 @@
 
 	.product-con .footer .bnt .buy {
 		border-radius: 0 50rpx 50rpx 0;
-		background-image: linear-gradient(to right, #fa6514 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 	}
 
 	.setCollectBox {

@@ -11,7 +11,6 @@
             </el-form-item>
           </el-form>
         </div>
-        <el-button type="primary"  size="small" @click="addExpress" v-hasPermi="['admin:express:sync']">同步物流公司</el-button>
       </div>
       <el-table
         v-loading="loading"
@@ -206,13 +205,6 @@ export default {
     handleSizeChange(e) {
       this.limit = e
       this.getExpressList()
-    },
-    // 添加物流公司
-    addExpress() {
-      logistics.expressSyncApi().then(data => {
-        this.page = 1
-        this.getExpressList()
-      })
     },
     // 删除物流公司
     bindDelete(item) {

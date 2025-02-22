@@ -9,3 +9,28 @@ nohup  java -Xms1024m -Xmx1024m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath
 
 
 nohup  java -Xms1024m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/root/my_data/Nbug-front.hprof -jar Nbug-front.jar --spring.profiles.active=prod >> /root/my_data/Nbug-front.log 2>&1 &
+
+
+hbuilderx uni-app
+
+不同平台打开的地图不一样
+App端是高德地图（不支持百度地图）、
+-------------H5端是腾讯地图或谷歌地图（也可能是高德地图）---------
+-------------微信小程序端是腾讯地图--------------默认，但是可以集成高德等
+百度小程序是百度地图、阿里小程序是高德地图、抖音小程序是高德地图。
+
+高德地图
+
+web key
+6569dac6----------3731a94f7008------------fd72fd4e2989
+
+securityJsCode
+72aea44------------28340f72d3a1---------------78815-----------d8c99188
+
+serviceHost
+https://xl.nbug.top/_AMapService/
+
+腾讯地图
+web key
+TYRBZ-7F---------MA3-X6D3F---------------OPTX7-LP3KV-CMFWS 废弃
+NZWBZ-56G6---------Q-U4Z5M-----------------2HXKM-QCB35-CSBTP

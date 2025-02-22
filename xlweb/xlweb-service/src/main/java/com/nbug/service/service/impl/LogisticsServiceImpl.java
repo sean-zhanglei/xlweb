@@ -11,9 +11,8 @@ import com.nbug.common.utils.RedisUtil;
 import com.nbug.common.utils.RestTemplateUtil;
 import com.nbug.common.vo.LogisticsResultListVo;
 import com.nbug.common.vo.LogisticsResultVo;
-import com.nbug.common.vo.OnePassLogisticsQueryVo;
+import com.nbug.common.vo.LogisticsQueryVo;
 import com.nbug.service.service.LogisticService;
-import com.nbug.service.service.OnePassService;
 import com.nbug.service.service.SystemConfigService;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -42,9 +41,6 @@ public class LogisticsServiceImpl implements LogisticService {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Autowired
-    private OnePassService onePassService;
-
     private String redisKey = Constants.LOGISTICS_KEY;
     private Long redisCacheSeconds = 1800L;
 
@@ -68,16 +64,6 @@ public class LogisticsServiceImpl implements LogisticService {
             return JSONObject.toJavaObject(result, LogisticsResultVo.class);
         }
         String logisticsType = systemConfigService.getValueByKeyException("logistics_type");
-        if ("1".equals(logisticsType)) {// 平台查询
-            OnePassLogisticsQueryVo queryVo = onePassService.exprQuery(expressNo, com);
-            if (ObjectUtil.isNull(queryVo)) {
-                return resultVo;
-            }
-            // 一号通vo转公共返回vo
-            resultVo = queryToResultVo(queryVo);
-            String jsonString = JSONObject.toJSONString(resultVo);
-            saveCache(JSONObject.parseObject(jsonString));
-        }
         if ("2".equals(logisticsType)) {// 阿里云查询
             String appCode = systemConfigService.getValueByKey(Constants.CONFIG_KEY_LOGISTICS_APP_CODE);
 
@@ -104,9 +90,9 @@ public class LogisticsServiceImpl implements LogisticService {
     }
 
     /**
-     * 一号通vo转公共返回vo
+     * vo转公共返回vo
      */
-    private LogisticsResultVo queryToResultVo(OnePassLogisticsQueryVo queryVo) {
+    private LogisticsResultVo queryToResultVo(LogisticsQueryVo queryVo) {
         LogisticsResultVo resultVo = new LogisticsResultVo();
         resultVo.setNumber(queryVo.getNum());
         resultVo.setExpName(queryVo.getCom());

@@ -4,6 +4,7 @@ package com.nbug.service.util;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.nbug.common.constants.YlyConstants;
+import com.nbug.common.enums.EnumYly;
 import com.nbug.common.exception.XlwebException;
 import com.nbug.common.request.YlyPrintRequest;
 import com.nbug.common.request.YlyPrintRequestGoods;
@@ -86,6 +87,14 @@ public class YlyUtil {
             logger.info("获取的易联云AccessToken:"+JSON.toJSONString(ylyAccessTokenResponse));
             String addedPrint = RequestMethod.getInstance().addPrinter(machine_code, msign, ylyAccessTokenResponse.getBody().getAccess_token());
             logger.info("添加打印机结果:"+addedPrint);
+
+            // 设置语音aid = 0
+            ylyVoice();
+            // 设置声音
+            ylySetSound(EnumYly.VOLUME_RESPONSE_TYPE_HORN.getCode(),
+                    EnumYly.VOLUME_RESPONSE_VOICE3.getCode());
+            // 设置语音aid = 0
+            ylyVoice();
         }catch (Exception e){
             logger.error("添加易联云打印机失败"+e.getMessage());
             logger.error(String.format("易联云 配置参数 client_id=%s client_secret=%s machine_code=%s msign=%s",client_id,client_secret,machine_code,msign));
@@ -108,8 +117,8 @@ public class YlyUtil {
         instant();
         RequestMethod.getInstance().printerSetVoice(
                 ylyAccessTokenResponse.getBody().getAccess_token(),
-                machine_code,"[\"XLWEB 来新单了\",9,0]","false",
-                "0","ORDER xxx");
+                machine_code,"[\"来新单了\",9,0]","false",
+                "0");
         logger.info("设置语音成功");
     }
 
@@ -134,11 +143,11 @@ public class YlyUtil {
      * 参数：* @param access_token 授权的token 必要参数
      * * @param machine_code 易联云打印机终端号
      */
-    public void ylyCancelAll() throws Exception {
+    /*public void ylyCancelAll() throws Exception {
         instant();
         String cancelAllPrint = RequestMethod.getInstance().printCancelAll(ylyAccessTokenResponse.getBody().getAccess_token(), machine_code);
         logger.info("取消掉所有打印订单"+cancelAllPrint);
-    }
+    }*/
 
 
     /**
@@ -152,13 +161,16 @@ public class YlyUtil {
      */
     public void ylyPrint(YlyPrintRequest ylyPrintRequest) throws Exception {
         instant();
-        String printSb = "<FH><FB><center>"+ylyPrintRequest.getBusinessName()+"</center></FB></FH>" +
+        String printSb = "<VN>0</VN>\n" +
+                "<FH><FB><center>"+ylyPrintRequest.getBusinessName()+"</center></FB></FH>" +
                 "********************************<FH>" +
                 "订单编号：" + ylyPrintRequest.getOrderNo()+"\n"+
                 "日   期：" + ylyPrintRequest.getDate()+"\n"+
                 "姓   名：" + ylyPrintRequest.getName()+"\n"+
                 "电   话：" + ylyPrintRequest.getPhone()+"\n"+
                 "地   址：" + ylyPrintRequest.getAddress()+"\n"+
+                "配送方式：" + (ylyPrintRequest.getShippingType() == 1 ? "商家配送" : "门店自提") +"\n"+
+                (ylyPrintRequest.getShippingType() == 1 ? "配送时间：" : "自提时间：") + (ylyPrintRequest.getShippingType() == 1 ? ylyPrintRequest.getDeliveryTime() : ylyPrintRequest.getPickupTime()) + "\n"+
                 "订单备注："+ ylyPrintRequest.getNote()+"</FH>\n" +
                 "********************************\n" +
                 "<FH>" +
@@ -173,7 +185,7 @@ public class YlyUtil {
                 "<FH><right>实际支付：¥"+ylyPrintRequest.getPayMoney()+"元</right></FH>" +
                 "<FB><FB><center>完</center></FB></FB>";
         RequestMethod.getInstance().printIndex(ylyAccessTokenResponse.getBody().getAccess_token(),machine_code,
-                URLEncoder.encode(printSb, "utf-8"),"order111");
+                URLEncoder.encode(printSb, "utf-8"), ylyPrintRequest.getOrderNo());
     }
 
     /**
@@ -209,14 +221,14 @@ public class YlyUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        YlyUtil ylyUtil = new YlyUtil();
-        ylyUtil.instant();
+//        YlyUtil ylyUtil = new YlyUtil();
+//        ylyUtil.instant();
 //        ylyUtil.ylyVoice();
-        // 响应类型 蜂鸣器:buzzer,喇叭:horn
-        // 音量大小 【1234】
-//        ylyUtil.ylySetSound(EnumYly.VOLUME_RESPONSE_TYPE_FENGMINGQI.getCode(),
+//        // 响应类型 蜂鸣器:buzzer,喇叭:horn
+//        // 音量大小 【1234】
+//        ylyUtil.ylySetSound(EnumYly.VOLUME_RESPONSE_TYPE_HORN.getCode(),
 //                EnumYly.VOLUME_RESPONSE_VOICE3.getCode());
-        ylyUtil.ylyVoice();
+//        ylyUtil.ylyVoice();
 
 
         // 根据商品对象打印商品信息

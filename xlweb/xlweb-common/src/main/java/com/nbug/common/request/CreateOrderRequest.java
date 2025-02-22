@@ -63,4 +63,10 @@ public class CreateOrderRequest implements Serializable {
 
     @ApiModelProperty(value = "手机号码")
     private String phone;
+
+    @ApiModelProperty(value = "配送时间")
+    private String deliveryTime;
+
+    @ApiModelProperty(value = "自提时间")
+    private String pickupTime;
 }

@@ -187,8 +187,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // 发送短信
         SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-        Integer tempId = Integer.valueOf(smsTemplate.getTempId());
-        systemAdminList.forEach(admin -> smsService.sendCreateOrderNotice(admin.getPhone(), orderNo, admin.getRealName(), tempId));
+        systemAdminList.forEach(admin -> smsService.sendCreateOrderNotice(admin.getPhone(), orderNo, admin.getRealName(), smsTemplate.getTempKey()));
     }
 
     /**
@@ -323,10 +322,9 @@ public class OrderServiceImpl implements OrderService {
                 List<SystemAdmin> systemAdminList = systemAdminService.findIsSmsList();
                 if (CollUtil.isNotEmpty(systemAdminList)) {
                     SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-                    Integer tempId = Integer.valueOf(smsTemplate.getTempId());
                     // 发送短信
                     systemAdminList.forEach(admin -> {
-                        smsService.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), tempId);
+                        smsService.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey());
                     });
                 }
             }
@@ -348,7 +346,6 @@ public class OrderServiceImpl implements OrderService {
         SystemNotification notification = systemNotificationService.getByMark(NotifyConstants.APPLY_ORDER_REFUND_ADMIN_MARK);
         List<SystemAdmin> systemAdminList = systemAdminService.findIsSmsList();
         SmsTemplate smsTemplate = smsTemplateService.getDetail(notification.getSmsId());
-        Integer tempId = Integer.valueOf(smsTemplate.getTempId());
         List<StoreOrder> orderList = CollUtil.newArrayList();
         for (OrderRefundApplyRequest request : applyList) {
             StoreOrder storeOrder = storeOrderService.getById(request.getId());
@@ -383,7 +380,7 @@ public class OrderServiceImpl implements OrderService {
             // 发送用户退款管理员提醒短信
             if (notification.getIsSms().equals(1) && CollUtil.isNotEmpty(systemAdminList)) {
                 // 发送短信
-                systemAdminList.forEach(admin -> smsService.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), tempId));
+                systemAdminList.forEach(admin -> smsService.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()));
             }
         }
 
@@ -925,6 +922,9 @@ public class OrderServiceImpl implements OrderService {
         String verifyCode = "";
         String userAddressStr = "";
         if (request.getShippingType() == 1) { // 快递配送
+            if (ObjectUtil.isNull(request.getDeliveryTime())) {
+                throw new XlwebException("请选择配送时间");
+            }
             if (request.getAddressId() <= 0) throw new XlwebException("请选择收货地址");
             UserAddress userAddress = userAddressService.getById(request.getAddressId());
             if (ObjectUtil.isNull(userAddress) || userAddress.getIsDel()) {
@@ -936,6 +936,9 @@ public class OrderServiceImpl implements OrderService {
         }else if (request.getShippingType() == 2) { // 到店自提
             if (StringUtils.isBlank(request.getRealName()) || StringUtils.isBlank(request.getPhone())) {
                 throw new XlwebException("请填写姓名和电话");
+            }
+            if (ObjectUtil.isNull(request.getPickupTime())) {
+                throw new XlwebException("请选择自提时间");
             }
             // 自提开关是否打开
             String storeSelfMention = systemConfigService.getValueByKey(SysConfigConstants.CONFIG_KEY_STORE_SELF_MENTION);
@@ -1067,7 +1070,11 @@ public class OrderServiceImpl implements OrderService {
         if (request.getShippingType() == 2) {
             storeOrder.setVerifyCode(verifyCode);
             storeOrder.setStoreId(request.getStoreId());
+            storeOrder.setPickupTime(request.getPickupTime());
+        } else {
+            storeOrder.setDeliveryTime(request.getDeliveryTime());
         }
+
         storeOrder.setTotalNum(orderInfoVo.getOrderProNum());
         storeOrder.setCouponId(Optional.ofNullable(request.getCouponId()).orElse(0));
 

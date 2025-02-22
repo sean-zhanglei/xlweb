@@ -274,7 +274,7 @@ public class OrderPayServiceImpl implements OrderPayService {
                 // 发送短信
                 if (StrUtil.isNotBlank(user.getPhone()) && payNotification.getIsSms().equals(1)) {
                     SmsTemplate smsTemplate = smsTemplateService.getDetail(payNotification.getSmsId());
-                    smsService.sendPaySuccess(user.getPhone(), storeOrder.getOrderId(), storeOrder.getPayPrice(), Integer.valueOf(smsTemplate.getTempId()));
+                    smsService.sendPaySuccess(user.getPhone(), storeOrder.getOrderId(), storeOrder.getPayPrice(), smsTemplate.getTempKey());
                 }
 
                 // 发送用户支付成功管理员提醒短信
@@ -286,7 +286,7 @@ public class OrderPayServiceImpl implements OrderPayService {
                         SmsTemplate smsTemplate = smsTemplateService.getDetail(payAdminNotification.getSmsId());
                         // 发送短信
                         systemAdminList.forEach(admin -> {
-                            smsService.sendOrderPaySuccessNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), Integer.valueOf(smsTemplate.getTempId()));
+                            smsService.sendOrderPaySuccessNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey());
                         });
                     }
                 }

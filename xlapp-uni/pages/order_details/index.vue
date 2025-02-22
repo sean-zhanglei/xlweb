@@ -85,12 +85,14 @@
 				</view>
 				<view v-if="orderInfo.shippingType === 1" class='address borRadius14'>
 					<view class='name'>{{orderInfo.realName}}<text class='phone'>{{orderInfo.userPhone}}</text></view>
+					<view class='name'>配送时间<text class='phone'>{{orderInfo.deliveryTime}}</text></view>
 					<view>{{orderInfo.userAddress}}</view>
 				</view>
 				<view v-else class='address' style="margin-top:15rpx;">
 					<view class='name' @tap="makePhone">{{orderInfo.systemStore?orderInfo.systemStore.name:''}}<text
 							class='phone'>{{orderInfo.systemStore?orderInfo.systemStore.phone:''}}</text><text
 							class="iconfont icon-tonghua font-color"></text></view>
+					<view class='name'>自提时间<text class='phone'>{{orderInfo.pickupTime}}</text></view>
 					<view>{{orderInfo.systemStore?orderInfo.systemStore.detailedAddress:''}}</view>
 				</view>
 

@@ -114,7 +114,7 @@
 							<view class="slider-banner banner">
 								<swiper indicator-dots="true" :autoplay="autoplay" :circular="circular"
 									:interval="interval" :duration="duration" indicator-color="#999"
-									indicator-active-color="#e93323" :style="'height:'+clientHeight+'px'">
+									indicator-active-color="#009600" :style="'height:'+clientHeight+'px'">
 									<swiper-item v-for="(item,indexw) in good_list" :key="indexw">
 										<view class="list acea-row row-middle" :id="'list'+indexw">
 											<view class="item" v-for="(val,indexn) in item.list" :key="indexn"
@@ -279,7 +279,7 @@
 	import {
 		toLogin
 	} from '@/libs/login.js';
-	import {computeUser} from "@/api/user.js";
+	// import {computeUser} from "@/api/user.js";
 	import {
 		mapGetters
 	} from "vuex";
@@ -429,7 +429,7 @@
 			}
 			that.navH = app.globalData.navHeight;
 			// #ifdef H5
-			computeUser();
+			// computeUser(); 已废除
 			// #endif
 			// #ifdef MP || APP-PLUS
 			// 小程序链接进入获取绑定关系id
@@ -1557,7 +1557,7 @@
 
 	.product-con .footer .bnt .buy {
 		border-radius: 0 50rpx 50rpx 0;
-		background-image: linear-gradient(to right, #fa6514 0%, #e93323 100%);
+		background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 	}
 
 	.product-con .store-info {

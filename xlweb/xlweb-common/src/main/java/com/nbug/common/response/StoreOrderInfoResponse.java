@@ -133,4 +133,10 @@ public class StoreOrderInfoResponse implements Serializable {
 
     @ApiModelProperty(value = "退款时间")
     private Date refundReasonTime;
+
+    @ApiModelProperty(value = "配送时间")
+    private String deliveryTime;
+
+    @ApiModelProperty(value = "自提时间")
+    private String pickupTime;
 }

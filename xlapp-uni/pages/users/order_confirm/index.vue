@@ -3,12 +3,27 @@
 		<view class='order-submission'>
 			<view class="allAddress" :style="store_self_mention ? '':'padding-top:10rpx;'">
 				<view class="nav acea-row">
-					<view class="item font-color" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
-						v-if='store_self_mention'></view>
 					<view class="item font-color" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)"
 						v-if='store_self_mention'></view>
+					<view class="item font-color" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
+						v-if='store_self_mention'></view>
 				</view>
-				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0' :style="store_self_mention ? '':'border-top-left-radius: 14rpx;border-top-right-radius: 14rpx;'">
+				<view class='address acea-row row-between-wrapper' v-if='shippingType == 1' @tap="showStoreList">
+					<block v-if="storeList.length>0">
+						<view class='addressCon'>
+							<view class='name'>{{system_store.name}}
+								<text class='phone'>{{system_store.phone}}</text>
+							</view>
+							<view class="line1"> {{system_store.address}}{{", " + system_store.detailedAddress}}
+							</view>
+						</view>
+						<view class='iconfont icon-jiantou'></view>
+					</block>
+					<block v-else>
+						<view>暂无门店信息</view>
+					</block>
+				</view>
+				<view class='address acea-row row-between-wrapper' v-else @tap='onAddress' :style="store_self_mention ? '':'border-top-left-radius: 14rpx;border-top-right-radius: 14rpx;'">
 					<view class='addressCon' v-if="addressInfo.realName">
 						<view class='name'>{{addressInfo.realName}}
 							<text class='phone'>{{addressInfo.phone}}</text>
@@ -23,21 +38,6 @@
 						<view class='setaddress'>设置收货地址</view>
 					</view>
 					<view class='iconfont icon-jiantou'></view>
-				</view>
-				<view class='address acea-row row-between-wrapper' v-else @tap="showStoreList">
-					<block v-if="storeList.length>0">
-						<view class='addressCon'>
-							<view class='name'>{{system_store.name}}
-								<text class='phone'>{{system_store.phone}}</text>
-							</view>
-							<view class="line1"> {{system_store.address}}{{", " + system_store.detailedAddress}}
-							</view>
-						</view>
-						<view class='iconfont icon-jiantou'></view>
-					</block>
-					<block v-else>
-						<view>暂无门店信息</view>
-					</block>
 				</view>
 				<view class='line'>
 					<image src='/static/images/line.jpg'></image>
@@ -67,19 +67,12 @@
 							</checkbox-group>
 						</view>
 					</view>
-					<!-- <view class='item acea-row row-between-wrapper'
+					<view class='item acea-row row-between-wrapper'
 						v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId">
 						<view>会员优惠</view>
 						<view class='discount'>-￥{{priceGroup.vipPrice}}</view>
-					</view> -->
-					<view class='item acea-row row-between-wrapper' v-if='shippingType==0'>
-						<view>快递费用</view>
-						<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
-							+￥{{orderInfoVo.freightFee}}
-						</view>
-						<view class='discount' v-else>免运费</view>
 					</view>
-					<view v-else>
+					<view v-if='shippingType==1'>
 						<view class="item acea-row row-between-wrapper">
 							<view>联系人</view>
 							<view class="discount textR">
@@ -94,11 +87,51 @@
 									@blur='phone'></input>
 							</view>
 						</view>
+						<view class="item acea-row row-between-wrapper">
+							<view>自提时间</view>
+							<view>
+								<!-- 下拉列表 自提时间 -->
+								<view @click="toggleDropdown" class="select-box">
+									{{ selectedOptionPickup }}
+								  <view class="arrow" :class="{ 'arrow-up': isDropdownVisible }"></view>
+								</view>
+								<view class="dropdown" v-if="isDropdownVisible">
+								  <view v-for="(option, index) in optionsPickup" :key="index" @click="selectOptionPickup(index)">
+									{{ option.name }}
+								  </view>
+								</view>
+							</view>
+						</view>
 					</view>
+					<view v-else>
+						<view class='item acea-row row-between-wrapper'>
+							<view>配送时间</view>
+							<view>
+								<!-- 下拉列表 配送时间 -->
+								<view @click="toggleDropdown" class="select-box">
+									{{ selectedOptionDelivery }}
+								  <view class="arrow" :class="{ 'arrow-up': isDropdownVisible }"></view>
+								</view>
+								<view class="dropdown" v-if="isDropdownVisible">
+								  <view v-for="(option, index) in optionsDelivery" :key="index" @click="selectOptionDelivery(index)">
+									{{ option.name }}
+								  </view>
+								</view>
+							</view>
+						</view>
+						<view class='item acea-row row-between-wrapper'>
+							<view>快递费用</view>
+							<view class='discount' v-if='parseFloat(orderInfoVo.freightFee) > 0'>
+								+￥{{orderInfoVo.freightFee}}
+							</view>
+							<view class='discount' v-else>免运费</view>
+						</view>
+					</view>
+					
 					<!-- <view class='item acea-row row-between-wrapper' wx:else>
-		      <view>自提门店</view>
-		      <view class='discount'>{{system_store.name}}</view>
-		    </view> -->
+						<view>自提门店</view>
+						<view class='discount'>{{system_store.name}}</view>
+					</view> -->
 					<view class='item' v-if="textareaStatus">
 						<view>备注信息</view>
 						<textarea v-if="coupon.coupon===false" placeholder-class='placeholder' @input='bindHideKeyboard'
@@ -261,7 +294,7 @@
 				status: 0,
 				is_address: false,
 				toPay: false, //修复进入支付时页面隐藏从新刷新页面
-				shippingType: 0,
+				shippingType: 1,
 				system_store: {},
 				storePostage: 0,
 				contacts: '',
@@ -290,7 +323,36 @@
 				orderInfoVo: {},
 				addressList: [], //地址列表数据
 				orderProNum: 0,
-				preOrderNo: '' //预下单订单号
+				preOrderNo: '',//预下单订单号
+				// 下拉列表是否可见
+				isDropdownVisible: false,
+				// 选中的选项
+				selectedOptionDelivery: '',
+				selectedOptionPickup: '',
+				optionsDelivery: [
+					{
+						id : 1,
+						name: "10:00 - 12:00"
+					},
+					{
+						id : 2,
+						name: "18:00 - 22:00"
+					},
+				],
+				optionsPickup: [
+					{
+						id : 1,
+						name: "10:00 - 13:00"
+					},
+					{
+						id : 2,
+						name: "13:00 - 18:00"
+					},
+					{
+						id : 3,
+						name: "18:00 - 22:00"
+					}
+				]
 			};
 		},
 		computed: mapGetters(['isLogin', 'systemPlatform', 'productType']),
@@ -324,6 +386,7 @@
 			if (this.isLogin) {
 				//this.getaddressInfo();
 				this.getloadPreOrder();
+				this.getList();
 			} else {
 				toLogin();
 			}
@@ -923,6 +986,11 @@
 							title: '请填写联系人或联系人电话'
 						});
 					}
+					if (that.selectedOptionPickup == "") {
+						return that.$util.Tips({
+							title: '请选择自提时间'
+						});
+					}
 					if (!/^1(3|4|5|7|8|9|6)\d{9}$/.test(that.contactsTel)) {
 						return that.$util.Tips({
 							title: '请填写正确的手机号'
@@ -936,6 +1004,12 @@
 					if (that.storeList.length == 0) return that.$util.Tips({
 						title: '暂无门店,请选择其他方式'
 					});
+				} else {
+					if (that.selectedOptionDelivery == "") {
+						return that.$util.Tips({
+							title: '请选择配送时间'
+						});
+					}
 				}
 				data = {
 					realName: that.contacts,
@@ -948,7 +1022,9 @@
 					mark: that.mark,
 					storeId: that.system_store.id || 0,
 					shippingType: that.$util.$h.Add(that.shippingType, 1),
-					payChannel: that.payChannel||'weixinh5'
+					payChannel: that.payChannel||'weixinh5',
+					deliveryTime: that.selectedOptionDelivery,
+					pickupTime: that.selectedOptionPickup
 
 				};
 				if (data.payType == 'yue' && parseFloat(that.userInfo.nowMoney) < parseFloat(that.totalPrice))
@@ -967,6 +1043,20 @@
 				// #ifndef MP
 				that.payment(data);
 				// #endif
+			},
+			// 切换下拉列表的显示状态
+			toggleDropdown() {
+			  this.isDropdownVisible = !this.isDropdownVisible;
+			},
+			// 选择选项的方法
+			selectOptionDelivery(index) {
+			  this.selectedOptionDelivery = this.optionsDelivery[index].name;
+			  this.isDropdownVisible = false;
+			},
+			// 选择选项的方法
+			selectOptionPickup(index) {
+			  this.selectedOptionPickup = this.optionsPickup[index].name;
+			  this.isDropdownVisible = false;
 			}
 		}
 	}
@@ -1030,10 +1120,7 @@
 
 	.order-submission .allAddress {
 		width: 100%;
-		background: linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: -webkit-linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
-		// background-image: -moz-linear-gradient(to bottom, #e93323 0%, #f5f5f5 100%);
+		background: linear-gradient(to bottom, #009600 0%, #f5f5f5 100%);
 		padding: 100rpx 30rpx 0 30rpx;
 	}
 
@@ -1054,7 +1141,7 @@
 	.order-submission .allAddress .nav .item.on::before {
 		position: absolute;
 		bottom: 0;
-		content: "快递配送";
+		content: "到店自提";
 		font-size: 28rpx;
 		display: block;
 		height: 0;
@@ -1069,7 +1156,7 @@
 	}
 
 	.order-submission .allAddress .nav .item:nth-of-type(2).on::before {
-		content: "到店自提";
+		content: "团购商家配送";
 		border-width: 0 0 80rpx 20rpx;
 		border-radius: 36rpx 14rpx 0 0;
 	}
@@ -1081,7 +1168,7 @@
 	.order-submission .allAddress .nav .item.on2::before {
 		position: absolute;
 		bottom: 0;
-		content: "到店自提";
+		content: "团购商家配送";
 		font-size: 28rpx;
 		display: block;
 		height: 0;
@@ -1095,7 +1182,7 @@
 	}
 
 	.order-submission .allAddress .nav .item:nth-of-type(1).on2::before {
-		content: "快递配送";
+		content: "到店自提";
 		border-width: 0 60rpx 60rpx 0;
 		border-radius: 14rpx 36rpx 0 0;
 	}
@@ -1269,5 +1356,38 @@
 
 	.footer .transparent {
 		opacity: 0
+	}
+	
+	.select-box {
+	  padding: 20rpx 40rpx 20rpx 10rpx;
+	  border: 2rpx solid #ccc;
+	  position: relative;
+	}
+	.arrow {
+	  position: absolute;
+	  right: 10rpx;
+	  top: 50%;
+	  transform: translateY(-50%);
+	  width: 0;
+	  height: 0;
+	  border-left: 10rpx solid transparent;
+	  border-right: 10rpx solid transparent;
+	  border-top: 10rpx solid #333;
+	}
+	.arrow-up {
+	  border-bottom: 10rpx solid #333;
+	  border-top: none;
+	}
+	
+	.dropdown {
+	  border: 2rpx solid #ccc;
+	  border-top: none;
+	}
+	.dropdown view {
+	  padding: 10rpx;
+	  cursor: pointer;
+	}
+	.dropdown view:hover {
+	  background-color: #f0f0f0;
 	}
 </style>

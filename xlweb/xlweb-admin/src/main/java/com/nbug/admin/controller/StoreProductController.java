@@ -186,23 +186,6 @@ public class StoreProductController {
         StoreProductRequest productRequest = storeProductService.importProductFromUrl(url, form);
         return CommonResult.success(productRequest);
     }
-
-    /**
-     * 获取复制商品配置
-     */
-    @PreAuthorize("hasAuthority('admin:product:copy:config')")
-    @ApiOperation(value = "获取复制商品配置")
-    @RequestMapping(value = "/copy/config", method = RequestMethod.POST)
-    public CommonResult<Map<String, Object>> copyConfig() {
-        return CommonResult.success(storeProductService.copyConfig());
-    }
-
-    @PreAuthorize("hasAuthority('admin:product:copy:product')")
-    @ApiOperation(value = "复制平台商品")
-    @RequestMapping(value = "/copy/product", method = RequestMethod.POST)
-    public CommonResult<Map<String, Object>> copyProduct(@RequestBody @Valid StoreCopyProductRequest request) {
-        return CommonResult.success(storeProductService.copyProduct(request.getUrl()));
-    }
 }
 
 

@@ -75,19 +75,6 @@ public class ExpressController {
         return CommonResult.failed();
     }
 
-    /**
-     * 同步物流公司
-     */
-    @PreAuthorize("hasAuthority('admin:express:sync')")
-    @ApiOperation(value = "同步物流公司")
-    @RequestMapping(value = "/sync/express", method = RequestMethod.POST)
-    public CommonResult<String> syncExpress() {
-        if (expressService.syncExpress()) {
-            return CommonResult.success();
-        }
-        return CommonResult.failed();
-    }
-
 
     /**
      * 查询快递公司表信息
