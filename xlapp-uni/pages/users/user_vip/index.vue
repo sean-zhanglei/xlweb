@@ -115,10 +115,10 @@
 				<view class="item acea-row row-between-wrapper" v-for="(item,index) in expList" :key="index">
 					<view class="text">
 						<view class="name">{{item.title}}</view>
-						<view class="data">{{item.add_time}}</view>
+						<view class="data">{{item.createTime}}</view>
 					</view>
-					<view class="num" v-if="item.pm">+{{item.number}}</view>
-					<view class="num on" v-else>-{{item.number}}</view>
+					<view class="num" v-if="item.type == 1">+{{item.experience}}</view>
+					<view class="num on" v-else>-{{item.experience}}</view>
 				</view>
 			</view>
 		</view>
