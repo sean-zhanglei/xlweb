@@ -98,7 +98,7 @@ let query = parseQuery();
 let urlSpread = query["spread"];
 let vconsole = query[cookieName.toLowerCase()];
 let md5Xlweb = "b14d1e9baeced9bb7525ab19ee35f2d2"; //XLWEB MD5 加密开启vconsole模式
-let md5UnXlweb = "3dca2162c4e101b7656793a1af20295c"; //UN_CREMB MD5 加密关闭vconsole模式
+let md5UnXlweb = "3dca2162c4e101b7656793a1af20295c"; //UN_XLWEB MD5 加密关闭vconsole模式
 
 
 if (vconsole !== undefined) {
