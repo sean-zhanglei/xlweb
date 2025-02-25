@@ -5,7 +5,7 @@
 			<view class="info-box">
 				<image :src="logoUrl"></image>
 				<view class="title">获取授权</view>
-				<view class="txt">手机号快捷登录</view>
+				<view class="txt">用于手机号快捷登录</view>
 			</view>
 			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">手机号快捷登录</button>
 		</view>
