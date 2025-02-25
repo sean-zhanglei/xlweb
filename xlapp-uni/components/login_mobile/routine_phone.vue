@@ -7,7 +7,7 @@
 				<view class="title">获取授权</view>
 				<view class="txt">手机号快捷登录</view>
 			</view>
-			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">获取微信手机号</button>
+			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">手机号快捷登录</button>
 		</view>
 	</view>
 </template>
