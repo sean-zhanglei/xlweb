@@ -428,13 +428,16 @@ public class WechatNewServiceImpl implements WechatNewService {
         String accessToken = getMiniAccessToken();
         String url = StrUtil.format(WeChatConstants.WECHAT_MINI_SEND_SUBSCRIBE_URL, accessToken);
         JSONObject messAge = JSONObject.parseObject(JSONObject.toJSONString(templateMessage));
+        logger.debug(StrUtil.format("小程序发送订阅消息,消息内容！{}", messAge.toJSONString()));
         String result = restTemplateUtil.postJsonData(url, messAge);
         JSONObject data = JSONObject.parseObject(result);
         if (ObjectUtil.isNull(data)) {
+            logger.error("小程序发送订阅消息,微信平台接口异常，没任何数据返回！");
             throw new XlwebException("微信平台接口异常，没任何数据返回！");
         }
         if (data.containsKey("errcode") && !"0".equals(data.getString("errcode"))) {
             if ("40001".equals(data.getString("errcode"))) {
+                logger.error(StrUtil.format("微信小程序发送订阅消息异常！{}", result));
                 wxExceptionDispose(data, "微信小程序发送订阅消息异常");
                 redisUtil.delete(WeChatConstants.REDIS_WECAHT_MINI_ACCESS_TOKEN_KEY);
                 accessToken = getMiniAccessToken();
@@ -443,6 +446,7 @@ public class WechatNewServiceImpl implements WechatNewService {
                 JSONObject data2 = JSONObject.parseObject(result);
                 if (data2.containsKey("errcode") && !"0".equals(data2.getString("errcode"))) {
                     if (data2.containsKey("errmsg")) {
+                        logger.error(StrUtil.format("微信小程序发送订阅消息重试异常！{}", result));
                         wxExceptionDispose(data2, "微信小程序发送订阅消息重试异常");
                         throw new XlwebException("微信接口调用失败：" + data2.getString("errcode") + data2.getString("errmsg"));
                     }
@@ -451,6 +455,7 @@ public class WechatNewServiceImpl implements WechatNewService {
                 }
             }
             if (data.containsKey("errmsg")) {
+                logger.error(StrUtil.format("微信小程序发送订阅消息异常！{}", result));
                 wxExceptionDispose(data, "微信小程序发送订阅消息异常");
                 throw new XlwebException("微信接口调用失败：" + data.getString("errcode") + data.getString("errmsg"));
             }

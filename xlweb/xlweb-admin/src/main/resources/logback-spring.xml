@@ -3,7 +3,8 @@
     <!-- 根据需要自行配置 -->
     <springProperty scope="context" name="LOG_PORT" source="server.port"/>
     <property name="APP_NAME" value="Xlweb"/>
-    <property name="log.path" value="../xlweb_admin_log/${LOG_PORT}}"/>
+    <property name="LOG_HOME" value="../xlweb_admin_log/${LOG_PORT}"/>
+    <property name="log.path" value="../xlweb_admin_log/${LOG_PORT}"/>
 
     <!--"@timestamp": "2019-06-27T09:59:41.897+08:00",-->
     <!--"@version": "1",-->
