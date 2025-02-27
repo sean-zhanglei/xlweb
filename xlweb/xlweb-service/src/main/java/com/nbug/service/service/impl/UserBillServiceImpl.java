@@ -887,17 +887,31 @@ public class UserBillServiceImpl extends ServiceImpl<UserBillDao, UserBill> impl
             MyRecord myRecord = new MyRecord();
             Map<String, String> status = new HashMap<>();
             status.put(Constants.USER_BILL_TYPE_SYSTEM_ADD, "系统增加");
-            status.put(Constants.USER_BILL_TYPE_PAY_RECHARGE, "充值");
+            status.put(Constants.USER_BILL_TYPE_PAY_RECHARGE, "充值支付");
             status.put(Constants.USER_BILL_TYPE_TRANSFER_IN, "佣金转入余额");
             status.put(Constants.USER_BILL_TYPE_PAY_PRODUCT_REFUND, "商品退款");
             status.put(Constants.USER_BILL_TYPE_PAY_ORDER, "订单支付");
             status.put(Constants.USER_BILL_TYPE_SYSTEM_SUB, "系统减少");
 
+            status.put(Constants.USER_BILL_TYPE_TRANSFER_IN, "佣金转入余额");
+            status.put(Constants.USER_BILL_TYPE_BROKERAGE, "推广佣金");
+
             Map<String, String> payType = new HashMap<>();
+            // 支付方式
             payType.put(PayConstants.PAY_TYPE_WE_CHAT, "微信支付");
             payType.put(PayConstants.PAY_TYPE_YUE, "余额支付");
             payType.put(PayConstants.PAY_TYPE_ALI_PAY, "支付宝");
             payType.put(PayConstants.PAY_TYPE_OFFLINE, "线下支付");
+
+            Map<String, String> payChannel = new HashMap<>();
+            // 支付渠道
+            payChannel.put(PayConstants.PAY_CHANNEL_WE_CHAT_H5, "H5唤起微信支付");
+            payChannel.put(PayConstants.PAY_CHANNEL_WE_CHAT_PROGRAM, "小程序");// 充值支付-小程序
+            payChannel.put(PayConstants.PAY_CHANNEL_WE_CHAT_PUBLIC, "公众号");
+            payChannel.put(PayConstants.PAY_CHANNEL_WE_CHAT_APP_ANDROID, "微信App支付android");
+            payChannel.put(PayConstants.PAY_CHANNEL_WE_CHAT_APP_IOS, "微信App支付ios");
+            payChannel.put(PayConstants.PAY_CHANNEL_ALI_PAY, "支付宝支付");
+            payChannel.put(PayConstants.PAY_CHANNEL_ALI_APP_PAY, "微信App支付ios");
 
             QueryWrapper<UserBill> queryAllWrapper = new QueryWrapper<>();
             queryAllWrapper.eq("category", Constants.USER_BILL_CATEGORY_MONEY);
@@ -936,18 +950,25 @@ public class UserBillServiceImpl extends ServiceImpl<UserBillDao, UserBill> impl
                     String payTypeName;
                     if (Constants.USER_BILL_TYPE_PAY_ORDER.equals(type) || Constants.USER_BILL_TYPE_PAY_PRODUCT_REFUND.equals(type)) {
                         StoreOrder storeOrder = storeOrderDao.selectById(Integer.valueOf((String) item.get("link_id")));
+
                         payTypeName = storeOrder.getPayType();
+                        data.put("pay_type_name", payType.get(payTypeName));
                         relation  = storeOrder.getOrderId();
                     } else if (Constants.USER_BILL_TYPE_PAY_RECHARGE.equals(type)) {
-                        UserRecharge userRecharge = userRechargeDao.selectById(Integer.valueOf((String) item.get("link_id")));
+                        QueryWrapper<UserRecharge> userRechargeQueryWrapper = new QueryWrapper<>();
+                        userRechargeQueryWrapper.eq("order_id", item.get("link_id"));
+                        UserRecharge userRecharge = userRechargeDao.selectOne(userRechargeQueryWrapper);
+                        // 充值来源 | public =  微信公众号, weixinh5 =微信H5支付, routine = 小程序，weixinAppIos-微信appios支付，
+                        // weixinAppAndroid-微信app安卓支付,alipay-支付包支付，appAliPay-App支付宝支付")
                         payTypeName = userRecharge.getRechargeType();
+                        data.put("pay_type_name", payChannel.get(payTypeName));
                         relation = userRecharge.getOrderId();
                     } else {
-                        payTypeName = "";
+                        // 推广、系统操作等
+                        data.put("pay_type_name", "");
                         relation = status.get(type);
                     }
                     data.put("order_id", relation);
-                    data.put("pay_type_name", payType.get(payTypeName));
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     data.put("update_time", sdf.format(item.get("update_time")));
