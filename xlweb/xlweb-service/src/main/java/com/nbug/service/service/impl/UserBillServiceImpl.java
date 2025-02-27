@@ -147,11 +147,14 @@ public class UserBillServiceImpl extends ServiceImpl<UserBillDao, UserBill> impl
 
             Map<String, String> status = new HashMap<>();
             status.put(Constants.USER_BILL_TYPE_SYSTEM_ADD, "系统增加");
-            status.put(Constants.USER_BILL_TYPE_PAY_RECHARGE, "充值");
+            status.put(Constants.USER_BILL_TYPE_PAY_RECHARGE, "充值支付");
             status.put(Constants.USER_BILL_TYPE_TRANSFER_IN, "佣金转入余额");
             status.put(Constants.USER_BILL_TYPE_PAY_PRODUCT_REFUND, "商品退款");
             status.put(Constants.USER_BILL_TYPE_PAY_ORDER, "订单支付");
             status.put(Constants.USER_BILL_TYPE_SYSTEM_SUB, "系统减少");
+
+            status.put(Constants.USER_BILL_TYPE_TRANSFER_IN, "佣金转入余额");
+            status.put(Constants.USER_BILL_TYPE_BROKERAGE, "推广佣金");
             record.set("status", status);
 
             List<UserBill> list = dao.selectList(queryWrapper);
@@ -177,7 +180,7 @@ public class UserBillServiceImpl extends ServiceImpl<UserBillDao, UserBill> impl
                     if (Constants.USER_BILL_TYPE_PAY_ORDER.equals(type) || Constants.USER_BILL_TYPE_PAY_PRODUCT_REFUND.equals(type)) {
                         relation = storeOrderDao.selectById(item.getLinkId()).getOrderId();
                     } else if (Constants.USER_BILL_TYPE_PAY_RECHARGE.equals(type)) {
-                        relation = userRechargeDao.selectById(item.getLinkId()).getOrderId();
+                        relation = item.getLinkId();
                     } else {
                         relation = status.get(type);
                     }
