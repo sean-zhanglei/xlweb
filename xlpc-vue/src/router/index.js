@@ -22,6 +22,7 @@ import appSettingRouter from './modules/appSetting'
 import maintainRouter from './modules/maintain'
 import mobileRouter from './modules/mobile'
 import codegen from './modules/codegen'
+import statistic from './modules/statistic'
 
 
 /**
@@ -77,6 +78,8 @@ export const constantRoutes = [
   mobileRouter,
   // 代码生成
   codegen,
+  // 数据统计
+  statistic,
 
   {
     path: '/404',

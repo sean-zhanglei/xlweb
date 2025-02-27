@@ -35,7 +35,7 @@ public class UserIntegralRecord implements Serializable {
     @ApiModelProperty(value = "关联id-orderNo,(sign,system默认为0）")
     private String linkId;
 
-    @ApiModelProperty(value = "关联类型（order,sign,system）")
+    @ApiModelProperty(value = "关联类型（order,sign,system, product）")
     private String linkType;
 
     @ApiModelProperty(value = "类型：1-增加，2-扣减")

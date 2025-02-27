@@ -9,6 +9,7 @@ import com.nbug.common.response.MonitorResponse;
 import com.nbug.common.request.StoreOrderRefundRequest;
 import com.nbug.common.model.user.User;
 import com.nbug.common.model.user.UserBill;
+import com.nbug.common.vo.MyRecord;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,15 @@ public interface UserBillService extends IService<UserBill> {
      * @return List<UserBill>
      */
     List<UserBill> getList(FundsMonitorSearchRequest request, PageParamRequest pageParamRequest);
+
+    /**
+     * 列表
+     *
+     * @param request          请求参数
+     * @param pageParamRequest 分页类参数
+     * @return List<UserBill>
+     */
+    MyRecord getBalanceList(FundsMonitorSearchRequest request, PageParamRequest pageParamRequest);
 
     /**
      * 新增/消耗  总金额
@@ -64,4 +74,16 @@ public interface UserBillService extends IService<UserBill> {
      * @return PageInfo
      */
     PageInfo<UserBill> nowMoneyBillRecord(Integer uid, String type, PageParamRequest pageRequest);
+
+    MyRecord getBalanceBasic(String time);
+
+    MyRecord getBalanceTrend(String time);
+
+    MyRecord getBalanceChannel(String time);
+
+    MyRecord getBalanceType(String time);
+
+    MyRecord getFlowRecord(String type, String time, PageParamRequest pageParamRequest);
+
+    MyRecord getFlowList(List<Integer> ids, String keywords, PageParamRequest pageParamRequest);
 }

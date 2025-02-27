@@ -286,7 +286,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
                 // 生成记录
                 UserIntegralRecord integralRecord = new UserIntegralRecord();
                 integralRecord.setUid(user.getUid());
-                integralRecord.setLinkType(IntegralRecordConstants.INTEGRAL_RECORD_LINK_TYPE_SIGN);
+                integralRecord.setLinkType(IntegralRecordConstants.INTEGRAL_RECORD_LINK_TYPE_SYSTEM);
                 integralRecord.setTitle(IntegralRecordConstants.BROKERAGE_RECORD_TITLE_SYSTEM);
                 integralRecord.setIntegral(request.getIntegralValue());
                 integralRecord.setStatus(IntegralRecordConstants.INTEGRAL_RECORD_STATUS_COMPLETE);

@@ -9,11 +9,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.nbug.common.constants.Constants;
 import com.nbug.common.constants.NotifyConstants;
+import com.nbug.common.constants.PayConstants;
 import com.nbug.common.constants.UserConstants;
 import com.nbug.common.exception.XlwebException;
 import com.nbug.common.model.combination.StorePink;
@@ -24,6 +26,7 @@ import com.nbug.common.model.system.SystemAdmin;
 import com.nbug.common.model.system.SystemNotification;
 import com.nbug.common.model.system.SystemStore;
 import com.nbug.common.model.user.User;
+import com.nbug.common.model.user.UserBill;
 import com.nbug.common.model.user.UserBrokerageRecord;
 import com.nbug.common.model.user.UserToken;
 import com.nbug.common.page.CommonPage;
@@ -36,7 +39,10 @@ import com.nbug.common.vo.*;
 import com.nbug.service.dao.StoreOrderDao;
 import com.nbug.service.delete.OrderUtils;
 import com.nbug.service.service.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +52,10 @@ import org.springframework.util.MultiValueMap;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,6 +65,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder> implements StoreOrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(StoreOrderServiceImpl.class);
 
     @Resource
     private StoreOrderDao dao;
@@ -2101,6 +2113,1041 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             default:
                 return Constants.PAY_TYPE_STR_OTHER;
         }
+    }
+
+    @Override
+    public MyRecord getOrderBasic(String time) {
+        try {
+            String[] times = time.split("-");
+            if (times.length != 2) {
+                throw new IllegalArgumentException("请选择时间");
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            Date startDate = sdf.parse(times[0]);
+            Date endDate = sdf.parse(times[1]);
+            Calendar cal =  Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            endDate = cal.getTime();
+            SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+            SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+
+            // 当前总订单销量
+            QueryWrapper<StoreOrder> queryStoreOrderAllWrapper = new QueryWrapper<>();
+            queryStoreOrderAllWrapper.select("IFNULL(sum(pay_price), 0) as pay_price");
+            queryStoreOrderAllWrapper.eq("paid", 1);
+            queryStoreOrderAllWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+            BigDecimal payPrice = dao.selectOne(queryStoreOrderAllWrapper).getPayPrice();
+
+            // 当前订单总数
+            QueryWrapper<StoreOrder> queryPayCountWrapper = new QueryWrapper<>();
+            queryPayCountWrapper.select("id");
+            queryPayCountWrapper.eq("paid", 1);
+            queryPayCountWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+
+            int payCount = dao.selectCount(queryPayCountWrapper);
+
+            // 当前退款金额
+            QueryWrapper<StoreOrder> queryRefundPriceWrapper = new QueryWrapper<>();
+            queryRefundPriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price");
+            queryRefundPriceWrapper.eq("paid", 1);
+            queryRefundPriceWrapper.ne("refund_status", 0);
+            queryRefundPriceWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+            BigDecimal refundPrice = dao.selectOne(queryRefundPriceWrapper).getPayPrice();
+
+            // 当前退款订单总数
+            QueryWrapper<StoreOrder> queryRefundCountWrapper = new QueryWrapper<>();
+            queryRefundCountWrapper.select("id");
+            queryRefundCountWrapper.eq("paid", 1);
+            queryRefundCountWrapper.ne("refund_status", 0);
+            queryRefundCountWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+            int refundCount = dao.selectCount(queryRefundCountWrapper);
+
+            MyRecord myRecord = new MyRecord();
+            myRecord.set("pay_price", payPrice);
+            myRecord.set("pay_count", payCount);
+            myRecord.set("refund_price", refundPrice);
+            myRecord.set("refund_count", refundCount);
+            return myRecord;
+        } catch (Exception ex) {
+            logger.error("获取订单统计数量数据失败", ex);
+            throw new XlwebException("获取订单统计数量数据失败");
+        }
+    }
+
+    @Override
+    public MyRecord getOrderTrend(String time) {
+        try {
+            String[] times = time.split("-");
+            if (times.length != 2) {
+                throw new IllegalArgumentException("请选择时间");
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            Date startDate = sdf.parse(times[0]);
+            Date endDate = sdf.parse(times[1]);
+            Calendar cal =  Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            endDate = cal.getTime();
+
+            long dayCount = (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000) + 1;
+            MyRecord record;
+            if (dayCount == 1) {
+                record = trend(times, 0);
+            } else if (dayCount > 1 && dayCount <= 31) {
+                record = trend(times, 1);
+            } else if (dayCount > 31 && dayCount <= 92) {
+                record = trend(times, 3);
+            } else {
+                record = trend(times, 30);
+            }
+            return record;
+        } catch (Exception ex) {
+            logger.error("获取订单统计折线图数据失败", ex);
+            throw new XlwebException("获取订单统计折线图数据失败");
+        }
+    }
+
+    public MyRecord trend(String[] time, int num) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Date startDate = sdf.parse(time[0]);
+        Date endDate = sdf.parse(time[1]);
+
+        List<String> xAxis = new ArrayList<>();
+        String timeType = "%Y-%m";
+        if (num == 0) {
+            xAxis = Arrays.asList("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
+            timeType = "%H";
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+
+            while (!cal.getTime().after(endDate)) {
+                if (num == 30) {
+                    xAxis.add(new SimpleDateFormat("yyyy-MM").format(cal.getTime()));
+                    cal.add(Calendar.MONTH, 1);
+                    timeType = "%Y-%m";
+                } else {
+                    xAxis.add(new SimpleDateFormat("MM-dd").format(cal.getTime()));
+                    cal.add(Calendar.DAY_OF_MONTH, num);
+                    timeType = "%m-%d";
+                }
+            }
+        }
+
+        SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+
+        QueryWrapper<StoreOrder> queryStoreOrderAllWrapper = new QueryWrapper<>();
+        queryStoreOrderAllWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+        queryStoreOrderAllWrapper.eq("paid", 1);
+        queryStoreOrderAllWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+        queryStoreOrderAllWrapper.groupBy("days");
+        List<Map<String, Object>> payPrice = dao.selectMaps(queryStoreOrderAllWrapper);
+
+        QueryWrapper<StoreOrder> queryStoreOrderCountAllWrapper = new QueryWrapper<>();
+        queryStoreOrderCountAllWrapper.select("count(id) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+        queryStoreOrderCountAllWrapper.eq("paid", 1);
+        queryStoreOrderCountAllWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+        queryStoreOrderCountAllWrapper.groupBy("days");
+        List<Map<String, Object>> payPriceCount = dao.selectMaps(queryStoreOrderCountAllWrapper);
+
+        QueryWrapper<StoreOrder> queryRefundPriceWrapper = new QueryWrapper<>();
+        queryRefundPriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+        queryRefundPriceWrapper.eq("paid", 1);
+        queryRefundPriceWrapper.ne("refund_status", 0);
+        queryRefundPriceWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+        queryRefundPriceWrapper.groupBy("days");
+        List<Map<String, Object>> refundPrice = dao.selectMaps(queryRefundPriceWrapper);
+
+        QueryWrapper<StoreOrder> queryRefundPriceCountWrapper = new QueryWrapper<>();
+        queryRefundPriceCountWrapper.select("count(id) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+        queryRefundPriceCountWrapper.eq("paid", 1);
+        queryRefundPriceCountWrapper.ne("refund_status", 0);
+        queryRefundPriceCountWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+        queryRefundPriceCountWrapper.groupBy("days");
+        List<Map<String, Object>> refundPriceCount = dao.selectMaps(queryRefundPriceCountWrapper);
+
+        Map<String, Float> payPriceMap = payPrice.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> Float.valueOf(((BigDecimal)item.get("pay_price")).toPlainString())
+                ));
+
+        Map<String, Integer> payPriceCountMap = payPriceCount.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> Integer.valueOf(String.valueOf(item.get("num")))
+                ));
+
+        Map<String, Float> refundPriceMap = refundPrice.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> Float.valueOf(((BigDecimal)item.get("pay_price")).toPlainString())
+                ));
+
+        Map<String, Integer> refundCountMap = refundPriceCount.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> Integer.valueOf(String.valueOf(item.get("num")))
+                ));
+
+        Map<String, List<Object>> data = new HashMap<>();
+        data.put("订单金额", new ArrayList<>());
+        data.put("订单量", new ArrayList<>());
+
+        data.put("退款金额", new ArrayList<>());
+        data.put("退款订单量", new ArrayList<>());
+
+
+        for (String item : xAxis) {
+            data.get("订单金额").add(payPriceMap.getOrDefault(item, 0.0f));
+            data.get("订单量").add(payPriceCountMap.getOrDefault(item, 0));
+            data.get("退款金额").add(refundPriceMap.getOrDefault(item, 0.0f));
+            data.get("退款订单量").add(refundCountMap.getOrDefault(item, 0));
+        }
+
+        List<Map<String, Object>> series = new ArrayList<>();
+        for (Map.Entry<String, List<Object>> entry : data.entrySet()) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("name", entry.getKey());
+            item.put("data", entry.getValue());
+            item.put("type", "line");
+            series.add(item);
+        }
+        MyRecord myRecord = new MyRecord();
+        myRecord.set("xAxis", xAxis);
+        myRecord.set("series", series);
+
+        return myRecord;
+    }
+
+    @Override
+    public MyRecord getOrderChannel(String time) {
+        try {
+            String[] times = time.split("-");
+            if (times.length != 2) {
+                throw new IllegalArgumentException("请选择时间");
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            Date startDate = sdf.parse(times[0]);
+            Date endDate = sdf.parse(times[1]);
+            Calendar cal =  Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            endDate = cal.getTime();
+
+            List<String> bingXdata = Arrays.asList("公众号", "小程序", "H5", "APP", "支付宝支付", "余额");
+            List<String> color = Arrays.asList("#64a1f4", "#3edeb5", "#70869f", "#fc7d6a", "#fc7d6c", "#70869d");
+
+            // 支付渠道"支付渠道(0-微信公众号,1-微信小程序,2-H5,3-余额,4-微信AppIos,5-微信AppIos安卓,6-支付宝支付，7-支付宝app支付)"
+            List<String> data = Arrays.asList("0", "1", "2", "3","4", "5");
+            List<Map<String, Object>> bingData = new ArrayList<>();
+
+            for (int key = 0; key < data.size(); key++) {
+                String item = data.get(key);
+
+                // 增加的积分
+                SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                QueryWrapper<StoreOrder> queryStoreOrderWrapper = new QueryWrapper<>();
+                queryStoreOrderWrapper.select("IFNULL(sum(pay_price), 0) as pay_price");
+                queryStoreOrderWrapper.eq("paid", "1");
+                queryStoreOrderWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+
+                switch (item) {
+                    case "0":// 公众号
+                        queryStoreOrderWrapper.eq("pay_type", PayConstants.PAY_TYPE_WE_CHAT);
+                        queryStoreOrderWrapper.in("is_channel", Collections.singletonList("0"));
+                        break;
+                    case "1":// 小程序
+                        queryStoreOrderWrapper.eq("pay_type", PayConstants.PAY_TYPE_WE_CHAT);
+                        queryStoreOrderWrapper.in("is_channel", Collections.singletonList("1"));
+                        break;
+                    case "2":// H5
+                        queryStoreOrderWrapper.eq("pay_type", PayConstants.PAY_TYPE_WE_CHAT);
+                        queryStoreOrderWrapper.in("is_channel", Collections.singletonList("2"));
+                        break;
+                    case "3":// APP
+                        queryStoreOrderWrapper.eq("pay_type", PayConstants.PAY_TYPE_WE_CHAT).in("is_channel", Arrays.asList("4","5"))
+                                .or()
+                                .eq("pay_type", PayConstants.PAY_TYPE_ALI_PAY).in("is_channel", Collections.singletonList("7"));
+                        break;
+                    case "4":// 支付宝支付
+                        queryStoreOrderWrapper.eq("pay_type", PayConstants.PAY_TYPE_ALI_PAY);
+                        queryStoreOrderWrapper.in("is_channel", Collections.singletonList("6"));
+                        break;
+                    default: // 余额
+                        queryStoreOrderWrapper.in("is_channel", Collections.singletonList("3"));
+                }
+
+                BigDecimal addValue = dao.selectOne(queryStoreOrderWrapper).getPayPrice();
+
+                Map<String, Object> recordData = new HashMap<>();
+                recordData.put("name", bingXdata.get(key));
+                recordData.put("value", addValue);
+                Map<String, Object> itemStyle = new HashMap<>();
+                itemStyle.put("color", color.get(key));
+                recordData.put("itemStyle", itemStyle);
+                bingData.add(recordData);
+            }
+
+            List<Map<String, Object>> list = new ArrayList<>();
+            BigDecimal count = bingData.stream().map(item -> (BigDecimal) item.get("value")).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            for (Map<String, Object> item : bingData) {
+                BigDecimal value = (BigDecimal) item.get("value");
+                double percent = count.intValue() != 0 ?
+                        value
+                                .divide(count, 4, BigDecimal.ROUND_HALF_UP)
+                                .multiply(new BigDecimal(100))
+                                .setScale(1, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue() : 0;
+                Map<String, Object> recordData = new HashMap<>();
+                recordData.put("name", item.get("name"));
+                recordData.put("value", value);
+                recordData.put("percent", percent);
+                list.add(recordData);
+            }
+
+            list.sort(Comparator.comparing(item -> (BigDecimal)item.get("value")));
+
+            MyRecord myRecord = new MyRecord();
+            myRecord.set("bing_xdata", bingXdata);
+            myRecord.set("bing_data", bingData);
+            myRecord.set("list", list);
+
+            return myRecord;
+        } catch (Exception ex) {
+            logger.error("获取订单来源分析数据失败", ex);
+            throw new XlwebException("获取订单来源分析数据失败");
+        }
+    }
+
+    @Override
+    public MyRecord getOrderType(String time) {
+        try {
+            String[] times = time.split("-");
+            if (times.length != 2) {
+                throw new IllegalArgumentException("请选择时间");
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            Date startDate = sdf.parse(times[0]);
+            Date endDate = sdf.parse(times[1]);
+            Calendar cal =  Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            endDate = cal.getTime();
+            List<String> color = Arrays.asList("#64a1f4", "#3edeb5", "#3edeb5", "#70869f", "#ffc653", "#ffc653");
+            List<String> bingXdata = Arrays.asList("普通订单", "核销订单", "秒杀订单", "砍价订单", "拼团订单", "视频订单");
+            List<String> data = Arrays.asList("1", "2", "3", "4", "5", "6");
+
+            List<Map<String, Object>> bingData = new ArrayList<>();
+            for (int key = 0; key < data.size(); key++) {
+                String orderType = data.get(key);
+                // 订单类型分析
+                SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+                QueryWrapper<StoreOrder> queryStoreOrderWrapper = new QueryWrapper<>();
+                queryStoreOrderWrapper.select("IFNULL(sum(pay_price), 0) as pay_price");
+                queryStoreOrderWrapper.eq("paid", "1");
+                queryStoreOrderWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+                switch (orderType) {
+                    case "2":// 核销订单
+                        queryStoreOrderWrapper.isNotNull("verify_code");
+                        break;
+                    case "3":// 秒杀订单
+                        queryStoreOrderWrapper.isNotNull("seckill_id");
+                        queryStoreOrderWrapper.gt("seckill_id", 0);
+                        break;
+                    case "4":// 砍价订单
+                        queryStoreOrderWrapper.isNotNull("bargain_id");
+                        queryStoreOrderWrapper.gt("bargain_id", 0);
+                        break;
+                    case "5":// 拼团订单
+                        queryStoreOrderWrapper.isNotNull("combination_id");
+                        queryStoreOrderWrapper.gt("combination_id", 0);
+                    case "6":// 视频订单
+                        queryStoreOrderWrapper.eq("type", 1);
+                        break;
+                    default: // 普通订单
+                        queryStoreOrderWrapper.isNull("verify_code");
+                        queryStoreOrderWrapper.eq("seckill_id", 0);
+                        queryStoreOrderWrapper.eq("bargain_id", 0);
+                        queryStoreOrderWrapper.eq("combination_id", 0);
+
+                        queryStoreOrderWrapper.ne("type", 1);
+                }
+
+                BigDecimal addValue = dao.selectOne(queryStoreOrderWrapper).getPayPrice();
+
+                Map<String, Object> recordData = new HashMap<>();
+                recordData.put("name", bingXdata.get(key));
+                recordData.put("value", addValue);
+                Map<String, Object> itemStyle = new HashMap<>();
+                itemStyle.put("color", color.get(key));
+                recordData.put("itemStyle", itemStyle);
+                bingData.add(recordData);
+            }
+
+            List<Map<String, Object>> list = new ArrayList<>();
+            BigDecimal count = bingData.stream().map(item -> (BigDecimal) item.get("value")).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            for (Map<String, Object> item : bingData) {
+                BigDecimal value = (BigDecimal) item.get("value");
+                double percent = count.intValue() != 0 ?
+                        value
+                                .divide(count, 4, BigDecimal.ROUND_HALF_UP)
+                                .multiply(new BigDecimal(100))
+                                .setScale(1, BigDecimal.ROUND_HALF_UP)
+                                .doubleValue() : 0;
+                Map<String, Object> recordData = new HashMap<>();
+                recordData.put("name", item.get("name"));
+                recordData.put("value", value);
+                recordData.put("percent", percent);
+                list.add(recordData);
+            }
+            list.sort(Comparator.comparing(item -> (BigDecimal)item.get("value")));
+
+            MyRecord myRecord = new MyRecord();
+            myRecord.set("bing_xdata", bingXdata);
+            myRecord.set("bing_data", bingData);
+            myRecord.set("list", list);
+
+            return myRecord;
+        } catch (Exception ex) {
+            logger.error("获取订单类型分析数据失败", ex);
+            throw new XlwebException("获取订单类型分析数据失败");
+        }
+    }
+
+    @Override
+    public MyRecord getTradetop(String time) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+            SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+            // 1、计算左侧
+            Map<String, Object> left = new HashMap<>();
+            left.put("name", "当日订单金额");
+            List<String> xAxis = Arrays.asList("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
+            String timeType = "%H";
+            // "x": ["00","24"]
+            left.put("x", xAxis);
+            // 查询当日数据
+            QueryWrapper<StoreOrder> queryCurDateWrapper = new QueryWrapper<>();
+            queryCurDateWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurDateWrapper.eq("paid", 1);
+            queryCurDateWrapper.eq("refund_status", 0);
+            Date curData = new Date();
+            queryCurDateWrapper.between("update_time", sdfFormat.format(curData), sdfEndFormat.format(curData));
+            queryCurDateWrapper.groupBy("days");
+            List<Map<String, Object>> curDatePrice = dao.selectMaps(queryCurDateWrapper);
+            Map<String, BigDecimal> curDatePriceMap = curDatePrice.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> (BigDecimal)item.get("pay_price"))
+                    );
+            // 查询昨日数据
+            QueryWrapper<StoreOrder> queryCurPreDateWrapper = new QueryWrapper<>();
+            queryCurPreDateWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurPreDateWrapper.eq("paid", 1);
+            queryCurPreDateWrapper.eq("refund_status", 0);
+            Calendar curPreCal = Calendar.getInstance();
+            curPreCal.setTime(curData);
+            curPreCal.add(Calendar.DAY_OF_MONTH, -1);
+            Date curPreData = curPreCal.getTime();
+            queryCurPreDateWrapper.between("update_time", sdfFormat.format(curPreData), sdfEndFormat.format(curPreData));
+            queryCurPreDateWrapper.groupBy("days");
+            List<Map<String, Object>> curPreDatePrice = dao.selectMaps(queryCurPreDateWrapper);
+            Map<String, BigDecimal> curPreDatePriceMap = curPreDatePrice.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> (BigDecimal)item.get("pay_price"))
+                    );
+            // 解析数据
+            BigDecimal defaultValue = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+            List<Map<String,Object>> curSeries = new ArrayList<>();
+            // 计算今天总金额
+            Map<String,Object> curSer = new HashMap<>();
+            BigDecimal curSerCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+            List<BigDecimal> curSerValues  = new ArrayList<>();
+
+            for (String x : xAxis) {
+                if (Objects.nonNull(curDatePriceMap.get(x))) {
+                    curSerValues.add(curDatePriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                    curSerCount = curSerCount.add(curDatePriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                } else {
+                    curSerValues.add(defaultValue);
+                }
+            }
+            curSer.put("money", curSerCount);
+            curSer.put("value", curSerValues);
+
+            // 计算昨天总金额
+            Map<String,Object> curPreSer = new HashMap<>();
+            BigDecimal curPreSerCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+            List<BigDecimal> curPreSerValues  = new ArrayList<>();
+            for (String x : xAxis) {
+                if (Objects.nonNull(curPreDatePriceMap.get(x))) {
+                    curPreSerValues.add(curPreDatePriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                    curPreSerCount = curPreSerCount.add(curPreDatePriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                } else {
+                    curPreSerValues.add(defaultValue);
+                }
+            }
+            curPreSer.put("money", curPreSerCount);
+            curPreSer.put("value", curPreSerValues);
+
+            curSeries.add(curSer);
+            curSeries.add(curPreSer);
+            left.put("series", curSeries);
+
+            ///2、计算右侧
+            Map<String, Object> right = new HashMap<>();
+            Map<String, Object> today = new HashMap<>();
+            today.put("x", xAxis); // "x": ["00","24"]
+            /**
+             * "series": [{
+             * 	"name": "今日订单数",
+             * 	"now_money": 18,
+             * 	"last_money": 7,
+             * 	"rate": "157.00",
+             * 	"value": [0, 0]
+             * }, {
+             * 	"name": "今日支付人数",
+             * 	"now_money": 10,
+             * 	"last_money": 5,
+             * 	"rate": "100.00",
+             * 	"value": [0, 0]
+             * }]
+             */
+            // 查询当日昨日订单数据
+            QueryWrapper<StoreOrder> queryCurDateOrderCountWrapper = new QueryWrapper<>();
+            queryCurDateOrderCountWrapper.select("count(id) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurDateOrderCountWrapper.eq("paid", 1);
+            queryCurDateOrderCountWrapper.eq("refund_status", 0);
+            queryCurDateOrderCountWrapper.between("update_time", sdfFormat.format(curData), sdfEndFormat.format(curData));
+            queryCurDateOrderCountWrapper.groupBy("days");
+            List<Map<String, Object>> curDateOrderCountList = dao.selectMaps(queryCurDateOrderCountWrapper);
+            Map<String, Integer> curDateOrderCountMap = curDateOrderCountList.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> ((Long)item.get("num")).intValue())
+                    );
+
+
+
+            // 查询当日昨日支付人数数据
+            QueryWrapper<StoreOrder> queryCurDatePayCountWrapper = new QueryWrapper<>();
+            queryCurDatePayCountWrapper.select("count(distinct uid) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurDatePayCountWrapper.eq("paid", 1);
+            queryCurDatePayCountWrapper.eq("refund_status", 0);
+            queryCurDatePayCountWrapper.between("update_time", sdfFormat.format(curData), sdfEndFormat.format(curData));
+            queryCurDatePayCountWrapper.groupBy("days");
+            List<Map<String, Object>> curDatePayCountList = dao.selectMaps(queryCurDatePayCountWrapper);
+            Map<String, Integer> curDatePayCountMap = curDatePayCountList.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> ((Long)item.get("num")).intValue())
+                    );
+
+            // 计算当日昨日数据
+            QueryWrapper<StoreOrder> queryCurPreDateOrderCountWrapper = new QueryWrapper<>();
+            queryCurPreDateOrderCountWrapper.select("id");
+            queryCurPreDateOrderCountWrapper.eq("paid", 1);
+            queryCurPreDateOrderCountWrapper.eq("refund_status", 0);
+            queryCurPreDateOrderCountWrapper.between("update_time", sdfFormat.format(curPreData), sdfEndFormat.format(curPreData));
+            int curPreDateOrderCount = dao.selectCount(queryCurPreDateOrderCountWrapper);
+
+            QueryWrapper<StoreOrder> queryCurPreDatePayCountWrapper = new QueryWrapper<>();
+            queryCurPreDatePayCountWrapper.select("distinct uid");
+            queryCurPreDatePayCountWrapper.eq("paid", 1);
+            queryCurPreDatePayCountWrapper.eq("refund_status", 0);
+            queryCurPreDatePayCountWrapper.between("update_time", sdfFormat.format(curPreData), sdfEndFormat.format(curPreData));
+            int curPreDatePayCount = dao.selectCount(queryCurPreDatePayCountWrapper);
+
+            int curDateOrderCount = 0;
+            List<Integer> curDateOrderSerValues  = new ArrayList<>();
+            for (String x : xAxis) {
+                if (Objects.nonNull(curDateOrderCountMap.get(x))) {
+                    curDateOrderSerValues.add(curDateOrderCountMap.get(x));
+                    curDateOrderCount = curDateOrderCount + curDateOrderCountMap.get(x);
+                } else {
+                    curDateOrderSerValues.add(0);
+                }
+            }
+
+            int curDatePayCount = 0;
+            List<Integer> curDatePaySerValues  = new ArrayList<>();
+            for (String x : xAxis) {
+                if (Objects.nonNull(curDatePayCountMap.get(x))) {
+                    curDatePaySerValues.add(curDatePayCountMap.get(x));
+                    curDatePayCount = curDatePayCount + curDatePayCountMap.get(x);
+                } else {
+                    curDatePaySerValues.add(0);
+                }
+            }
+
+            // 使用 DecimalFormat 保留两位小数
+            DecimalFormat df = new DecimalFormat("0.00");
+            List<Map<String, Object>> toDaySeries = new ArrayList<>();
+            Map<String, Object> toDayOrder = new HashMap<>();
+            toDayOrder.put("name", "今日订单数");
+            toDayOrder.put("now_money", curDateOrderCount);
+            toDayOrder.put("last_money", curPreDateOrderCount);
+            // 计算环比
+            double curPreDateOrderGrowthRate = (((double)(curDateOrderCount - curPreDateOrderCount)) / (curPreDateOrderCount == 0 ? 1 : curPreDateOrderCount)) * 100;
+            toDayOrder.put("rate", df.format(curPreDateOrderGrowthRate));
+            toDayOrder.put("value", curDateOrderSerValues);
+
+            Map<String, Object> toDayPay = new HashMap<>();
+            toDayPay.put("name", "今日支付人数");
+            toDayPay.put("now_money", curDatePayCount);
+            toDayPay.put("last_money", curPreDatePayCount);
+            // 计算环比
+            double curPreDatePayGrowthRate = (((double)(curDatePayCount - curPreDatePayCount)) / (curPreDatePayCount == 0 ? 1 : curPreDatePayCount)) * 100;
+            toDayPay.put("rate", df.format(curPreDatePayGrowthRate));
+            toDayPay.put("value", curDatePaySerValues);
+
+            toDaySeries.add(toDayOrder);
+            toDaySeries.add(toDayPay);
+            today.put("series", toDaySeries);
+            right.put("today", today);
+            /**
+             * "month": [{
+             * 	"name": "本月订单数",
+             * 	"now_money": 153,
+             * 	"last_money": 172,
+             * 	"rate": "-11.00",
+             * 	"value": {
+             * 		"2025-02-01": 0,
+             * 		"2025-02-28": 0
+             *        }
+             * }, {
+             * 	"name": "本月支付人数",
+             * 	"now_money": 93,
+             * 	"last_money": 90,
+             * 	"rate": "3.00",
+             * 	"value": {
+             * 		"2025-02-01": 0,
+             * 		"2025-02-28": 0
+             *    }
+             * }]
+             */
+            List<Map<String, Object>> month = new ArrayList<>();
+            timeType = "%Y-%m-%d";
+            // 查询当月订单数据
+            QueryWrapper<StoreOrder> queryCurMonthOrderCountWrapper = new QueryWrapper<>();
+            queryCurMonthOrderCountWrapper.select("count(id) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurMonthOrderCountWrapper.eq("paid", 1);
+            queryCurMonthOrderCountWrapper.eq("refund_status", 0);
+            Date curMonthStart = sdf.parse(DateUtil.nowDateTime(Constants.DATE_FORMAT_MONTH_START));
+            Date curMonthEnd = sdf.parse(DateUtil.getMonthEndDay());
+            queryCurMonthOrderCountWrapper.between("update_time", sdfFormat.format(curMonthStart), sdfEndFormat.format(curMonthEnd));
+            queryCurMonthOrderCountWrapper.groupBy("days");
+            List<Map<String, Object>> curMonthOrderCountList = dao.selectMaps(queryCurMonthOrderCountWrapper);
+            Map<String, Integer> curMonthOrderCountMap = curMonthOrderCountList.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> ((Long)item.get("num")).intValue())
+                    );
+
+            // 查询上月支付人数数据
+            QueryWrapper<StoreOrder> queryCurMonthPayCountWrapper = new QueryWrapper<>();
+            queryCurMonthPayCountWrapper.select("count(distinct uid) as num, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryCurMonthPayCountWrapper.eq("paid", 1);
+            queryCurMonthPayCountWrapper.eq("refund_status", 0);
+            Date preMonthStart = sdf.parse(DateUtil.getLastMonthStartDay());
+            Date preMonthEnd = sdf.parse(DateUtil.getLastMonthEndDay());
+            queryCurMonthPayCountWrapper.between("update_time", sdfFormat.format(preMonthStart), sdfEndFormat.format(preMonthEnd));
+            queryCurMonthPayCountWrapper.groupBy("days");
+            List<Map<String, Object>> curMonthPayCountList = dao.selectMaps(queryCurMonthPayCountWrapper);
+            Map<String, Integer> curMonthPayCountMap = curMonthPayCountList.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> ((Long)item.get("num")).intValue())
+                    );
+
+            // 计算当月上月数据
+            QueryWrapper<StoreOrder> queryCurPreMonthOrderCountWrapper = new QueryWrapper<>();
+            queryCurPreMonthOrderCountWrapper.select("id");
+            queryCurPreMonthOrderCountWrapper.eq("paid", 1);
+            queryCurPreMonthOrderCountWrapper.eq("refund_status", 0);
+            queryCurPreMonthOrderCountWrapper.between("update_time", sdfFormat.format(preMonthStart), sdfEndFormat.format(preMonthEnd));
+            int curPreMonthOrderCount = dao.selectCount(queryCurPreMonthOrderCountWrapper);
+
+            QueryWrapper<StoreOrder> queryCurPreMonthPayCountWrapper = new QueryWrapper<>();
+            queryCurPreMonthPayCountWrapper.select("distinct uid");
+            queryCurPreMonthPayCountWrapper.eq("paid", 1);
+            queryCurPreMonthPayCountWrapper.eq("refund_status", 0);
+            queryCurPreMonthPayCountWrapper.between("update_time", sdfFormat.format(preMonthStart), sdfEndFormat.format(preMonthEnd));
+            int curPreMonthPayCount = dao.selectCount(queryCurPreMonthPayCountWrapper);
+
+            int curMonthOrderCount = 0;
+            List<String> curMonthSerValues  = new ArrayList<>();
+            Calendar curCalMonthOrder = Calendar.getInstance();
+            curCalMonthOrder.setTime(curMonthStart);
+            while (!curCalMonthOrder.getTime().after(curMonthEnd)) {
+                curMonthSerValues.add(new SimpleDateFormat("yyyy-MM-dd").format(curCalMonthOrder.getTime()));
+                curCalMonthOrder.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            for (String x : curMonthSerValues) {
+                if (Objects.nonNull(curMonthOrderCountMap.get(x))) {
+                    curMonthOrderCount = curMonthOrderCount + curMonthOrderCountMap.get(x);
+                }
+            }
+
+            int curMonthPayCount = 0;
+            for (String x : curMonthSerValues) {
+                if (Objects.nonNull(curMonthPayCountMap.get(x))) {
+                    curMonthPayCount = curMonthPayCount + curMonthPayCountMap.get(x);
+                }
+            }
+
+            // 使用 DecimalFormat 保留两位小数
+            Map<String, Object> toMonthOrder = new HashMap<>();
+            toMonthOrder.put("name", "本月订单数");
+            toMonthOrder.put("now_money", curMonthOrderCount);
+            toMonthOrder.put("last_money", curPreMonthOrderCount);
+            // 计算环比
+            double curPreMonthOrderGrowthRate = (((double)(curMonthOrderCount - curPreMonthOrderCount)) / (curPreMonthOrderCount == 0 ? 1 : curPreMonthOrderCount)) * 100;
+            toMonthOrder.put("rate", df.format(curPreMonthOrderGrowthRate));
+            toMonthOrder.put("value", curMonthSerValues);
+
+            Map<String, Object> toMonthPay = new HashMap<>();
+            toMonthPay.put("name", "本月支付人数");
+            toMonthPay.put("now_money", curMonthPayCount);
+            toMonthPay.put("last_money", curPreMonthPayCount);
+            // 计算环比
+            double curPreMonthPayGrowthRate = (((double)(curMonthPayCount - curPreMonthPayCount)) / (curPreMonthPayCount == 0 ? 1 : curPreMonthPayCount)) * 100;
+            toMonthPay.put("rate", df.format(curPreMonthPayGrowthRate));
+            toMonthPay.put("value", curMonthSerValues);
+
+            month.add(toMonthOrder);
+            month.add(toMonthPay);
+            right.put("month", month);
+
+            MyRecord myRecord = new MyRecord();
+            myRecord.set("left", left);
+            myRecord.set("right", right);
+            return myRecord;
+        } catch (Exception ex) {
+            logger.error("获取今天交易数据失败", ex);
+            throw new XlwebException("获取今天交易数据失败");
+        }
+    }
+
+    @Override
+    public MyRecord getTradeBottom(String time) {
+        try {
+            List<Map<String, Object>> series = new ArrayList<>();
+            String[] times = time.split("-");
+            if (times.length != 2) {
+                throw new IllegalArgumentException("请选择时间");
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            Date startDate = sdf.parse(times[0]);
+            // 结束日减去1
+            Date endDate = sdf.parse(times[1]);
+            Calendar cal =  Calendar.getInstance();
+            cal.setTime(endDate);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            endDate = cal.getTime();
+            // 生成xAxis
+            List<String> xAxis = xAixs(startDate, endDate);
+            String timeType = timeType(startDate, endDate);
+
+            // 1、余额支付金额 "type": 0, "desc": "用户下单时使用余额实际支付的金额"
+            QueryWrapper<StoreOrder> queryYuePriceWrapper = new QueryWrapper<>();
+            queryYuePriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryYuePriceWrapper.eq("paid", 1);
+            queryYuePriceWrapper.eq("pay_type", PayConstants.PAY_TYPE_YUE);
+            series.add(bottomOrderPayItem("余额支付金额", "用户下单时使用余额实际支付的金额", 0, xAxis, timeType, startDate, endDate, queryYuePriceWrapper));
+
+            //2、商品退款金额 "type": 0, "desc": "用户成功退款的商品金额"
+            QueryWrapper<StoreOrder> queryRefundPriceWrapper = new QueryWrapper<>();
+            queryRefundPriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryRefundPriceWrapper.eq("paid", 1);
+            queryRefundPriceWrapper.eq("refund_status", 2);
+            series.add(bottomOrderPayItem("商品退款金额", "用户成功退款的商品金额", 0, xAxis, timeType, startDate, endDate, queryRefundPriceWrapper));
+
+            //3、支出金额 "type": 1, "desc": "余额支付金额、商品退款成功金额"
+            QueryWrapper<StoreOrder> queryOutPriceWrapper = new QueryWrapper<>();
+            queryOutPriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryOutPriceWrapper.eq("paid", 1);
+            queryOutPriceWrapper.eq("refund_status", 2).or().eq("pay_type", PayConstants.PAY_TYPE_YUE);
+            series.add(bottomOrderPayItem("支出金额", "余额支付金额、商品退款成功金额", 1, xAxis, timeType, startDate, endDate, queryOutPriceWrapper));
+
+            //4、充值金额 "type": 1, "desc": "选定条件下，用户成功充值的金额，用户充值、后台充值"
+            QueryWrapper<UserBill> queryYueIncomeWrapper = new QueryWrapper<>();
+            queryYueIncomeWrapper.select("IFNULL(sum(number), 0) as number, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryYueIncomeWrapper.eq("category", Constants.USER_BILL_CATEGORY_MONEY);
+            queryYueIncomeWrapper.eq("status", 1);
+            queryYueIncomeWrapper.in("type", Arrays.asList(Constants.USER_BILL_TYPE_SYSTEM_ADD, Constants.USER_BILL_TYPE_PAY_RECHARGE));
+            queryYueIncomeWrapper.eq("pm", 1);
+            SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+            SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+            // 先查询环比数据
+            Map<String, Date> preDates = preDates(timeType, startDate, endDate);
+            Date preStartDate = preDates.get("preStartDate");
+            Date preEndDate = preDates.get("preEndDate");
+            QueryWrapper<UserBill> queryPreYueIncomeWrapper = new QueryWrapper<>();
+            queryPreYueIncomeWrapper.select("IFNULL(sum(number), 0) as number, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryPreYueIncomeWrapper.eq("category", Constants.USER_BILL_CATEGORY_MONEY);
+            queryPreYueIncomeWrapper.eq("status", 1);
+            queryPreYueIncomeWrapper.in("type", Arrays.asList(Constants.USER_BILL_TYPE_SYSTEM_ADD, Constants.USER_BILL_TYPE_PAY_RECHARGE));
+            queryPreYueIncomeWrapper.eq("pm", 1);
+            queryPreYueIncomeWrapper.groupBy("days");
+            queryPreYueIncomeWrapper.between("update_time", sdfFormat.format(preStartDate), sdfEndFormat.format(preEndDate));
+            List<Map<String, Object>> preYueIncome = userBillService.listMaps(queryPreYueIncomeWrapper);
+            Map<String, BigDecimal> preYueIncomeMap = preYueIncome.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> (BigDecimal)item.get("number"))
+                    );
+
+            // 在查询当前数据
+            queryYueIncomeWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+            List<Map<String, Object>> curYueIncome = userBillService.listMaps(queryYueIncomeWrapper);
+            Map<String, BigDecimal> curYueIncomeMap = curYueIncome.stream()
+                    .collect(Collectors.toMap(
+                            item -> (String) item.get("days"),
+                            item -> (BigDecimal)item.get("number"))
+                    );
+            // 解析数据
+            BigDecimal curYueIncomeCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal preYueIncomeCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+            List<BigDecimal> curYueIncomeValues  = new ArrayList<>();
+            List<String> xAxisPre =  xAixs(preStartDate, preEndDate);
+            for (String preX : xAxisPre) {
+                if (Objects.nonNull(preYueIncomeMap.get(preX))) {
+                    preYueIncomeCount = preYueIncomeCount.add(preYueIncomeMap.get(preX).setScale(2, RoundingMode.HALF_UP));
+                }
+            }
+            for (String x : xAxis) {
+                if (Objects.nonNull(curYueIncomeMap.get(x))) {
+                    curYueIncomeValues.add(curYueIncomeMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                    curYueIncomeCount = curYueIncomeCount.add(curYueIncomeMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                } else {
+                    curYueIncomeValues.add(new BigDecimal(0).setScale(2, RoundingMode.HALF_UP));
+                }
+            }
+            Map<String, Object> curYueIncomeItem = new HashMap<>();
+            curYueIncomeItem.put("name", "充值金额");
+            curYueIncomeItem.put("desc", "选定条件下，用户成功充值的金额，用户充值、后台充值");
+            curYueIncomeItem.put("money", curYueIncomeCount);
+            curYueIncomeItem.put("pre_money", preYueIncomeCount);
+            curYueIncomeItem.put("type", 1);
+            curYueIncomeItem.put("rate", curYueIncomeCount.subtract(preYueIncomeCount).divide(preYueIncomeCount.intValue() == 0 ? new BigDecimal(1) : preYueIncomeCount, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)));
+            curYueIncomeItem.put("value", curYueIncomeValues);
+            series.add(curYueIncomeItem);
+
+            //5、商品支付金额 "type": 1, "desc": "选定条件下，用户购买商品的实际支付金额，包括微信支付、余额支付、支付宝支付"
+            QueryWrapper<StoreOrder> queryPayPriceWrapper = new QueryWrapper<>();
+            queryPayPriceWrapper.select("IFNULL(sum(pay_price), 0) as pay_price, DATE_FORMAT(update_time, '"+ timeType +"') as days");
+            queryPayPriceWrapper.eq("paid", 1);
+            Map<String, Object> payItem = bottomOrderPayItem("商品支付金额", "选定条件下，用户购买商品的实际支付金额，包括微信支付、余额支付、支付宝支付", 1, xAxis, timeType, startDate, endDate, queryPayPriceWrapper);
+            BigDecimal payPriceMoney =  (BigDecimal)payItem.get("money");
+            BigDecimal payPreMoney =  (BigDecimal)payItem.get("pre_money");
+            List<BigDecimal> payPriceValues = (List<BigDecimal>)payItem.get("value");
+            series.add(payItem);
+
+            //6、营业额 "type": 1, "desc": "商品支付金额、充值金额"
+            List<BigDecimal> curYYEValues  = new ArrayList<>();
+            BigDecimal curYYECount = curYueIncomeCount.add(payPriceMoney);
+            BigDecimal preYYECount = preYueIncomeCount.add(payPreMoney);
+            for(int i = 0 ; i < xAxis.size(); i++) {
+                curYYEValues.add(i, payPriceValues.get(i).add(curYueIncomeValues.get(i)));
+            }
+            Map<String, Object> curYYEItem = new HashMap<>();
+            curYYEItem.put("name", "营业额");
+            curYYEItem.put("desc", "商品支付金额、充值金额");
+            curYYEItem.put("money", curYueIncomeCount.add(payPriceMoney));
+            curYYEItem.put("type", 1);
+            curYYEItem.put("rate", curYYECount.subtract(preYYECount).divide(preYYECount.intValue() == 0 ? new BigDecimal(1) : preYYECount, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)));
+            curYYEItem.put("value", curYYEValues);
+            series.add(curYYEItem);
+
+            MyRecord myRecord = new MyRecord();
+            myRecord.set("x", xAxis);
+            myRecord.set("series", series);
+            return myRecord;
+        } catch (Exception ex) {
+            logger.error("获取交易概括数据失败", ex);
+            throw new XlwebException("获取交易概括数据失败");
+        }
+    }
+
+    String timeType(Date startDate, Date endDate) {
+        long dayCount = (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000) + 1;
+        int num;
+        if (dayCount == 1) {
+            num = 0;
+        } else if (dayCount > 1 && dayCount <= 31) {
+            num = 1;
+        } else if (dayCount > 31 && dayCount <= 92) {
+            num = 3;
+        } else {
+            num = 30;
+        }
+
+        String timeType = "%Y-%m";
+        if (num == 0) {
+            timeType = "%H";
+        } else if(num == 30) {
+            timeType = "%Y-%m";
+        } else {
+            timeType = "%Y-%m-%d";
+        }
+        return timeType;
+    }
+
+    List<String> xAixs(Date startDate, Date endDate) {
+        List<String> xAxis = new ArrayList<>();
+        // 生成xAxis
+        long dayCount = (endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000) + 1;
+        int num;
+        if (dayCount == 1) {
+            num = 0;
+        } else if (dayCount > 1 && dayCount <= 31) {
+            num = 1;
+        } else if (dayCount > 31 && dayCount <= 92) {
+            num = 3;
+        } else {
+            num = 30;
+        }
+
+        if (num == 0) {
+            xAxis = Arrays.asList("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            while (!cal.getTime().after(endDate)) {
+                if (num == 30) {
+                    xAxis.add(new SimpleDateFormat("yyyy-MM").format(cal.getTime()));
+                    cal.add(Calendar.MONTH, 1);
+                } else {
+                    xAxis.add(new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                    cal.add(Calendar.DAY_OF_MONTH, num);
+                }
+            }
+        }
+        return xAxis;
+    }
+
+    Map<String, Date> preDates(String timeType, Date startDate, Date endDate) {
+        Date preStartDate = startDate;
+        Date preEndDate = endDate;
+        Calendar preStartCal = Calendar.getInstance();
+        preStartCal.setTime(startDate);
+        Calendar preEndCal = Calendar.getInstance();
+        preEndCal.setTime(endDate);
+        if ("%H".equals(timeType)) {
+            // "%H"
+            // 前一天
+            preStartCal.add(Calendar.DAY_OF_MONTH, -1);
+            preStartDate = preStartCal.getTime();
+            preEndCal.add(Calendar.DAY_OF_MONTH, -1);
+            preEndDate = preEndCal.getTime();
+        } else if ("%Y-%m".equals(timeType)) {
+            // "%Y-%m"
+            // 去年
+            preStartCal.add(Calendar.YEAR, -1);
+            preStartDate = preStartCal.getTime();
+            preEndCal.add(Calendar.YEAR, -1);
+            preEndDate = preEndCal.getTime();
+        } else {
+            // "%Y-%m-%d"
+            // 上一月
+            preStartCal.add(Calendar.MONTH, -1);
+            preStartDate = preStartCal.getTime();
+            preEndCal.add(Calendar.MONTH, -1);
+            preEndDate = preEndCal.getTime();
+        }
+        Map<String, Date> result = new HashMap<>();
+        result.put("preStartDate", preStartDate);
+        result.put("preEndDate", preEndDate);
+        return result;
+    }
+
+    /**
+     * 合并两个 QueryWrapper，使用 AND 逻辑连接
+     * @param source 第一个 QueryWrapper
+     * @param target 第二个 QueryWrapper
+     * @return 合并后的 QueryWrapper
+     */
+    public static <T> QueryWrapper<T> mergeQueryWrappers(QueryWrapper<T> source, QueryWrapper<T> target) {
+        // 合并条件，使用 AND 逻辑连接
+        target.and(wrapper -> wrapper.apply(source.getSqlSegment()));
+
+        return target;
+    }
+
+    Map<String,Object> bottomOrderPayItem(String name, String desc, Integer type, List<String> xAxis, String timeType, Date startDate, Date endDate, QueryWrapper<StoreOrder> queryPriceWrapper) {
+
+        SimpleDateFormat sdfFormat = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        SimpleDateFormat sdfEndFormat = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+        BigDecimal defaultValue = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+        // 先查询环比数据
+        Map<String, Date> preDates = preDates(timeType, startDate, endDate);
+        Date preStartDate = preDates.get("preStartDate");
+        Date preEndDate = preDates.get("preEndDate");
+
+        QueryWrapper<StoreOrder> queryPrePriceWrapper = new QueryWrapper<>();
+        queryPrePriceWrapper.select(queryPriceWrapper.getSqlSelect());
+        queryPrePriceWrapper.between("update_time", sdfFormat.format(preStartDate), sdfEndFormat.format(preEndDate));
+        queryPrePriceWrapper = mergeQueryWrappers(queryPriceWrapper, queryPrePriceWrapper);
+        queryPrePriceWrapper.groupBy("days");
+        List<Map<String, Object>> prePrice = dao.selectMaps(queryPrePriceWrapper);
+        Map<String, BigDecimal> prePriceMap = prePrice.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> (BigDecimal)item.get("pay_price"))
+                );
+
+        // 再查询当前数据
+        queryPriceWrapper.between("update_time", sdfFormat.format(startDate), sdfEndFormat.format(endDate));
+        queryPrePriceWrapper.groupBy("days");
+        List<Map<String, Object>> curPrice = dao.selectMaps(queryPriceWrapper);
+        Map<String, BigDecimal> curPriceMap = curPrice.stream()
+                .collect(Collectors.toMap(
+                        item -> (String) item.get("days"),
+                        item -> (BigDecimal)item.get("pay_price"))
+                );
+        // 解析数据
+        BigDecimal curPriceCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal prePriceCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
+        List<BigDecimal> curPriceValues  = new ArrayList<>();
+        List<String> xAxisPre = xAixs(preStartDate, preEndDate);
+        for (String preX : xAxisPre) {
+            if (Objects.nonNull(prePriceMap.get(preX))) {
+                prePriceCount = prePriceCount.add(prePriceMap.get(preX).setScale(2, RoundingMode.HALF_UP));
+            }
+        }
+
+        for (String x : xAxis) {
+            if (Objects.nonNull(curPriceMap.get(x))) {
+                curPriceValues.add(curPriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+                curPriceCount = curPriceCount.add(curPriceMap.get(x).setScale(2, RoundingMode.HALF_UP));
+            } else {
+                curPriceValues.add(defaultValue);
+            }
+        }
+        Map<String, Object> item = new HashMap<>();
+        item.put("name", name);
+        item.put("desc", desc);
+        item.put("money", curPriceCount);
+        item.put("pre_money", prePriceCount);
+        item.put("type", type);
+        item.put("rate", curPriceCount.subtract(prePriceCount).divide(prePriceCount.intValue() == 0 ? new BigDecimal(1) : prePriceCount, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)));
+        item.put("value", curPriceValues);
+
+        return item;
     }
 
 }

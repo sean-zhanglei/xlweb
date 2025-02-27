@@ -45,7 +45,15 @@ const financialRouter = {
           component: () => import('@/views/financial/record/monitor/index'),
           name: 'Monitor',
           meta: { title: '资金监控', icon: '' }
-        }
+        },
+        {
+          path: 'billingRecords',
+          name: `billingRecords`,
+          meta: {
+            title: '账单记录',icon: ''
+          },
+          component: () => import('@/views/financial/record/billingRecords/index'),
+        },
       ]
     },
     {
@@ -53,7 +61,15 @@ const financialRouter = {
       component: () => import('@/views/financial/brokerage/index'),
       name: 'Brokerage',
       meta: { title: '佣金记录', icon: '' }
-    }
+    },
+    {
+      path: 'balance',
+      name: 'balance',
+      meta: {
+        title: '余额记录',icon: ''
+      },
+      component: () => import('@/views/financial/balance/index'),
+    },
   ]
 }
 

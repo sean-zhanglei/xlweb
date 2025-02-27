@@ -133,3 +133,14 @@ export function brokerageListApi(params) {
   })
 }
 
+/**
+ * @description 财务管理 -- 余额列表
+ * @param {Number} param data {Number} 请求参数data
+ */
+export function getBalanceList(data) {
+  return request({
+    url: `/admin/statistic/balance/list`,
+    method: 'get',
+    params: data,
+  });
+}

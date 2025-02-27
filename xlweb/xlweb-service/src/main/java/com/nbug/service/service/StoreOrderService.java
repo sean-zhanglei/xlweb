@@ -7,6 +7,7 @@ import com.nbug.common.request.*;
 import com.nbug.common.response.*;
 import com.nbug.common.vo.ExpressSheetVo;
 import com.nbug.common.vo.LogisticsResultVo;
+import com.nbug.common.vo.MyRecord;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -370,4 +371,16 @@ public interface StoreOrderService extends IService<StoreOrder> {
      * @param spreadId 推广人uid
      */
     OrderBrokerageData getBrokerageData(Integer uid, Integer spreadId);
+
+    MyRecord getOrderBasic(String time);
+
+    MyRecord getOrderTrend(String time);
+
+    MyRecord getOrderChannel(String time);
+
+    MyRecord getOrderType(String time);
+
+    MyRecord getTradetop(String time);
+
+    MyRecord getTradeBottom(String time);
 }

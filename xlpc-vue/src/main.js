@@ -40,6 +40,7 @@ import modalAttr from '@/libs/modal-attr'
 import modalIcon from '@/libs/modal-icon'
 import { modalSure } from '@/libs/public'
 import timeOptions from "@/libs/timeOptions";
+import Pagination from '@/components/Pagination';
 import { loadScriptQueue } from '@/components/FormGenerator/utils/loadScript'
 import './icons' // icon
 import './permission' // permission control
@@ -69,6 +70,7 @@ Vue.use(VueAwesomeSwiper)
 Vue.use(plugins)
 Vue.use(directive)
 
+Vue.component('Pagination', Pagination);
 
 Vue.component('attrFrom', attrFrom)
 Vue.component('UploadIndex', UploadIndex)

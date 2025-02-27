@@ -6,8 +6,11 @@ import com.nbug.common.request.PageParamRequest;
 import com.nbug.common.response.UserIntegralRecordResponse;
 import com.github.pagehelper.PageInfo;
 import com.nbug.common.model.user.UserIntegralRecord;
+import com.nbug.common.vo.MyRecord;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户积分记录Service
@@ -60,4 +63,12 @@ public interface UserIntegralRecordService extends IService<UserIntegralRecord> 
      * @return 积分数量
      */
     Integer getFrozenIntegralByUid(Integer uid);
+
+    MyRecord getIntegralBasic(String time);
+
+    MyRecord getIntegralTrend(String time);
+
+    MyRecord getIntegralChannel(String time);
+
+    MyRecord getIntegralType(String time);
 }
