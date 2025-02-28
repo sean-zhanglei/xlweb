@@ -131,12 +131,39 @@
 									v-if="item.activityH5 && item.activityH5.type === '3'">拼团</span>
 								<image :src="item.image" mode=""></image>
 							</view>
-							<view class="text-info">
-								<view class="title line1">{{item.storeName}}</view>
-								<view class="old-price"><text>¥{{item.otPrice}}</text></view>
-								<view class="price">
-									<text>￥</text>{{item.price}}
-									<view class="txt" v-if="item.checkCoupon">券</view>
+							<view class="product-info">
+								<view class="text-info">
+									<view class="title line2">{{item.storeName}}</view>
+								</view>
+								<view class="product-buy">
+									<view class="product-data">
+										<view class="stock-info">
+											<view class="stock-status">
+												已售
+												<view class="txt" v-if="(item.sales / ((item.stock + item.sales) == 0 ? 1 : (item.stock + item.sales))) > 0.8">库存紧张</view>
+											</view>
+											<view class="stock-num">
+												<text>{{item.sales + item.ficti}}</text>
+												<!-- <text>{{item.unitName}}</text> -->
+												<progress activeColor="#fea10f" backgroundColor="#fff" border-radius="1" :percent="(item.sales / ((item.stock + item.sales) == 0 ? 1 : (item.stock + item.sales))  * 100).toFixed(1)" :show-info="true" />
+											</view>
+										</view>
+										<view class="price-info">
+											<view class="old-price"><text>¥{{item.otPrice}}</text></view>
+											<view class="price">
+												<text>￥</text>{{item.price}}
+												<view class="txt" v-if="item.checkCoupon">券</view>
+											</view>
+										</view>
+									</view>
+									<view class="bnt acea-row" v-if="item.stock == 0">
+										<button disabled="true" class="nobuy bnts bg-color-hui" form-type="submit">已售罄</button>
+									</view>
+									<view class="bnt acea-row" v-else>
+										<button class="joinCart bnts"
+												@click.stop="joinCart(item.id)">加入购物车</button>
+										<button class="buy bnts" @click.stop="goBuy(item.id)">立即购买</button>
+									</view>
 								</view>
 							</view>
 						</view>
@@ -148,12 +175,17 @@
 						<text>我是有底线的</text>
 					</view>
 				</view>
+				<!-- 组件 -->
+				<productWindow :attr="attr" :isShow='1' :iSplus='1' :iScart='1' @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
+					@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id='product-window' @goCat="joinCart(curProductId)">
+				</productWindow>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	
 	import Auth from '@/libs/wechat';
 	import Cache from '../../utils/cache';
 	let app = getApp();
@@ -185,6 +217,7 @@
 	import goodList from '@/components/goodList';
 	import promotionGood from '@/components/promotionGood';
 	import couponWindow from '@/components/couponWindow';
+	import productWindow from '@/components/productWindow';
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
 	import {
 		goShopDetail
@@ -195,6 +228,8 @@
 	import tabNav from '@/components/tabNav.vue'
 	import countDown from '@/components/countDown';
 	import {
+		getProductDetail,
+		postCartAdd,
 		getCategoryList,
 		getProductslist,
 		getProductHot,
@@ -227,6 +262,7 @@
 			goodList,
 			promotionGood,
 			couponWindow,
+			productWindow,
 			countDown,
 			a_seckill,
 			b_combination,
@@ -318,7 +354,19 @@
 				lineStyle: {}, // 下划线位置--动态甲酸
 				listActive: 0, // 当前选中项
 
-				duration: 0.2 // 下划线动画时长
+				duration: 0.2 ,// 下划线动画时长
+				curProductId: '',
+				type: "" ,//视频号普通商品类型
+				productValue: [], //系统属性
+				attrTxt: '请选择', //属性页面提示
+				attrValue: '', //已选属性
+				attr: {
+					cartAttr: false,
+					productAttr: [],
+					productSelect: {}
+				},
+				productInfo: {} ,//商品详情
+				isOpen: false, //是否打开属性组件
 			}
 		},
 		watch: {
@@ -332,7 +380,7 @@
 		mounted() {
 			this.setTabList()
 		},
-		onLoad() {
+		onLoad(options) {
 			var that = this;
 			// 获取系统信息
 			uni.getSystemInfo({
@@ -381,6 +429,8 @@
 			// #ifdef MP
 			this.getTemlIds()
 			// #endif
+			
+			options.type == undefined || options.type == null ? that.type = 'normal' : that.type = options.type;
 		},
 		onShow() {
 			let self = this
@@ -632,6 +682,252 @@
 					that.hostProduct = that.hostProduct.concat(res.data.list)
 				});
 			},
+			/**
+			 * 打开属性加入购物车
+			 * 
+			 */
+			joinCart: function(id) {
+				this.$set(this, 'curProductId', id);
+				//是否登录
+				if (this.isLogin === false) {
+					toLogin();
+				} else {
+					this.goCat(1,id);
+				}
+			},
+			/**
+			 * 立即购买
+			 */
+			goBuy: function(id) {
+				this.$set(this, 'curProductId', id);
+				if (this.isLogin === false) {
+					toLogin();
+				} else {
+					this.goCat(0,id);
+				}
+			},
+			onMyEvent: function() {
+				this.$set(this.attr, 'cartAttr', false);
+				this.$set(this, 'isOpen', false);
+			},
+			/**
+			 * 属性变动赋值
+			 * 
+			 */
+			ChangeAttr: function(res) {
+				let productSelect = this.productValue[res];
+				if (productSelect) {
+					this.$set(this.attr.productSelect, "image", productSelect.image);
+					this.$set(this.attr.productSelect, "price", productSelect.price);
+					this.$set(this.attr.productSelect, "stock", productSelect.stock);
+					this.$set(this.attr.productSelect, "unique", productSelect.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", res);
+					this.$set(this, "attrTxt", "已选择");
+				} else {
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", 0);
+					this.$set(this.attr.productSelect, "unique", this.productInfo.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				}
+			},
+			/**
+			 * 购物车数量加和数量减
+			 * 
+			 */
+			ChangeCartNum: function(changeValue) {
+				//changeValue:是否 加|减
+				//获取当前变动属性
+				let productSelect = this.productValue[this.attrValue];
+				//如果没有属性,赋值给商品默认库存
+				if (productSelect === undefined && !this.attr.productAttr.length)
+					productSelect = this.attr.productSelect;
+				//无属性值即库存为0；不存在加减；
+				if (productSelect === undefined) return;
+				let stock = productSelect.stock || 0;
+				let num = this.attr.productSelect;
+				if (changeValue) {
+					num.cart_num++;
+					if (num.cart_num > stock) {
+						this.$set(this.attr.productSelect, "cart_num", stock);
+						this.$set(this, "cart_num", stock);
+					}
+				} else {
+					num.cart_num--;
+					if (num.cart_num < 1) {
+						this.$set(this.attr.productSelect, "cart_num", 1);
+					}
+				}
+			},
+			attrVal(val) {
+				this.$set(this.attr.productAttr[val.indexw], 'index', this.attr.productAttr[val.indexw].attrValues[val
+					.indexn]);
+			},
+			/**
+			 * 购物车手动填写
+			 * 
+			 */
+			iptCartNum: function(e) {
+				this.$set(this.attr.productSelect, 'cart_num', e ? e : 1);
+			},
+			
+			/*
+			 * 加入购物车
+			 */
+			goCat: function(num,id) {
+				let that = this;
+				getProductDetail(id, this.type).then(res => {
+					
+					let productInfo = res.data.productInfo;
+					this.$set(this, 'productInfo', productInfo);
+					this.$set(this.attr, 'productAttr', res.data.productAttr);
+					this.$set(this, 'productValue', res.data.productValue);
+					
+					let productAttr = this.attr.productAttr.map(item => {
+						return {
+							attrName : item.attrName,
+							attrValues: item.attrValues.split(','),
+							id:item.id,
+							isDel:item.isDel,
+							productId:item.productId,
+							type:item.type
+						 }
+					});
+					this.$set(this.attr,'productAttr',productAttr);
+					
+					// 判断是否存在产品详情信息
+					if (! (this.attrValue != undefined && this.attrValue != '')) {
+						// 未设置过值
+						this.DefaultSelect();
+					}
+					
+					if (num === 1) {
+						let productSelect = this.productValue[this.attrValue];
+						//打开属性
+						if (this.attrValue) {
+							//默认选中了属性，但是没有打开过属性弹窗还是自动打开让用户查看默认选中的属性
+							this.attr.cartAttr = !this.isOpen ? true : false;
+							// 清空选中的属性
+							this.attrValue = '';
+						} else {
+							if (this.isOpen) this.attr.cartAttr = true;
+							else this.attr.cartAttr = !this.attr.cartAttr;
+						}
+						//只有关闭属性弹窗时进行加入购物车
+						if (this.attr.cartAttr === true && this.isOpen === false)
+							return (this.isOpen = true);
+						//如果有属性,没有选择,提示用户选择
+						if (
+							this.attr.productAttr.length &&
+							productSelect.stock === 0 &&
+							this.isOpen === true
+						)
+						return this.$util.Tips({
+							title: "产品库存不足，请选择其它"
+						});
+						
+						let q = {
+							productId: parseFloat(id),
+							cartNum: parseFloat(this.attr.productSelect.cart_num),
+							isNew: false,
+							productAttrUnique: this.attr.productSelect !== undefined ?
+								this.attr.productSelect.unique : this.productInfo.id
+						};
+						postCartAdd(q).then(function(res) {
+								that.isOpen = false;
+								that.attr.cartAttr = false;
+								that.$util.Tips({
+									title: "添加购物车成功",
+									success: () => {}
+								});
+							})
+							.catch(res => {
+								that.isOpen = false;
+								return that.$util.Tips({
+									title: res
+								});
+							});
+					} else {
+						this.getPreOrder(id);
+					}
+				});
+			},
+			/**
+			 * 默认选中属性
+			 * 
+			 */
+			DefaultSelect: function() {
+				let productAttr = this.attr.productAttr;
+				let value = [];
+				for (let key in this.productValue) {
+					if (this.productValue[key].stock > 0) {
+						value = this.attr.productAttr.length ? key.split(",") : [];
+						break;
+					}
+				}
+				for (let i = 0; i < productAttr.length; i++) {
+					this.$set(productAttr[i], "index", value[i]);
+				}
+				//sort();排序函数:数字-英文-汉字；
+				let productSelect = this.productValue[value.join(",")];
+				if (productSelect && productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", productSelect.image);
+					this.$set(this.attr.productSelect, "price", productSelect.price);
+					this.$set(this.attr.productSelect, "stock", productSelect.stock);
+					this.$set(this.attr.productSelect, "unique", productSelect.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", value.join(","));
+					this.$set(this, "attrTxt", "已选择");
+				} else if (!productSelect && productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", 0);
+					this.$set(this.attr.productSelect, "unique", this.productInfo.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				} else if (!productSelect && !productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", this.productInfo.stock);
+					this.$set(
+						this.attr.productSelect,
+						"unique",
+						this.productInfo.id || ""
+					);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				}
+			},
+			/**
+			 * 预下单
+			 */
+			getPreOrder: function(id) {
+				this.$Order.getPreOrder(this.type === 'normal' ? 'buyNow' : 'video', [{
+					"attrValueId": parseFloat(this.attr.productSelect.unique),
+					"productId": parseFloat(id),
+					"productNum": parseFloat(this.attr.productSelect.cart_num)
+				}]);
+			}
 		},
 		mounted() {
 			let self = this
@@ -843,7 +1139,7 @@
 		top: var(--window-top);
 		/* #endif */
 
-		z-index: 99;
+		z-index: 4;
 		flex-direction: row;
 		margin: 0px;
 		background: #f5f5f5;
@@ -1181,61 +1477,158 @@
 					justify-content: space-between;
 
 					.item {
-						width: 335rpx;
+						width: 680rpx;
 						margin-bottom: 20rpx;
 						background-color: #fff;
 						border-radius: 10rpx;
 						overflow: hidden;
+						display: flex;
 
 						image {
-							width: 100%;
-							height: 330rpx;
+							width: 260rpx;
+							height: 260rpx;
+							margin: 15rpx 0rpx 15rpx 0rpx;
+							border-radius: 10rpx;
 						}
 
-						.text-info {
-							padding: 10rpx 20rpx 15rpx;
-
-							.title {
-								color: #222222;
-							}
-
-							.old-price {
-								margin-top: 8rpx;
-								font-size: 26rpx;
-								color: #AAAAAA;
-								text-decoration: line-through;
-
-								text {
-									margin-right: 2px;
-									font-size: 20rpx;
+						.product-info {
+							.text-info {
+								padding: 20rpx 20rpx 15rpx;
+								width: 420rpx;
+								height: 85rpx;
+							
+								.title {
+									color: #222222;
 								}
 							}
-
-							.price {
+							
+							.product-buy {
+								padding: 0rpx 20rpx 15rpx;
+								width: 420rpx;
+								height: 205rpx;
 								display: flex;
+								flex-flow: column;
+								justify-content: space-between;
 								align-items: flex-end;
-								color: $theme-color;
-								font-size: 34rpx;
-								font-weight: 800;
-
-								text {
-									padding-bottom: 4rpx;
-									font-size: 24rpx;
-									font-weight: 800;
-								}
-
-								.txt {
+								
+								.product-data {
 									display: flex;
-									align-items: center;
-									justify-content: center;
-									width: 28rpx;
-									height: 28rpx;
-									margin-left: 15rpx;
-									margin-bottom: 10rpx;
-									border: 1px solid $theme-color;
-									border-radius: 4rpx;
-									font-size: 22rpx;
-									font-weight: normal;
+									flex-direction: row;
+									justify-content: space-between;
+									align-items: flex-end;
+									width: 100%;
+									
+									.stock-info {
+										padding: 15rpx 0rpx 15rpx;
+										
+										.stock-num {
+											margin-top: 8rpx;
+											font-size: 26rpx;
+											color: #AAAAAA;
+											
+											text {
+												margin-right: 2px;
+												font-size: 20rpx;
+												font-weight: bold;
+												color: red;
+											}
+										}
+										
+										.stock-status {
+											display: flex;
+											align-items: flex-end;
+											color: red;
+											font-size: 34rpx;
+											font-weight: 800;
+										
+											text {
+												padding-bottom: 4rpx;
+												font-size: 24rpx;
+												font-weight: 800;
+											}
+										
+											.txt {
+												display: flex;
+												align-items: center;
+												justify-content: center;
+												width: 112rpx;
+												height: 28rpx;
+												margin-left: 15rpx;
+												margin-bottom: 10rpx;
+												border: 1px solid red;
+												border-radius: 4rpx;
+												font-size: 22rpx;
+												font-weight: normal;
+											}
+										}
+									}
+									
+									.price-info {
+										padding: 15rpx 0rpx 15rpx;
+										
+										.old-price {
+											margin-top: 8rpx;
+											font-size: 26rpx;
+											color: #AAAAAA;
+											text-decoration: line-through;
+										
+											text {
+												margin-right: 2px;
+												font-size: 20rpx;
+											}
+										}
+										
+										.price {
+											display: flex;
+											align-items: flex-end;
+											color: $theme-color;
+											font-size: 34rpx;
+											font-weight: 800;
+										
+											text {
+												padding-bottom: 4rpx;
+												font-size: 24rpx;
+												font-weight: 800;
+											}
+										
+											.txt {
+												display: flex;
+												align-items: center;
+												justify-content: center;
+												width: 28rpx;
+												height: 28rpx;
+												margin-left: 15rpx;
+												margin-bottom: 10rpx;
+												border: 1px solid $theme-color;
+												border-radius: 4rpx;
+												font-size: 22rpx;
+												font-weight: normal;
+											}
+										}
+									}
+								}
+								
+								.bnt{
+									.bnts {
+										text-align: center;
+										color: #fff;
+										font-size: 28rpx;
+									}
+									flex-wrap: nowrap;
+									.joinCart {
+										border-radius: 50rpx 0 0 50rpx;
+										background-image: linear-gradient(to right, #fea10f 0%, #fa8013 100%);
+									}
+									.buy {
+										border-radius: 0 50rpx 50rpx 0;
+										background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
+										min-width: 136rpx;
+									}
+									.nobuy {
+										border-radius: 50rpx 50rpx 50rpx 50rpx;
+										background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
+										min-width: 136rpx;
+									}
 								}
 							}
 						}

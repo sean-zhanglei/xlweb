@@ -46,15 +46,21 @@
 								v-if="item.activityH5 && item.activityH5.type === '3'">拼团</span>
 						</view>
 						<view class='text' :class='is_switch==true?"":"on"'>
-							<view class='name line1'>{{item.storeName}}</view>
-							<view class='money font-color' :class='is_switch==true?"":"on"'>￥<text
-									class='num'>{{item.price}}</text></view>
-							<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
-								<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
-									<image src='../../static/images/vip.png'></image>
+							<view class="text-info">
+								<view class='name line1'>{{item.storeName}}</view>
+								<view class='money font-color' :class='is_switch==true?"":"on"'>￥<text
+										class='num'>{{item.price}}</text></view>
+								<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>
+									<view class='vip-money' v-if="item.vip_price && item.vip_price > 0">￥{{item.vip_price}}
+										<image src='../../static/images/vip.png'></image>
+									</view>
+									<view>已售{{Number(item.sales) + Number(item.ficti) || 0}}{{item.unitName}}</view>
 								</view>
-								<view>已售{{Number(item.sales) + Number(item.ficti) || 0}}{{item.unitName}}</view>
 							</view>
+							<view class="and-cart">
+								<image class="pic" src="/static/images/3-002.png" @click.stop="joinCart(item.id)" />
+							</view>
+							
 						</view>
 					</view>
 				</view>
@@ -69,15 +75,24 @@
 			</view>
 			<recommend :hostProduct="hostProduct"></recommend>
 		</view>
+		<home></home>
+		<!-- 组件 -->
+		<productWindow :attr="attr" :isShow='1' :iSplus='1' :iScart='1' @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
+			@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id='product-window' @goCat="joinCart(curProductId)">
+		</productWindow>
 	</view>
 </template>
 
 <script>
 	import {
+		getProductDetail,
+		postCartAdd,
 		getProductslist,
 		getProductHot
 	} from '@/api/store.js';
 	import recommend from '@/components/recommend';
+	import productWindow from '@/components/productWindow';
+	import home from '@/components/home';
 	import {
 		mapGetters
 	} from "vuex";
@@ -87,7 +102,9 @@
 	export default {
 		computed: mapGetters(['uid']),
 		components: {
-			recommend
+			recommend,
+			productWindow,
+			home
 		},
 		data() {
 			return {
@@ -112,7 +129,20 @@
 				hostProduct: [],
 				hotPage: 1,
 				hotLimit: 10,
-				hotScroll: false
+				hotScroll: false,
+				
+				curProductId: '',
+				type: "" ,//视频号普通商品类型
+				productValue: [], //系统属性
+				attrTxt: '请选择', //属性页面提示
+				attrValue: '', //已选属性
+				attr: {
+					cartAttr: false,
+					productAttr: [],
+					productSelect: {}
+				},
+				productInfo: {} ,//商品详情
+				isOpen: false, //是否打开属性组件
 			};
 		},
 		onLoad: function(options) {
@@ -120,6 +150,8 @@
 			this.title = options.title || '';
 			this.$set(this.where, 'keyword', options.searchValue || '');
 			this.get_product_list();
+			
+			options.type == undefined || options.type == null ? this.type = 'normal' : this.type = options.type;
 		},
 		methods: {
 			goback() {
@@ -229,6 +261,226 @@
 					that.loadTitle = '加载更多';
 				});
 			},
+			/**
+			 * 打开属性加入购物车
+			 * 
+			 */
+			joinCart: function(id) {
+				this.$set(this, 'curProductId', id);
+				//是否登录
+				if (this.isLogin === false) {
+					toLogin();
+				} else {
+					this.goCat(1,id);
+				}
+			},
+			onMyEvent: function() {
+				this.$set(this.attr, 'cartAttr', false);
+				this.$set(this, 'isOpen', false);
+			},
+			/**
+			 * 属性变动赋值
+			 * 
+			 */
+			ChangeAttr: function(res) {
+				let productSelect = this.productValue[res];
+				if (productSelect) {
+					this.$set(this.attr.productSelect, "image", productSelect.image);
+					this.$set(this.attr.productSelect, "price", productSelect.price);
+					this.$set(this.attr.productSelect, "stock", productSelect.stock);
+					this.$set(this.attr.productSelect, "unique", productSelect.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", res);
+					this.$set(this, "attrTxt", "已选择");
+				} else {
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", 0);
+					this.$set(this.attr.productSelect, "unique", this.productInfo.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				}
+			},
+			/**
+			 * 购物车数量加和数量减
+			 * 
+			 */
+			ChangeCartNum: function(changeValue) {
+				//changeValue:是否 加|减
+				//获取当前变动属性
+				let productSelect = this.productValue[this.attrValue];
+				//如果没有属性,赋值给商品默认库存
+				if (productSelect === undefined && !this.attr.productAttr.length)
+					productSelect = this.attr.productSelect;
+				//无属性值即库存为0；不存在加减；
+				if (productSelect === undefined) return;
+				let stock = productSelect.stock || 0;
+				let num = this.attr.productSelect;
+				if (changeValue) {
+					num.cart_num++;
+					if (num.cart_num > stock) {
+						this.$set(this.attr.productSelect, "cart_num", stock);
+						this.$set(this, "cart_num", stock);
+					}
+				} else {
+					num.cart_num--;
+					if (num.cart_num < 1) {
+						this.$set(this.attr.productSelect, "cart_num", 1);
+					}
+				}
+			},
+			attrVal(val) {
+				this.$set(this.attr.productAttr[val.indexw], 'index', this.attr.productAttr[val.indexw].attrValues[val
+					.indexn]);
+			},
+			/**
+			 * 购物车手动填写
+			 * 
+			 */
+			iptCartNum: function(e) {
+				this.$set(this.attr.productSelect, 'cart_num', e ? e : 1);
+			},
+			
+			/*
+			 * 加入购物车
+			 */
+			goCat: function(num,id) {
+				let that = this;
+				getProductDetail(id, this.type).then(res => {
+					let productInfo = res.data.productInfo;
+					this.$set(this, 'productInfo', productInfo);
+					this.$set(this.attr, 'productAttr', res.data.productAttr);
+					this.$set(this, 'productValue', res.data.productValue);
+					
+					let productAttr = this.attr.productAttr.map(item => {
+						return {
+							attrName : item.attrName,
+							attrValues: item.attrValues.split(','),
+							id:item.id,
+							isDel:item.isDel,
+							productId:item.productId,
+							type:item.type
+						 }
+					});
+					this.$set(this.attr,'productAttr',productAttr);
+					
+					// 判断是否存在产品详情信息
+					if (! (this.attrValue != undefined && this.attrValue != '')) {
+						// 未设置过值
+						this.DefaultSelect();
+					}
+					let productSelect = this.productValue[this.attrValue];
+					//打开属性
+					if (this.attrValue) {
+						//默认选中了属性，但是没有打开过属性弹窗还是自动打开让用户查看默认选中的属性
+						this.attr.cartAttr = !this.isOpen ? true : false;
+						// 清空选中的属性
+						this.attrValue = '';
+					} else {
+						if (this.isOpen) this.attr.cartAttr = true;
+						else this.attr.cartAttr = !this.attr.cartAttr;
+					}
+					//只有关闭属性弹窗时进行加入购物车
+					if (this.attr.cartAttr === true && this.isOpen === false) {
+						
+						return (this.isOpen = true);
+					}
+					//如果有属性,没有选择,提示用户选择
+					if (
+						this.attr.productAttr.length &&
+						productSelect.stock === 0 &&
+						this.isOpen === true
+					)
+					return this.$util.Tips({
+						title: "产品库存不足，请选择其它"
+					});
+					let q = {
+						productId: parseFloat(id),
+						cartNum: parseFloat(this.attr.productSelect.cart_num),
+						isNew: false,
+						productAttrUnique: this.attr.productSelect !== undefined ?
+							this.attr.productSelect.unique : this.productInfo.id
+					};
+					postCartAdd(q).then(function(res) {
+							that.isOpen = false;
+							that.attr.cartAttr = false;
+							that.$util.Tips({
+								title: "添加购物车成功",
+								success: () => {}
+							});
+						})
+						.catch(res => {
+							that.isOpen = false;
+							return that.$util.Tips({
+								title: res
+							});
+						});
+				});
+			},
+			/**
+			 * 默认选中属性
+			 * 
+			 */
+			DefaultSelect: function() {
+				let productAttr = this.attr.productAttr;
+				let value = [];
+				for (let key in this.productValue) {
+					if (this.productValue[key].stock > 0) {
+						value = this.attr.productAttr.length ? key.split(",") : [];
+						break;
+					}
+				}
+				for (let i = 0; i < productAttr.length; i++) {
+					this.$set(productAttr[i], "index", value[i]);
+				}
+				//sort();排序函数:数字-英文-汉字；
+				let productSelect = this.productValue[value.join(",")];
+				if (productSelect && productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", productSelect.image);
+					this.$set(this.attr.productSelect, "price", productSelect.price);
+					this.$set(this.attr.productSelect, "stock", productSelect.stock);
+					this.$set(this.attr.productSelect, "unique", productSelect.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", value.join(","));
+					this.$set(this, "attrTxt", "已选择");
+				} else if (!productSelect && productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", 0);
+					this.$set(this.attr.productSelect, "unique", this.productInfo.id);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				} else if (!productSelect && !productAttr.length) {
+					this.$set(
+						this.attr.productSelect,
+						"storeName",
+						this.productInfo.storeName
+					);
+					this.$set(this.attr.productSelect, "image", this.productInfo.image);
+					this.$set(this.attr.productSelect, "price", this.productInfo.price);
+					this.$set(this.attr.productSelect, "stock", this.productInfo.stock);
+					this.$set(
+						this.attr.productSelect,
+						"unique",
+						this.productInfo.id || ""
+					);
+					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this, "attrValue", "");
+					this.$set(this, "attrTxt", "请选择");
+				}
+			}
 		},
 		onPullDownRefresh() {
 
@@ -384,6 +636,20 @@
 		padding: 18rpx 20rpx;
 		font-size: 30rpx;
 		color: #222;
+		
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+		
+		.text-info {
+			overflow: hidden;
+		}
+		
+		.and-cart .pic {
+			width: 50rpx;
+			height: 50rpx;
+		}
 	}
 
 	.productList .list .item .text.on {

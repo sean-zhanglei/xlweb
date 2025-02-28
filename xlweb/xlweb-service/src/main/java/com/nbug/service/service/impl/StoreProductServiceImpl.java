@@ -1075,7 +1075,7 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         PageHelper.startPage(pageParamRequest.getPage(), pageParamRequest.getLimit());
         LambdaQueryWrapper<StoreProduct> lambdaQueryWrapper = Wrappers.lambdaQuery();
         lambdaQueryWrapper.select(StoreProduct::getId, StoreProduct::getImage, StoreProduct::getStoreName,
-                StoreProduct::getPrice, StoreProduct::getOtPrice, StoreProduct::getActivity);
+                StoreProduct::getPrice, StoreProduct::getOtPrice, StoreProduct::getActivity, StoreProduct::getFicti, StoreProduct::getSales, StoreProduct::getStock, StoreProduct::getUnitName);
         switch (type) {
             case Constants.INDEX_RECOMMEND_BANNER: //精品推荐
                 lambdaQueryWrapper.eq(StoreProduct::getIsBest, true);
@@ -1096,9 +1096,10 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
 
         lambdaQueryWrapper.eq(StoreProduct::getIsDel, false);
         lambdaQueryWrapper.eq(StoreProduct::getIsRecycle, false);
-        lambdaQueryWrapper.gt(StoreProduct::getStock, 0);
+        // lambdaQueryWrapper.gt(StoreProduct::getStock, 0);
         lambdaQueryWrapper.eq(StoreProduct::getIsShow, true);
 
+        lambdaQueryWrapper.orderByDesc(StoreProduct::getSales);
         lambdaQueryWrapper.orderByDesc(StoreProduct::getSort);
         lambdaQueryWrapper.orderByDesc(StoreProduct::getId);
         return dao.selectList(lambdaQueryWrapper);

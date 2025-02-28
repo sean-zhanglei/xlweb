@@ -40,6 +40,7 @@
 				<view :style='"height:"+(height-300)+"rpx;"' v-if="number<15"></view>
 			</scroll-view>
 		</view>
+		<home></home>
 	</view>
 </template>
 
@@ -48,7 +49,11 @@
 		getCategoryList
 	} from '@/api/store.js';
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
+	import home from '@/components/home';
 	export default {
+		components: {
+			home
+		},
 		data() {
 			return {
 				navlist: [],
