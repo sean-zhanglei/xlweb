@@ -46,7 +46,7 @@
         </el-form-item>
         <el-form-item label="经纬度：" prop="latitude">
           <el-tooltip content="请点击查找位置选择位置">
-            <el-input v-model="ruleForm.latitude" placeholder="请查找位置" class="dialogWidth" readOnly>
+            <el-input v-model="ruleForm.latitude" placeholder="请查找位置" class="dialogWidth">
               <el-button slot="append" @click="onSearch">查找位置</el-button>
             </el-input>
           </el-tooltip>

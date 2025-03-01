@@ -60,4 +60,10 @@ public class IndexInfoResponse implements Serializable {
 
     @ApiModelProperty(value = "首页商品列表模板配置")
     private String homePageSaleListStyle;
+
+    @ApiModelProperty(value = "欢迎语标题")
+    private String consumerWelcomeTitle;
+
+    @ApiModelProperty(value = "欢迎语")
+    private String consumerWelcome;
 }

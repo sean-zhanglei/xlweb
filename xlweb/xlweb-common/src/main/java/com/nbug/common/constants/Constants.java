@@ -184,6 +184,10 @@ public class Constants {
     public static final String CONFIG_KEY_YZF_H5_URL = "yzf_h5_url"; //云智服H5 url
     // 客服电话
     public static final String CONFIG_KEY_CONSUMER_HOTLINE = "consumer_hotline";
+    // 欢迎语 标题
+    public static final String CONFIG_KEY_CONSUMER_WELCOME_TITLE = "consumer_welcome_title";
+    // 欢迎语
+    public static final String CONFIG_KEY_CONSUMER_WELCOME = "consumer_welcome";
     // 客服电话服务开关
     public static final String CONFIG_KEY_TELEPHONE_SERVICE_SWITCH = "telephone_service_switch";
     //商品分类页配置

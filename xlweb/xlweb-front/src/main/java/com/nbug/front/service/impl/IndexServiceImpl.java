@@ -74,6 +74,10 @@ public class IndexServiceImpl implements IndexService {
         indexInfoResponse.setIsShowCategory(systemConfigService.getValueByKey(Constants.CONFIG_IS_SHOW_CATEGORY));// 是否隐藏一级分类
         indexInfoResponse.setExplosiveMoney(systemGroupDataService.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_EX_BANNER));//首页超值爆款
         indexInfoResponse.setHomePageSaleListStyle(systemConfigService.getValueByKey(Constants.CONFIG_IS_PRODUCT_LIST_STYLE));// 首页商品列表模板配置
+
+        indexInfoResponse.setConsumerWelcomeTitle(systemConfigService.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME_TITLE));// 欢迎语标题
+        indexInfoResponse.setConsumerWelcome(systemConfigService.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME));// 欢迎语
+
         indexInfoResponse.setSubscribe(false);
         User user = userService.getInfo();
         if(ObjectUtil.isNotNull(user) && user.getSubscribe()) {
