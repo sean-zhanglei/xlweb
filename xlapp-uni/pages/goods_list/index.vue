@@ -366,7 +366,7 @@
 					this.$set(this.attr,'productAttr',productAttr);
 					
 					// 判断是否存在产品详情信息
-					if (! (this.attrValue != undefined && this.attrValue != '')) {
+					if (! (this.attrValue !== undefined && this.attrValue !== '')) {
 						// 未设置过值
 						this.DefaultSelect();
 					}

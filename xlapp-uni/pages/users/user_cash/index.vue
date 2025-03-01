@@ -73,7 +73,7 @@
 						<button formType="submit" class='bnt bg-color'>提现</button>
 					</form>
 				</view>
-				<view :hidden='currentTab != 2' class='list'>
+				<!-- <view :hidden='currentTab != 2' class='list'>
 					<form @submit="subCash" report-submit='true'>
 						<view class='item acea-row row-between-wrapper'>
 							<view class='name'>账号</view>
@@ -104,7 +104,7 @@
 						</view>
 						<button formType="submit" class='bnt bg-color'>提现</button>
 					</form>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<!-- #ifdef MP -->
@@ -144,10 +144,10 @@
 						'name': '微信',
 						'icon': 'icon-weixin2'
 					},
-					{
-						'name': '支付宝',
-						'icon': 'icon-icon34'
-					}
+					// {
+					// 	'name': '支付宝',
+					// 	'icon': 'icon-icon34'
+					// }
 				],
 				currentTab: 0,
 				index: 0,
@@ -267,14 +267,15 @@
 						});
 						value.wechat = value.name;
 						value.qrcodeUrl = that.qrcodeUrlW;
-					} else if (that.currentTab == 2) { //支付宝
-						value.extractType = 'alipay';
-						if (value.name.length == 0) return this.$util.Tips({
-							title: '请填写账号'
-						});
-						value.alipayCode = value.name;
-						value.qrcodeUrl = that.qrcodeUrlZ;
 					}
+					// else if (that.currentTab == 2) { //支付宝
+					// 	value.extractType = 'alipay';
+					// 	if (value.name.length == 0) return this.$util.Tips({
+					// 		title: '请填写账号'
+					// 	});
+					// 	value.alipayCode = value.name;
+					// 	value.qrcodeUrl = that.qrcodeUrlZ;
+					// }
 					if (value.money.length == 0) return this.$util.Tips({
 						title: '请填写提现金额'
 					});

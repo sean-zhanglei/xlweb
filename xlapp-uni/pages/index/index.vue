@@ -19,6 +19,16 @@
 			<!-- 首页展示 -->
 			<view class="page_content" :style="'margin-top:'+(marTop)" v-if="navIndex == 0">
 				<view class="mp-bg"></view>
+				<view class="mp-welcome" v-if="consumerWelcome && consumerWelcome.length > 0">
+					<view class="title" v-if="consumerWelcomeTitle && consumerWelcomeTitle.length > 0">
+						{{consumerWelcomeTitle}}
+					</view>
+					<view class="text" v-html="consumerWelcome">
+					</view>
+					<!-- #ifdef MP || MP-WEIXIN -->
+					<button type="warn" open-type="subscribe" @subscribe="subscribeCallBack" style="color: white;font-size: 24rpx;white-space: nowrap;overflow: visible;}">立即订阅</button>
+					<!-- #endif -->
+				</view>
 				<!-- banner -->
 				<view class="swiper" v-if="imgUrls.length">
 					<swiper indicator-dots="true" :autoplay="true" :circular="circular" :interval="interval"
@@ -111,6 +121,8 @@
 						<view class="tab nav-bd" id="tab_list">
 							<view id="tab_item" :class="{ 'active': listActive == index}" class="item"
 								v-for="(item, index) in explosiveMoney" :key="index" @click="ProductNavTab(item,index)">
+								<text class="blink-text" v-if="item.type == 2">今日热销中</text>
+								<text class="blink-text" v-if="item.type == 4">今日促销中</text>
 								<view class="txt">{{item.name}}</view>
 								<view class="label">{{item.info}}</view>
 							</view>
@@ -123,6 +135,8 @@
 					<view class="list-box animated" :class='tempArr.length > 0?"fadeIn on":""'>
 						<view class="item" v-for="(item,index) in tempArr" :key="index" @click="goDetail(item)">
 							<view class="pictrue">
+								<span class="pictrue_log pictrue_log_class"
+									v-if="! item.activityH5 && item.otPrice > item.price">折扣</span>
 								<span class="pictrue_log pictrue_log_class"
 									v-if="item.activityH5 && item.activityH5.type === '1'">秒杀</span>
 								<span class="pictrue_log pictrue_log_class"
@@ -140,7 +154,7 @@
 										<view class="stock-info">
 											<view class="stock-status">
 												已售
-												<view class="txt" v-if="(item.sales / ((item.stock + item.sales) == 0 ? 1 : (item.stock + item.sales))) > 0.8">库存紧张</view>
+												<view class="txt" v-if="(item.sales / ((item.stock + item.sales) == 0 ? 1 : (item.stock + item.sales))) > 0.8">即将售罄</view>
 											</view>
 											<view class="stock-num">
 												<text>{{item.sales + item.ficti}}</text>
@@ -161,8 +175,8 @@
 									</view>
 									<view class="bnt acea-row" v-else>
 										<button class="joinCart bnts"
-												@click.stop="joinCart(item.id)">加入购物车</button>
-										<button class="buy bnts" @click.stop="goBuy(item.id)">立即购买</button>
+												@click.stop="goBuyNow(item.id, 1)">加入购物车</button>
+										<button class="buy bnts" @click.stop="goBuyNow(item.id, 0)">立即购买</button>
 									</view>
 								</view>
 							</view>
@@ -177,7 +191,7 @@
 				</view>
 				<!-- 组件 -->
 				<productWindow :attr="attr" :isShow='1' :iSplus='1' :iScart='1' @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
-					@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id='product-window' @goCat="joinCart(curProductId)">
+					@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id='product-window' @goCat="goBuyNow(curProductId)">
 				</productWindow>
 			</view>
 		</view>
@@ -367,6 +381,10 @@
 				},
 				productInfo: {} ,//商品详情
 				isOpen: false, //是否打开属性组件
+				butsNum: '', // 按钮哪一个操作
+				
+				consumerWelcomeTitle: '', // 欢迎语
+				consumerWelcome: ''
 			}
 		},
 		watch: {
@@ -439,6 +457,10 @@
 			})
 		},
 		methods: {
+			subscribeCallBack: function(e) {
+				console.log(e);
+			},
+			
 			getCoupon: function(id, index) {
 				let that = this;
 				//领取优惠券
@@ -527,6 +549,8 @@
 					})
 					that.$set(that, "logoUrl", res.data.logoUrl);
 					that.$set(that, "site_name", '首页');
+					that.$set(that, "consumerWelcomeTitle", res.data.consumerWelcomeTitle);
+					that.$set(that, "consumerWelcome", res.data.consumerWelcome);
 					that.$set(that, "imgUrls", res.data.banner);
 					that.$set(that, "menus", res.data.menus);
 					that.$set(that, "roll", res.data.roll ? res.data.roll : []);
@@ -683,27 +707,19 @@
 				});
 			},
 			/**
-			 * 打开属性加入购物车
-			 * 
+			 * 立即加入购物车/购买
 			 */
-			joinCart: function(id) {
+			goBuyNow: function(id, butsNum) {
+				let type = this.butsNum;
 				this.$set(this, 'curProductId', id);
-				//是否登录
-				if (this.isLogin === false) {
-					toLogin();
-				} else {
-					this.goCat(1,id);
+				if (butsNum !== undefined && butsNum !== '') {
+					this.$set(this, 'butsNum', butsNum);
+					type = butsNum;
 				}
-			},
-			/**
-			 * 立即购买
-			 */
-			goBuy: function(id) {
-				this.$set(this, 'curProductId', id);
 				if (this.isLogin === false) {
 					toLogin();
 				} else {
-					this.goCat(0,id);
+					this.goCat(type, id);
 				}
 			},
 			onMyEvent: function() {
@@ -799,35 +815,35 @@
 					this.$set(this.attr,'productAttr',productAttr);
 					
 					// 判断是否存在产品详情信息
-					if (! (this.attrValue != undefined && this.attrValue != '')) {
+					if (! (this.attrValue !== undefined && this.attrValue !== '')) {
 						// 未设置过值
 						this.DefaultSelect();
 					}
+					let productSelect = this.productValue[this.attrValue];
+					//打开属性
+					if (this.attrValue) {
+						//默认选中了属性，但是没有打开过属性弹窗还是自动打开让用户查看默认选中的属性
+						this.attr.cartAttr = !this.isOpen ? true : false;
+						// 清空选中的属性
+						this.attrValue = '';
+					} else {
+						if (this.isOpen) this.attr.cartAttr = true;
+						else this.attr.cartAttr = !this.attr.cartAttr;
+					}
+					//只有关闭属性弹窗时进行加入购物车
+					if (this.attr.cartAttr === true && this.isOpen === false)
+						return (this.isOpen = true);
+					//如果有属性,没有选择,提示用户选择
+					if (
+						this.attr.productAttr.length &&
+						productSelect.stock === 0 &&
+						this.isOpen === true
+					)
+					return this.$util.Tips({
+						title: "产品库存不足，请选择其它"
+					});
 					
 					if (num === 1) {
-						let productSelect = this.productValue[this.attrValue];
-						//打开属性
-						if (this.attrValue) {
-							//默认选中了属性，但是没有打开过属性弹窗还是自动打开让用户查看默认选中的属性
-							this.attr.cartAttr = !this.isOpen ? true : false;
-							// 清空选中的属性
-							this.attrValue = '';
-						} else {
-							if (this.isOpen) this.attr.cartAttr = true;
-							else this.attr.cartAttr = !this.attr.cartAttr;
-						}
-						//只有关闭属性弹窗时进行加入购物车
-						if (this.attr.cartAttr === true && this.isOpen === false)
-							return (this.isOpen = true);
-						//如果有属性,没有选择,提示用户选择
-						if (
-							this.attr.productAttr.length &&
-							productSelect.stock === 0 &&
-							this.isOpen === true
-						)
-						return this.$util.Tips({
-							title: "产品库存不足，请选择其它"
-						});
 						
 						let q = {
 							productId: parseFloat(id),
@@ -851,6 +867,8 @@
 								});
 							});
 					} else {
+						that.isOpen = false;
+						that.attr.cartAttr = false;
 						this.getPreOrder(id);
 					}
 				});
@@ -983,6 +1001,19 @@
 	}
 </style>
 <style lang="scss">
+	/* 定义闪烁动画 */
+	@keyframes blink-color {
+	  0% {
+	    color: orange; /* 橙色 */
+	  }
+	  50% {
+	    color: red; /* 红色 */
+	  }
+	  100% {
+	    color: pink; /* 橙色 */
+	  }
+	}
+	
 	.notice {
 		width: 100%;
 		height: 70rpx;
@@ -1044,6 +1075,7 @@
 				color: #FFEBD2;
 				font-size: 34rpx;
 				font-weight: 600;
+				animation: blink-color 1s infinite;
 			}
 
 			.tit2 {
@@ -1143,7 +1175,7 @@
 		flex-direction: row;
 		margin: 0px;
 		background: #f5f5f5;
-		padding: 30rpx 0;
+		padding: 0 0 30rpx 0;
 	}
 
 	.listAll {
@@ -1423,7 +1455,7 @@
 
 			.nav-bd {
 				display: flex;
-				align-items: center;
+				align-items: flex-end;
 				justify-content: space-between;
 
 				.item {
@@ -1431,6 +1463,17 @@
 					flex-direction: column;
 					align-items: center;
 					justify-content: center;
+					
+					.blink-text {
+						position: relative;
+						right: -60rpx;
+						top: 14rpx;
+						border-radius: 10rpx 10rpx 0px 0px;
+						background-color: orange;
+						font-size: 20rpx;
+						color: white;
+						animation: blink-color 1s infinite;
+					}
 
 					.txt {
 						font-size: 32rpx;
@@ -1477,7 +1520,7 @@
 					justify-content: space-between;
 
 					.item {
-						width: 680rpx;
+						width: 100%;
 						margin-bottom: 20rpx;
 						background-color: #fff;
 						border-radius: 10rpx;
@@ -1616,16 +1659,18 @@
 									}
 									flex-wrap: nowrap;
 									.joinCart {
-										border-radius: 50rpx 0 0 50rpx;
+										border-radius: 15rpx 0 0 15rpx;
+										padding: 0 0 0 20rpx;
 										background-image: linear-gradient(to right, #fea10f 0%, #fa8013 100%);
 									}
 									.buy {
-										border-radius: 0 50rpx 50rpx 0;
+										border-radius: 0 15rpx 15rpx 0;
+										padding: 0 20rpx 0 0;
 										background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 										min-width: 136rpx;
 									}
 									.nobuy {
-										border-radius: 50rpx 50rpx 50rpx 50rpx;
+										border-radius: 15rpx 15rpx 15rpx 15rpx;
 										background-image: linear-gradient(to right, #55aa7f 0%, #009600 100%);
 										min-width: 136rpx;
 									}
@@ -1781,6 +1826,44 @@
 		// border-radius: 0 0 30rpx 30rpx;
 
 
+	}
+	
+	.mp-welcome {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: 100rpx;
+		background-color: rgba(0, 0, 0, 0.6); /* 50% 透明度的黑灰色背景 */
+		padding: 10rpx 30rpx 10rpx 30rpx;
+		z-index: 999;
+		color: white;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+		
+		.title {
+			font-size: 16rpx;
+			border-radius: 50rpx;
+			max-height: 80rpx;
+			background-color: $theme-color;
+			margin-right: 24rpx;
+			padding: 12rpx;
+			white-space: nowrap;
+			animation: blink-color 1s infinite;
+		}
+		
+		.text {
+			font-size: 24rpx;
+			overflow: hidden;
+			max-height: 80rpx;
+			margin-right: 24rpx;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
 	}
 
 	.stats {

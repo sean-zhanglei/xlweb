@@ -152,14 +152,13 @@
 		}
 
 		.conter {
-			width: 666rpx;
 			height: 320rpx;
 			border-radius: 12px;
 			margin-top: 24rpx;
 
 			.itemCon {
 				display: inline-block;
-				width: 186rpx;
+				width: 198rpx;
 				margin-right: 24rpx;
 
 				.item {
@@ -167,7 +166,7 @@
 
 					.pictrue {
 						width: 100%;
-						height: 186rpx;
+						height: 198rpx;
 						border-radius: 6rpx;
 
 						image {

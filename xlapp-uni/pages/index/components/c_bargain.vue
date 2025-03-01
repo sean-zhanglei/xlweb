@@ -133,14 +133,14 @@
 			margin-top: 28rpx;
 			.itemCon {
 				display: inline-block;
-				width: 220rpx;
+				width: 198rpx;
 				margin-right: 24rpx;
 			}
 			.item{
 				width:100%;
 				.pictrue{
 					width: 100%;
-					height: 220rpx;
+					height: 198rpx;
 					border-radius: 6rpx;
 					image{
 						width: 100%;

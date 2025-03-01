@@ -214,7 +214,7 @@
 
 			.itemCon {
 				display: inline-block;
-				width: 220rpx;
+				width: 198rpx;
 				margin-right: 24rpx;
 			}
 
@@ -223,7 +223,7 @@
 
 				.pictrue {
 					width: 100%;
-					height: 220rpx;
+					height: 198rpx;
 					border-radius: 6rpx;
 
 					image {
