@@ -789,9 +789,12 @@
 					scale: 8,
 					name: this.system_store.name,
 					address: this.system_store.address + this.system_store.detailedAddress,
-					success: function() {
-
+					success: function(e) {
+						console.log('success');
 					},
+					fail: function(e) {
+						console.log('fail');
+					}
 				});
 			},
 			/**

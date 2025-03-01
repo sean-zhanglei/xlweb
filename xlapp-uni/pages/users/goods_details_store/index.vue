@@ -162,8 +162,11 @@
 						longitude: Number(e.longitude),
 						name: e.name,
 						address: `${e.address}-${e.detailedAddress}`,
-						success: function() {
+						success: function(e) {
 							console.log('success');
+						},
+						fail: function(e) {
+							console.log('fail');
 						}
 					});
 					// #ifdef H5	

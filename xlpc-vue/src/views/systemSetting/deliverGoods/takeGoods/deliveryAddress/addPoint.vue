@@ -167,8 +167,8 @@
             window.parent.selectAdderss(loc);
           } else if (event.origin.includes("m.amap.com")) {
               // 高德地图
-              let lat = event.data.location.split(',')[0];
-              let lng = event.data.location.split(',')[1];
+              let lng = event.data.location.split(',')[0];
+              let lat = event.data.location.split(',')[1];
               var loc = {
                 latlng:{
                   lat: lat,
