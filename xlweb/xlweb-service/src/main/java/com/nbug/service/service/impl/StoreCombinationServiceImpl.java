@@ -591,7 +591,19 @@ public class StoreCombinationServiceImpl extends ServiceImpl<StoreCombinationDao
                 BeanUtils.copyProperties(i, pinkResponse);
                 User teamUser = userService.getById(i.getUid());
                 pinkResponse.setAvatar(Optional.ofNullable(teamUser.getAvatar()).orElse(""));
-                pinkResponse.setNickname(teamUser.getNickname());
+                String nickname = teamUser.getNickname();
+                if (StrUtil.isNotBlank(nickname)) {
+                    if (nickname.length() == 1) {
+                        nickname = nickname.concat("**");
+                    } else if (nickname.length() == 2) {
+                        nickname = nickname.charAt(0) + "**";
+                    } else {
+                        nickname = nickname.charAt(0) + "**" + nickname.substring(nickname.length() - 1);
+                    }
+                } else {
+                    nickname = "**";
+                }
+                pinkResponse.setNickname(nickname);
                 return pinkResponse;
             }).collect(Collectors.toList());
 
@@ -611,7 +623,19 @@ public class StoreCombinationServiceImpl extends ServiceImpl<StoreCombinationDao
                     BeanUtils.copyProperties(i, pinkResponse);
                     User teamUser = userService.getById(i.getUid());
                     pinkResponse.setAvatar(Optional.ofNullable(teamUser.getAvatar()).orElse(""));
-                    pinkResponse.setNickname(teamUser.getNickname());
+                    String nickname = teamUser.getNickname();
+                    if (StrUtil.isNotBlank(nickname)) {
+                        if (nickname.length() == 1) {
+                            nickname = nickname.concat("**");
+                        } else if (nickname.length() == 2) {
+                            nickname = nickname.charAt(0) + "**";
+                        } else {
+                            nickname = nickname.charAt(0) + "**" + nickname.substring(nickname.length() - 1);
+                        }
+                    } else {
+                        nickname = "**";
+                    }
+                    pinkResponse.setNickname(nickname);
                     return pinkResponse;
                 }).collect(Collectors.toList());
                 okList.addAll(responseList);

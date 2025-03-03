@@ -3,6 +3,7 @@ package com.nbug.front.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageInfo;
 import com.nbug.common.constants.CategoryConstants;
 import com.nbug.common.constants.Constants;
@@ -563,7 +564,20 @@ public class ProductServiceImpl implements ProductService {
                     orderInfoResponse.setPrice(ObjectUtil.isNotNull(e.getVipPrice()) ? e.getVipPrice() : e.getPrice());
                     orderInfoResponse.setProductId(e.getProductId());
                     orderInfoResponse.setSku(e.getSku());
-                    orderInfoResponse.setRealName(storeOrderMap.get(e.getOrderNo()).getRealName());
+                    // 昵称
+                    String nickname = storeOrderMap.get(e.getOrderNo()).getRealName();
+                    if (StrUtil.isNotBlank(nickname)) {
+                        if (nickname.length() == 1) {
+                            nickname = nickname.concat("**");
+                        } else if (nickname.length() == 2) {
+                            nickname = nickname.charAt(0) + "**";
+                        } else {
+                            nickname = nickname.charAt(0) + "**" + nickname.substring(nickname.length() - 1);
+                        }
+                    } else {
+                        nickname = "**";
+                    }
+                    orderInfoResponse.setRealName(nickname);
                     orderInfoResponse.setOrderId(e.getOrderId());
                     orderInfoResponse.setAttrId(e.getAttrValueId());
                     infoResponseList.add(orderInfoResponse);
