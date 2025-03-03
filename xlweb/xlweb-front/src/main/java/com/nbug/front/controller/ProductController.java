@@ -69,6 +69,16 @@ public class ProductController {
     }
 
     /**
+     * 商品购买记录 TOP 10
+     * @return 订单购买记录
+     */
+    @ApiOperation(value = "商品购买记录")
+    @RequestMapping(value = "/products/top10buy-list/{productId}", method = RequestMethod.GET)
+    public CommonResult<List<OrderInfoResponse>> orderBuyListTop10(@PathVariable Integer productId) {
+        return CommonResult.success(productService.orderBuyListTop10(productId));
+    }
+
+    /**
      * 商品详情
      */
     @ApiOperation(value = "商品详情")

@@ -7,6 +7,9 @@ import com.github.pagehelper.PageInfo;
 import com.nbug.common.constants.CategoryConstants;
 import com.nbug.common.constants.Constants;
 import com.nbug.common.constants.SysConfigConstants;
+import com.nbug.common.exception.XlwebException;
+import com.nbug.common.model.order.StoreOrder;
+import com.nbug.common.model.order.StoreOrderInfo;
 import com.nbug.common.model.product.StoreProduct;
 import com.nbug.common.model.product.StoreProductAttr;
 import com.nbug.common.model.product.StoreProductAttrValue;
@@ -25,6 +28,7 @@ import com.nbug.common.vo.MyRecord;
 import com.nbug.front.service.ProductService;
 import com.nbug.service.delete.ProductUtils;
 import com.nbug.service.service.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
 * IndexServiceImpl 接口实现
@@ -81,6 +87,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private UserVisitRecordService userVisitRecordService;
 
+    @Autowired
+    private StoreOrderService storeOrderService;
+
+    @Autowired
+    private StoreOrderInfoService storeOrderInfoService;
+
     /**
      * 获取分类
      * @return List<CategoryTreeVo>
@@ -98,6 +110,8 @@ public class ProductServiceImpl implements ProductService {
         }
         return listTree;
     }
+
+
 
     /**
      * 商品列表
@@ -527,6 +541,40 @@ public class ProductServiceImpl implements ProductService {
     public List<StoreProduct> getLeaderboard() {
         return storeProductService.getLeaderboard();
     }
+
+    /**
+     * 商品购买记录TOP10
+     * @return CommonPage<OrderDetailResponse>
+     */
+    @Override
+    public List<OrderInfoResponse> orderBuyListTop10(Integer productId) {
+        try {
+            List<OrderInfoResponse> infoResponseList = CollUtil.newArrayList();
+            // 获取订单详情列表TOP 10
+            List<StoreOrderInfo> infoList = storeOrderInfoService.getListByProductIdTop10(productId);
+            List<String> orderNoList = infoList.stream().map(StoreOrderInfo::getOrderNo).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(orderNoList)) {
+                // 获取订单列表
+                Map<String, StoreOrder> storeOrderMap = storeOrderService.getMapInOrderNo(orderNoList);
+                infoList.forEach(e -> {
+                    OrderInfoResponse orderInfoResponse = new OrderInfoResponse();
+                    orderInfoResponse.setStoreName(e.getProductName());
+                    orderInfoResponse.setCartNum(e.getPayNum());
+                    orderInfoResponse.setPrice(ObjectUtil.isNotNull(e.getVipPrice()) ? e.getVipPrice() : e.getPrice());
+                    orderInfoResponse.setProductId(e.getProductId());
+                    orderInfoResponse.setSku(e.getSku());
+                    orderInfoResponse.setRealName(storeOrderMap.get(e.getOrderNo()).getRealName());
+                    orderInfoResponse.setOrderId(e.getOrderId());
+                    orderInfoResponse.setAttrId(e.getAttrValueId());
+                    infoResponseList.add(orderInfoResponse);
+                });
+            }
+            return infoResponseList;
+        } catch (Exception ex) {
+            throw  new XlwebException("获取商品购买记录TOP10数据失败");
+        }
+    }
+
 
 }
 

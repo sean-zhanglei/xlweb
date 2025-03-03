@@ -95,4 +95,6 @@ public interface ProductService {
      * @return List
      */
     List<StoreProduct> getLeaderboard();
+
+    List<OrderInfoResponse> orderBuyListTop10(Integer productId);
 }

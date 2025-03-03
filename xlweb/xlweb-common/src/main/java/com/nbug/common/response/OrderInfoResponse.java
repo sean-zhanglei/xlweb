@@ -21,8 +21,9 @@ public class OrderInfoResponse implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-//    @ApiModelProperty(value = "订单id")
-//    private Integer orderId;
+    @ApiModelProperty(value = "订单id")
+    private Integer orderId;
+
     @ApiModelProperty(value = "attrId")
     private Integer attrId;
 
@@ -53,4 +54,7 @@ public class OrderInfoResponse implements Serializable {
 
     @ApiModelProperty(value = "规格属性值")
     private String sku;
+
+    @ApiModelProperty(value = "用户姓名")
+    private String realName;
 }

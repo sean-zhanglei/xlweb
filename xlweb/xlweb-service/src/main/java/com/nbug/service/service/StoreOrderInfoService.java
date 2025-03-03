@@ -63,4 +63,6 @@ public interface StoreOrderInfoService extends IService<StoreOrderInfo> {
      * @return BigDecimal
      */
     BigDecimal getSalesByDateAndProductId(String date, Integer proId);
+
+    List<StoreOrderInfo> getListByProductIdTop10(Integer productId);
 }

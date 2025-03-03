@@ -138,6 +138,20 @@ public class StoreOrderInfoServiceImpl extends ServiceImpl<StoreOrderInfoDao, St
     }
 
     /**
+     * 获取订单详情-商品编号
+     * @param productId 商品编号
+     * @return List
+     */
+    @Override
+    public List<StoreOrderInfo> getListByProductIdTop10(Integer productId) {
+        LambdaQueryWrapper<StoreOrderInfo> lqw = Wrappers.lambdaQuery();
+        lqw.eq(StoreOrderInfo::getProductId, productId);
+        lqw.orderByDesc(StoreOrderInfo::getId);
+        lqw.last("limit 10");
+        return dao.selectList(lqw);
+    }
+
+    /**
      * 根据时间、商品id获取销售件数
      * @param date 时间，格式'yyyy-MM-dd'
      * @param proId 商品id
