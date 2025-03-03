@@ -86,6 +86,16 @@ export function getProductslist(data) {
 }
 
 /**
+ 商品购买记录 TOP 10
+ * @param object {}
+ */
+export function getProductsTopBuy10list(productId) {
+	return request.get('products/top10buy-list/' + productId, {}, {
+		noAuth: true
+	});
+}
+
+/**
  * 获取推荐产品
  * 
  */

@@ -84,6 +84,22 @@
 								</view>
 							</view>
 						</view>
+						<view class='notice acea-row row-middle mb30 borRadius14' v-if="storeTop10Infos && storeTop10Infos.length > 0">
+							<view class='num font-color'>
+								<text class='iconfont icon-laba'></text>
+								已售<text class='line'>|</text>
+							</view>
+							<view class='swiper'>
+								<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" interval="2500"
+									duration="500" vertical="true" circular="true">
+									<block v-for="(item,index) in storeTop10Infos" :key='index'>
+										<swiper-item>
+											<view class='line1'>{{item.realName}}刚刚成功下了{{item.cartNum}}单</view>
+										</swiper-item>
+									</block>
+								</swiper>
+							</view>
+						</view>
 						<view class='attribute acea-row row-between-wrapper mb30 borRadius14' @click="selecAttr">
 							<view class="line1">{{attrTxt}}：
 								<text class='atterTxt'>{{attrValue}}</text>
@@ -267,7 +283,8 @@
 		getReplyList,
 		getReplyConfig,
 		getProductGood,
-		getReplyProduct
+		getReplyProduct,
+		getProductsTopBuy10list
 	} from '@/api/store.js';
 	import { spread } from "@/api/user";
 	import {
@@ -397,7 +414,11 @@
 				navbarRight: 0,
 				userCollect: false,
 				returnShow: true, //判断顶部返回是否出现
-				type: "" //视频号普通商品类型
+				type: "" ,//视频号普通商品类型
+				
+				indicatorDots: false,
+				autoplay: true,
+				storeTop10Infos: []
 			};
 		},
 		computed: mapGetters(['isLogin', 'uid', 'chatUrl']),
@@ -471,6 +492,7 @@
 				that.$store.commit("PRODUCT_TYPE", that.type);
 			}
 			this.getGoodsDetails();
+			this.getProductsTopBuy10list();
 			this.getCouponList();
 			this.getProductReplyList();
 			this.getProductReplyCount();
@@ -748,6 +770,13 @@
 						};
 					})
 				});
+			},
+			getProductsTopBuy10list: function() {
+				let that = this;
+				getProductsTopBuy10list(that.id).then(res => {
+					let storeTop10Infos = res.data;
+					that.$set(that, 'storeTop10Infos', storeTop10Infos);
+				})
 			},
 			/**
 			 * 获取产品详情
@@ -1400,6 +1429,30 @@
 
 		.buy {
 			border-radius: 50rpx !important;
+		}
+	}
+	
+	.notice {
+		width: 100%;
+		height: 62rpx;
+		background-color: #ffedeb;
+		padding: 0 24rpx;
+		box-sizing: border-box;
+		
+		.swiper {
+			height: 100%;
+			width: 360rpx;
+			line-height: 62rpx;
+			overflow: hidden;
+			margin-left: 14rpx;
+			
+			swiper {
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+				font-size: 24rpx;
+				color: #333333;
+			}
 		}
 	}
 

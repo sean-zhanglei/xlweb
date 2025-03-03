@@ -44,6 +44,22 @@
 							<view class="line1">{{attr}}：<text class='atterTxt'>{{attrValue}}</text></view>
 							<view class='iconfont icon-jiantou'></view>
 						</view>
+						<view class='notice acea-row row-middle mb30 borRadius14'  v-if="storeTop10Infos && storeTop10Infos.length > 0">
+							<view class='num font-color'>
+								<text class='iconfont icon-laba'></text>
+								已售<text class='line'>|</text>
+							</view>
+							<view class='swiper'>
+								<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" interval="2500"
+									duration="500" vertical="true" circular="true">
+									<block v-for="(item,index) in storeTop10Infos" :key='index'>
+										<swiper-item>
+											<view class='line1'>{{item.realName}}刚刚成功下了{{item.cartNum}}单</view>
+										</swiper-item>
+									</block>
+								</swiper>
+							</view>
+						</view>
 						<view class='userEvaluation' id="past1">
 							<view class='title acea-row row-between-wrapper' :style="replyCount==0?'border-bottom-left-radius:14rpx;border-bottom-right-radius:14rpx;':''">
 								<view>用户评价({{replyCount}})</view>
@@ -176,7 +192,8 @@
 		collectAdd,
 		collectDel,
 		getReplyList,
-		getReplyConfig
+		getReplyConfig,
+		getProductsTopBuy10list
 	} from '@/api/store.js';
 	import productConSwiper from '@/components/productConSwiper/index.vue'
 	import productWindow from '@/components/productWindow/index.vue'
@@ -284,7 +301,11 @@
 				errT: '',
 				returnShow: true,
 				homeTop: 20,
-				userCollect: false
+				userCollect: false,
+				
+				indicatorDots: false,
+				autoplay: true,
+				storeTop10Infos: []
 			}
 		},
 		components: {
@@ -439,6 +460,13 @@
 					this.getSeckillDetail();
 				}
 			},
+			getProductsTopBuy10list: function() {
+				let that = this;
+				getProductsTopBuy10list(that.storeInfo.productId).then(res => {
+					let storeTop10Infos = res.data;
+					that.$set(that, 'storeTop10Infos', storeTop10Infos);
+				})
+			},
 			getSeckillDetail: function() {
 				let that = this;
 				getSeckillDetail(that.id).then(res => {
@@ -453,6 +481,7 @@
 					this.personNum = res.data.storeSeckill.quota;
 					this.attribute.productSelect.num = res.data.storeSeckill.num;
 					
+					this.getProductsTopBuy10list();
 					this.getProductReplyList();
 					this.getProductReplyCount();
 					let productAttr = res.data.productAttr.map(item => {
@@ -1052,6 +1081,31 @@
 			height: 100%;
 		}
 	}
+	
+	.notice {
+		width: 100%;
+		height: 62rpx;
+		background-color: #ffedeb;
+		padding: 0 24rpx;
+		box-sizing: border-box;
+		
+		.swiper {
+			height: 100%;
+			width: 360rpx;
+			line-height: 62rpx;
+			overflow: hidden;
+			margin-left: 14rpx;
+			
+			swiper {
+				height: 100%;
+				width: 100%;
+				overflow: hidden;
+				font-size: 24rpx;
+				color: #333333;
+			}
+		}
+	}
+	
 	.generate-posters {
 		width: 100%;
 		height: 170rpx;

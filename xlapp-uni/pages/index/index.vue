@@ -1835,7 +1835,7 @@
 		height: 100rpx;
 		background-color: rgba(0, 0, 0, 0.6); /* 50% 透明度的黑灰色背景 */
 		padding: 10rpx 30rpx 10rpx 30rpx;
-		z-index: 999;
+		z-index: 11;
 		color: white;
 		display: flex;
 		flex-direction: row;
