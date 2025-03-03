@@ -12,7 +12,7 @@
 				</view>
 			</view>
 		</view>
-		<view id="home" class="home acea-row row-center-wrapper iconfont icon-xiangzuo" :class="opacity>0.5?'on':''"
+		<view id="home" class="home-nav acea-row row-center-wrapper iconfont icon-xiangzuo" :class="opacity>0.5?'on':''"
 			:style="{ top: homeTop + 'rpx' }" v-if="returnShow" @tap="returns">
 		</view>
 		<!-- 	<view class='iconfont icon-xiangzuo' :style="'top:'+navH/2+'rpx'" @tap='returns'></view> -->
@@ -1905,9 +1905,9 @@
 	}
 
 	.icon-xiangzuo {
-		margin-top: var(--status-bar-height);
+		// margin-top: var(--status-bar-height);
 		/* #ifdef H5 */
-		top: 20rpx !important;
+		top: 30rpx !important;
 		/* #endif */
 	}
 
@@ -1947,7 +1947,7 @@
 		height: 100rpx;
 		width: 100%;
 	}
-
+	
 	.icon-xiangzuo {
 		color: #000;
 		position: fixed;
@@ -1958,6 +1958,36 @@
 		z-index: 1000;
 		left: -5rpx;
 	}
+	
+	.home-nav {
+		color: #fff;
+		position: fixed;
+		font-size: 33rpx;
+		width: 56rpx;
+		height: 56rpx;
+		z-index: 999;
+		left: 33rpx;
+		background: rgba(190, 190, 190, 0.5);
+		border-radius: 50%;
+
+		&.on {
+			background: unset;
+			color: #333;
+		}
+	}
+
+	.home-nav .line {
+		width: 1rpx;
+		height: 24rpx;
+		background: rgba(255, 255, 255, 0.25);
+	}
+
+	.home-nav .icon-xiangzuo {
+		width: auto;
+		font-size: 28rpx;
+	}
+
+	
 
 	.share-box {
 		z-index: 1000;

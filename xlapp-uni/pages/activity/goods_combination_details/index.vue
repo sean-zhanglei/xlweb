@@ -13,8 +13,8 @@
 				</view>
 			</view>
 		</view>
-
-		<!-- <view class='iconfont icon-xiangzuo' :style="'top:'+navH/2+'rpx'" @tap='returns'></view> -->
+		<view id="home" class="home-nav acea-row row-center-wrapper iconfont icon-xiangzuo" :class="opacity>0.5?'on':''" :style="{ top: homeTop + 'rpx' }" v-if="returnShow" @tap="returns">
+		</view>
 		<!-- 详情 -->
 		<view class='product-con'>
 			<scroll-view :scroll-top="scrollTop" scroll-y='true' scroll-with-animation="true"
