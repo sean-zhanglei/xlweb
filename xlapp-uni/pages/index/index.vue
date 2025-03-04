@@ -43,6 +43,11 @@
 						</block>
 					</swiper>
 				</view>
+				<!-- #ifdef MP || MP-WEIXIN -->
+					<view class="official-account">
+						<official-account></official-account>
+					</view>
+				<!-- #endif -->
 				<!-- 新闻简报 -->
 				<view class='notice acea-row row-middle row-between' v-if="roll.length">
 					<view class="pic">
@@ -1001,6 +1006,14 @@
 	}
 </style>
 <style lang="scss">
+	
+	.official-account {
+		 width: 100%;
+		 heigth: 84px;
+		 border-radius: 10rpx;
+		 background-color: #fff;
+		 margin-bottom: 15rpx;
+	}
 	/* 定义闪烁动画 */
 	@keyframes blink-color {
 	  0% {
