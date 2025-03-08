@@ -3,6 +3,7 @@ package com.nbug.service.util;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import com.nbug.common.constants.Constants;
 import com.nbug.common.constants.YlyConstants;
 import com.nbug.common.enums.EnumYly;
 import com.nbug.common.exception.XlwebException;
@@ -56,10 +57,17 @@ public class YlyUtil {
      *      * @param access_token 授权的token 必要参数，有效时间35天
      */
     public void instant() {
-        if(ObjectUtil.isNotNull(ylyAccessTokenResponse) && StringUtils.isNotBlank(ylyAccessTokenResponse.getBody().getAccess_token())){
-            return;
-        }
         try {
+            // 获取Access Token
+            boolean exists = redisUtil.exists(YlyConstants.YLY_REDIS_TOKEN);
+            if(exists) {
+                Object o = redisUtil.get(YlyConstants.YLY_REDIS_TOKEN);
+                ylyAccessTokenResponse = JSON.parseObject(o.toString(), YlyAccessTokenResponse.class);
+            }
+            if(ObjectUtil.isNotNull(ylyAccessTokenResponse) && StringUtils.isNotBlank(ylyAccessTokenResponse.getBody().getAccess_token())){
+                return;
+            }
+
             client_id = systemConfigService.getValueByKey(YlyConstants.YLY_PRINT_APP_ID);
             client_secret = systemConfigService.getValueByKey(YlyConstants.YLY_PRINT_APP_SECRET);
             machine_code = systemConfigService.getValueByKey(YlyConstants.YLY_PRINT_APP_MACHINE_CODE);
@@ -74,15 +82,9 @@ public class YlyUtil {
             }
             // 初始化易联云
             RequestMethod.init(client_id,client_secret);
-            // 获取Access Token
-            boolean exists = redisUtil.exists(YlyConstants.YLY_REDIS_TOKEN);
-            if(exists){
-                Object o = redisUtil.get(YlyConstants.YLY_REDIS_TOKEN);
-                ylyAccessTokenResponse = JSON.parseObject(o.toString(),YlyAccessTokenResponse.class);
-            }else{
-                ylyAccessTokenResponse = JSON.parseObject(RequestMethod.getAccessToken(),YlyAccessTokenResponse.class);
-                redisUtil.set(YlyConstants.YLY_REDIS_TOKEN,JSON.toJSONString(ylyAccessTokenResponse),30L, TimeUnit.DAYS);
-            }
+
+            ylyAccessTokenResponse = JSON.parseObject(RequestMethod.getAccessToken(),YlyAccessTokenResponse.class);
+            redisUtil.set(YlyConstants.YLY_REDIS_TOKEN,JSON.toJSONString(ylyAccessTokenResponse),30L, TimeUnit.DAYS);
 
             logger.info("获取的易联云AccessToken:"+JSON.toJSONString(ylyAccessTokenResponse));
             String addedPrint = RequestMethod.getInstance().addPrinter(machine_code, msign, ylyAccessTokenResponse.getBody().getAccess_token());
@@ -93,10 +95,12 @@ public class YlyUtil {
             // 设置声音
             ylySetSound(EnumYly.VOLUME_RESPONSE_TYPE_HORN.getCode(),
                     EnumYly.VOLUME_RESPONSE_VOICE3.getCode());
-            // 设置语音aid = 0
-            ylyVoice();
-        }catch (Exception e){
-            logger.error("添加易联云打印机失败"+e.getMessage());
+
+            ylyIcon();
+        } catch (Exception e){
+            ylyAccessTokenResponse = null;
+            redisUtil.delete(YlyConstants.YLY_REDIS_TOKEN);
+            logger.error("添加易联云打印机失败: {}", e.getMessage());
             logger.error(String.format("易联云 配置参数 client_id=%s client_secret=%s machine_code=%s msign=%s",client_id,client_secret,machine_code,msign));
         }
 
@@ -121,6 +125,20 @@ public class YlyUtil {
                 "0");
         logger.info("设置语音成功");
     }
+
+    /**
+     * 设置logo接口
+     * @throws Exception
+     */
+    public void ylyIcon() throws Exception {
+        instant();
+        String logoUrl = systemConfigService.getValueByKeyException(Constants.CONFIG_KEY_SITE_URL) + "/" + systemConfigService.getValueByKeyException("mobile_login_logo");
+        RequestMethod.getInstance().printSetIcon(
+                ylyAccessTokenResponse.getBody().getAccess_token(),
+                machine_code, logoUrl);
+        logger.info("设置logo成功");
+    }
+
 
     /**
      * 声音调节接口
@@ -161,7 +179,8 @@ public class YlyUtil {
      */
     public void ylyPrint(YlyPrintRequest ylyPrintRequest) throws Exception {
         instant();
-        String printSb = "<VN>0</VN>\n" +
+        String orderDetailUrlH5 = systemConfigService.getValueByKeyException(Constants.CONFIG_KEY_SITE_URL) + "/#/pages/order_details/index?order_id=" + ylyPrintRequest.getOrderNo();
+        String printSb = "<ML>1</ML><VN>0</VN>\n" +
                 "<FH><FB><center>"+ylyPrintRequest.getBusinessName()+"</center></FB></FH>" +
                 "********************************<FH>" +
                 "订单编号：" + ylyPrintRequest.getOrderNo()+"\n"+
@@ -183,6 +202,11 @@ public class YlyUtil {
                 "<LR>邮费：¥"+ylyPrintRequest.getPostal()+"元，抵扣：¥"+ylyPrintRequest.getDeduction()+"元</LR>" +
                 "</FH>" +
                 "<FH><right>实际支付：¥"+ylyPrintRequest.getPayMoney()+"元</right></FH>" +
+//                "<FH>" +
+//                "********************************\n" +
+//                "</FH>" +
+//                "<center>扫码查看订单详情</center>" +
+//                "<center><QR>"+orderDetailUrlH5+"</QR></center>" +
                 "<FB><FB><center>完</center></FB></FB>";
         RequestMethod.getInstance().printIndex(ylyAccessTokenResponse.getBody().getAccess_token(),machine_code,
                 URLEncoder.encode(printSb, "utf-8"), ylyPrintRequest.getOrderNo());
