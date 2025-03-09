@@ -1,0 +1,3 @@
+com.nbug.depends.mybatis.datasource.config.XlwebDataSourceAutoConfiguration
+com.nbug.depends.mybatis.plus.config.XlwebMybatisAutoConfiguration
+com.nbug.depends.mybatis.translate.config.XlwebTranslateAutoConfiguration

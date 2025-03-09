@@ -1,0 +1,2 @@
+com.nbug.depends.job.quartz.config.XlwebXxlJobAutoConfiguration
+com.nbug.depends.job.quartz.config.XlwebAsyncAutoConfiguration

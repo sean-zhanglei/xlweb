@@ -1,0 +1,6 @@
+com.nbug.module.system.depends.web.apilog.config.XlwebApiLogAutoConfiguration
+com.nbug.module.system.depends.web.jackson.config.XlwebJacksonAutoConfiguration
+com.nbug.module.system.depends.web.swagger.config.XlwebSwaggerAutoConfiguration
+com.nbug.module.system.depends.web.web.config.XlwebWebAutoConfiguration
+com.nbug.module.system.depends.web.apilog.config.XlwebApiLogRpcAutoConfiguration
+com.nbug.module.system.depends.web.banner.config.XlwebBannerAutoConfiguration

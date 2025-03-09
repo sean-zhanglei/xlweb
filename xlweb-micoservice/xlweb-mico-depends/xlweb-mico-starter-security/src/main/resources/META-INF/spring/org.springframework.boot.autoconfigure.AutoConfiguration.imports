@@ -1,0 +1,5 @@
+com.nbug.module.system.depends.security.security.config.XlwebSecurityRpcAutoConfiguration
+com.nbug.module.system.depends.security.security.config.XlwebSecurityAutoConfiguration
+com.nbug.module.system.depends.security.security.config.XlwebWebSecurityConfigurerAdapter
+com.nbug.module.system.depends.security.operatelog.config.XlwebOperateLogConfiguration
+com.nbug.module.system.depends.security.operatelog.config.XlwebOperateLogRpcAutoConfiguration

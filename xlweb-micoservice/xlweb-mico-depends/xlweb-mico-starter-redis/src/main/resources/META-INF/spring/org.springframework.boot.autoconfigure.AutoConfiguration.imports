@@ -1,0 +1,2 @@
+com.nbug.depends.redis.config.XlwebRedisAutoConfiguration
+com.nbug.depends.redis.config.XlwebCacheAutoConfiguration

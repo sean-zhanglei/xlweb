@@ -1,0 +1,3 @@
+com.nbug.depends.mq.redis.config.XlwebRedisMQProducerAutoConfiguration
+com.nbug.depends.mq.redis.config.XlwebRedisMQConsumerAutoConfiguration
+com.nbug.depends.mq.rabbitmq.config.XlwebRabbitMQAutoConfiguration
