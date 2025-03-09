@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xlweb-mico-module</artifactId>
+        <groupId>com.nbug</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xlweb-mico-system</artifactId>
+    <packaging>pom</packaging>
+
+    <name>xlweb-mico-system</name>
+    <url>http://maven.apache.org</url>
+    <modules>
+        <module>xlweb-mico-system-api</module>
+<!--        <module>xlweb-mico-system-biz</module>-->
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <description>
+        system 模块下，我们放通用业务，支撑上层的核心业务。
+        例如说：用户、部门、权限、数据字典等等
+    </description>
+
+</project>

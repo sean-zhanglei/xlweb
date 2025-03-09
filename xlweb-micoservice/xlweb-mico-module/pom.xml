@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xlweb-micoservice</artifactId>
+        <groupId>com.nbug</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xlweb-mico-module</artifactId>
+    <packaging>pom</packaging>
+    <name>xlweb-mico-module</name>
+    <version>${revision}</version>
+
+    <modules>
+        <module>xlweb-mico-system</module>
+        <module>xlweb-mico-order</module>
+        <module>xlweb-mico-store</module>
+        <module>xlweb-mico-user</module>
+        <module>xlweb-mico-infra</module>
+    </modules>
+
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-common</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-mq</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-job</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-rpc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-infra-api</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-system-api</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-tenant</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

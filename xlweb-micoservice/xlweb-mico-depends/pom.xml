@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xlweb-micoservice</artifactId>
+        <groupId>com.nbug</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xlweb-mico-depends</artifactId>
+    <packaging>pom</packaging>
+    <name>xlweb-mico-depends</name>
+    <version>${revision}</version>
+
+    <description>Xlweb-depends project for micro-service</description>
+    <url>http://maven.apache.org</url>
+    <modules>
+        <module>xlweb-mico-starter-redis</module>
+        <module>xlweb-mico-starter-mybatis</module>
+        <module>xlweb-mico-starter-job</module>
+        <module>xlweb-mico-starter-rpc</module>
+        <module>xlweb-mico-starter-mq</module>
+        <module>xlweb-mico-starter-security</module>
+        <module>xlweb-mico-starter-web</module>
+        <module>xlweb-mico-starter-tenant</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-common</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- RPC 远程调用相关 -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-rpc</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- infra -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-infra-api</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- redis -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-redis</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- web -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-web</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- system -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-system-api</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- mq -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-mq</artifactId>
+                <version>${revision}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- job -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-job</artifactId>
+                <version>${revision}</version>
+                <optional>true</optional>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- mybatis -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- security -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

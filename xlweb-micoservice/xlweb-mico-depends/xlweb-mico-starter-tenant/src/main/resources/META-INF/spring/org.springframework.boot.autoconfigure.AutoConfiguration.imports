@@ -1,0 +1,2 @@
+com.nbug.module.system.depends.tenant.config.XlwebTenantRpcAutoConfiguration
+com.nbug.module.system.depends.tenant.config.XlwebTenantAutoConfiguration
