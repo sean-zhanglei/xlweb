@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-common</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Spring Boot 配置所需依赖 -->
@@ -80,6 +80,7 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-rpc</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- infra -->
         <dependency>

@@ -28,6 +28,12 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-system-api</artifactId>
         </dependency>
 
         <!-- Web 相关 -->
@@ -51,21 +57,18 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-rpc</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- Job 定时任务相关 -->
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-job</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- 消息队列相关 -->
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-mq</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.kafka</groupId>

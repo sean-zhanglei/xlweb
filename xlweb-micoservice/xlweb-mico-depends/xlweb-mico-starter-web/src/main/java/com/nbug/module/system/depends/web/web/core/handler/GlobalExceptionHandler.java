@@ -38,6 +38,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 
+import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.*;
+
 
 /**
  * 全局异常处理器，将 Exception 翻译成 CommonResult + 对应的异常编号

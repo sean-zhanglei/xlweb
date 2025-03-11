@@ -32,7 +32,6 @@
                 <groupId>com.nbug</groupId>
                 <artifactId>xlweb-mico-common</artifactId>
                 <version>${revision}</version>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>

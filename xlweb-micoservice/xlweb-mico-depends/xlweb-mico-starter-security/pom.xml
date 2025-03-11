@@ -26,6 +26,7 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-common</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Spring 核心 -->
@@ -59,7 +60,6 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-rpc</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <!-- 工具类相关 -->

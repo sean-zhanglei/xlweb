@@ -1,0 +1,22 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: xlweb-mico-gateway
+
+  profiles:
+    active: dev
+
+  main:
+    allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
+
+  config:
+    import:
+      - optional:classpath:application-${spring.profiles.active}.yaml # 加载【本地】配置
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.yaml # 加载【Nacos】的配置
+
+--- #################### NBUG相关配置 ####################
+
+xlweb:
+  info:
+    version: 1.0.0

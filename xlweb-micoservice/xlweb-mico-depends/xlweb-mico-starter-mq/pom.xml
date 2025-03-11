@@ -19,12 +19,13 @@
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-common</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <!-- DB 相关 -->
         <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-starter-redis</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- 消息队列相关 -->

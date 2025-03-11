@@ -50,7 +50,6 @@
                 <groupId>com.nbug</groupId>
                 <artifactId>xlweb-mico-infra-api</artifactId>
                 <version>${revision}</version>
-                <scope>compile</scope>
             </dependency>
             <!-- redis -->
             <dependency>
@@ -72,7 +71,6 @@
                 <groupId>com.nbug</groupId>
                 <artifactId>xlweb-mico-system-api</artifactId>
                 <version>${revision}</version>
-                <scope>compile</scope>
             </dependency>
 
             <!-- mq -->
