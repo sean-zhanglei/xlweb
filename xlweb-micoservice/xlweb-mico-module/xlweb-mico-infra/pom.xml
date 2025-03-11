@@ -13,7 +13,7 @@
     <url>http://maven.apache.org</url>
     <modules>
         <module>xlweb-mico-infra-api</module>
-<!--        <module>xlweb-mico-infra-biz</module>-->
+        <module>xlweb-mico-infra-biz</module>
     </modules>
     <name>${project.artifactId}</name>
     <description>
