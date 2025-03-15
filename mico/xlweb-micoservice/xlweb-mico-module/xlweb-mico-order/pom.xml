@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xlweb-mico-module</artifactId>
+        <groupId>com.nbug</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xlweb-mico-order</artifactId>
+    <packaging>pom</packaging>
+
+    <name>xlweb-mico-order</name>
+    <url>http://maven.apache.org</url>
+    <description>订单服务</description>
+    <modules>
+        <module>xlweb-mico-order-api</module>
+        <module>xlweb-mico-order-biz</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>

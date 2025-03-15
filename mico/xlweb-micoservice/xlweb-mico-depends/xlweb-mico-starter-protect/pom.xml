@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xlweb-mico-depends</artifactId>
+        <groupId>com.nbug</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xlweb-mico-starter-protect</artifactId>
+    <packaging>jar</packaging>
+
+    <name>xlweb-mico-starter-protect</name>
+    <url>http://maven.apache.org</url>
+    <description>服务保证，提供分布式锁、幂等、限流、熔断等等功能</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-common</artifactId>
+        </dependency>
+        <!-- Web 相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-web</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有限流、幂等使用到 -->
+        </dependency>
+
+        <!-- DB 相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-redis</artifactId>
+        </dependency>
+
+        <!-- 服务保障相关 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
