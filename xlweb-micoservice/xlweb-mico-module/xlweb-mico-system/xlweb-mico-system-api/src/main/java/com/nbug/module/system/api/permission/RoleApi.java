@@ -1,10 +1,10 @@
-package com.nbug.module.system.api.permission;
+package cn.iocoder.yudao.module.system.api.permission;
 
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.system.enums.ApiConstants;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.module.system.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

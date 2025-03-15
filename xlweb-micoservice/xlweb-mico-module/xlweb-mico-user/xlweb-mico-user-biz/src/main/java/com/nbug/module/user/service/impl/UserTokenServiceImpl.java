@@ -2,9 +2,9 @@ package com.nbug.module.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nbug.common.model.user.UserToken;
+import com.nbug.mico.common.model.user.UserToken;
+import com.nbug.module.user.dal.UserTokenDao;
 import com.nbug.module.user.service.UserTokenService;
-import com.nbug.module.user.dao.UserTokenDao;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

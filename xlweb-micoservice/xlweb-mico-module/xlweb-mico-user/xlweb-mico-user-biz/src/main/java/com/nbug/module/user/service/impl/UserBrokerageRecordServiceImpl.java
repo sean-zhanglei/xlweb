@@ -9,19 +9,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.constants.BrokerageRecordConstants;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.model.user.User;
-import com.nbug.common.model.user.UserBrokerageRecord;
-import com.nbug.common.page.CommonPage;
-import com.nbug.common.request.BrokerageRecordRequest;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.RetailShopStairUserRequest;
-import com.nbug.common.response.SpreadCommissionDetailResponse;
-import com.nbug.common.utils.ArrayUtil;
-import com.nbug.common.utils.date.DateUtil;
-import com.nbug.common.vo.dateLimitUtilVo;
-import com.nbug.module.user.dao.UserBrokerageRecordDao;
+import com.nbug.mico.common.constants.BrokerageRecordConstants;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.model.user.User;
+import com.nbug.mico.common.model.user.UserBrokerageRecord;
+import com.nbug.mico.common.page.CommonPage;
+import com.nbug.mico.common.request.BrokerageRecordRequest;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.RetailShopStairUserRequest;
+import com.nbug.mico.common.response.SpreadCommissionDetailResponse;
+import com.nbug.mico.common.utils.ArrayUtil;
+import com.nbug.mico.common.utils.date.DateUtil;
+import com.nbug.mico.common.vo.dateLimitUtilVo;
+import com.nbug.module.user.dal.UserBrokerageRecordDao;
 import com.nbug.module.user.service.UserBrokerageRecordService;
 import com.nbug.module.user.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +33,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -179,7 +180,7 @@ public class UserBrokerageRecordServiceImpl extends ServiceImpl<UserBrokerageRec
         lqw.eq(UserBrokerageRecord::getUid, uid);
         lqw.eq(UserBrokerageRecord::getLinkType, BrokerageRecordConstants.BROKERAGE_RECORD_LINK_TYPE_ORDER);
         lqw.eq(UserBrokerageRecord::getStatus, BrokerageRecordConstants.BROKERAGE_RECORD_STATUS_COMPLETE);
-        return dao.selectCount(lqw);
+        return Math.toIntExact(dao.selectCount(lqw));
     }
 
     /**
@@ -246,7 +247,7 @@ public class UserBrokerageRecordServiceImpl extends ServiceImpl<UserBrokerageRec
         queryWrapper.apply(StrUtil.format("left(update_time, 7) in ({})", ArrayUtil.strListToSqlJoin(monthList)));
         queryWrapper.groupBy("left(update_time, 7)");
         List<UserBrokerageRecord> list = dao.selectList(queryWrapper);
-        Map<String, Integer> map = CollUtil.newHashMap();
+        Map<String, Integer> map = new HashMap();
         if (CollUtil.isEmpty(list)) {
             return map;
         }

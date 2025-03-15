@@ -2,9 +2,6 @@ package com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
-import com.nbug.depends.excel.core.annotations.DictFormat;
-import com.nbug.depends.excel.core.convert.DictConvert;
-import com.nbug.module.system.enums.DictTypeConstants;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -28,8 +25,6 @@ public class ApiAccessLogRespVO {
     private Long userId;
 
     @Schema(description = "用户类型，参见 UserTypeEnum 枚举", requiredMode = Schema.RequiredMode.REQUIRED, example = "2")
-    @ExcelProperty(value = "用户类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.USER_TYPE)
     private Integer userType;
 
     @Schema(description = "应用名", requiredMode = Schema.RequiredMode.REQUIRED, example = "dashboard")
@@ -69,8 +64,6 @@ public class ApiAccessLogRespVO {
     private String operateName;
 
     @Schema(description = "操作分类", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-    @ExcelProperty(value = "操作分类", converter = DictConvert.class)
-    @DictFormat(com.nbug.infra.enums.DictTypeConstants.OPERATE_TYPE)
     private Integer operateType;
 
     @Schema(description = "开始请求时间", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -89,7 +82,7 @@ public class ApiAccessLogRespVO {
     @ExcelProperty("结果码")
     private Integer resultCode;
 
-    @Schema(description = "结果提示", example = "NBUG，牛逼！")
+    @Schema(description = "结果提示", example = "NUBG")
     @ExcelProperty("结果提示")
     private String resultMsg;
 

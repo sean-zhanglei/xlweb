@@ -1,7 +1,7 @@
-package com.nbug.module.system.api.oauth2.dto;
+package cn.iocoder.yudao.module.system.api.oauth2.dto;
 
-import com.nbug.mico.common.enums.UserTypeEnum;
-import com.nbug.mico.common.validation.InEnum;
+import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
+import cn.iocoder.yudao.framework.common.validation.InEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class OAuth2AccessTokenCreateReqDTO implements Serializable {
     @InEnum(value = UserTypeEnum.class, message = "用户类型必须是 {value}")
     private Integer userType;
 
-    @Schema(description = "客户端编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "xlwebyuanma")
+    @Schema(description = "客户端编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "yudaoyuanma")
     @NotNull(message = "客户端编号不能为空")
     private String clientId;
 

@@ -2,11 +2,11 @@ package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.model.user.UserIntegralRecord;
-import com.nbug.common.request.AdminIntegralSearchRequest;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.response.UserIntegralRecordResponse;
-import com.nbug.common.vo.MyRecord;
+import com.nbug.mico.common.model.user.UserIntegralRecord;
+import com.nbug.mico.common.request.AdminIntegralSearchRequest;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.response.UserIntegralRecordResponse;
+import com.nbug.mico.common.vo.MyRecord;
 
 import java.util.List;
 

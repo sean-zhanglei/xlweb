@@ -1,11 +1,11 @@
-package com.nbug.module.system.api.logger;
+package cn.iocoder.yudao.module.system.api.logger;
 
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.mico.common.pojo.PageResult;
-import com.nbug.module.system.api.logger.dto.OperateLogCreateReqDTO;
-import com.nbug.module.system.api.logger.dto.OperateLogPageReqDTO;
-import com.nbug.module.system.api.logger.dto.OperateLogRespDTO;
-import com.nbug.module.system.enums.ApiConstants;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.system.api.logger.dto.OperateLogCreateReqDTO;
+import cn.iocoder.yudao.module.system.api.logger.dto.OperateLogPageReqDTO;
+import cn.iocoder.yudao.module.system.api.logger.dto.OperateLogRespDTO;
+import cn.iocoder.yudao.module.system.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;

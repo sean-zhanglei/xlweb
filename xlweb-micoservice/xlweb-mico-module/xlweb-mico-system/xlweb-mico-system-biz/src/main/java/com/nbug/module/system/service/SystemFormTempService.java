@@ -1,11 +1,11 @@
-package com.nbug.module.system.module.system.service;
+package com.nbug.module.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.system.SystemFormTemp;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.SystemFormCheckRequest;
-import com.nbug.common.request.SystemFormTempRequest;
-import com.nbug.common.request.SystemFormTempSearchRequest;
+import com.nbug.mico.common.model.system.SystemFormTemp;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.SystemFormCheckRequest;
+import com.nbug.mico.common.request.SystemFormTempRequest;
+import com.nbug.mico.common.request.SystemFormTempSearchRequest;
 
 import java.util.List;
 

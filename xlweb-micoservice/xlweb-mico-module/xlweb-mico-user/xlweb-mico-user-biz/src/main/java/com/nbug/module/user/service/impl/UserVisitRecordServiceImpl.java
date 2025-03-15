@@ -2,8 +2,8 @@ package com.nbug.module.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nbug.common.model.record.UserVisitRecord;
-import com.nbug.module.user.dao.UserVisitRecordDao;
+import com.nbug.mico.common.model.record.UserVisitRecord;
+import com.nbug.module.user.dal.UserVisitRecordDao;
 import com.nbug.module.user.service.UserVisitRecordService;
 import org.springframework.stereotype.Service;
 

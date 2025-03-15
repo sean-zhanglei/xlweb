@@ -2,12 +2,10 @@ package com.nbug.module.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.nbug.common.model.system.SystemAdmin;
-import com.nbug.common.model.system.SystemMenu;
-import com.nbug.common.model.system.SystemPermissions;
-import com.nbug.common.vo.LoginUserVo;
-import com.nbug.user.service.SystemAdminService;
-import com.nbug.user.service.SystemMenuService;
+import com.nbug.mico.common.model.system.SystemAdmin;
+import com.nbug.mico.common.model.system.SystemMenu;
+import com.nbug.mico.common.model.system.SystemPermissions;
+import com.nbug.mico.common.vo.LoginUserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

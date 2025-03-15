@@ -1,10 +1,10 @@
-package com.nbug.module.system.module.system.service;
+package com.nbug.module.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.system.SystemConfig;
-import com.nbug.common.request.SystemConfigAdminRequest;
-import com.nbug.common.request.SystemFormCheckRequest;
-import com.nbug.common.vo.ExpressSheetVo;
+import com.nbug.mico.common.model.system.SystemConfig;
+import com.nbug.mico.common.request.SystemConfigAdminRequest;
+import com.nbug.mico.common.request.SystemFormCheckRequest;
+import com.nbug.mico.common.vo.ExpressSheetVo;
 
 import java.util.HashMap;
 import java.util.List;

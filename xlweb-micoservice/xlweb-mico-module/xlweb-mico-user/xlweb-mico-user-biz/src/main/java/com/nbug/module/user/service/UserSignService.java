@@ -1,12 +1,12 @@
 package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.user.UserSign;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.response.UserSignInfoResponse;
-import com.nbug.common.vo.SystemGroupDataSignConfigVo;
-import com.nbug.common.vo.UserSignMonthVo;
-import com.nbug.common.vo.UserSignVo;
+import com.nbug.mico.common.model.user.UserSign;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.response.UserSignInfoResponse;
+import com.nbug.mico.common.vo.SystemGroupDataSignConfigVo;
+import com.nbug.mico.common.vo.UserSignMonthVo;
+import com.nbug.mico.common.vo.UserSignVo;
 
 import java.util.HashMap;
 import java.util.List;

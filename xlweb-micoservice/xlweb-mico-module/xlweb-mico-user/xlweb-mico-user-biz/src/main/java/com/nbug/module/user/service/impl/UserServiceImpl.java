@@ -13,59 +13,65 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.constants.CouponConstants;
-import com.nbug.common.constants.ExperienceRecordConstants;
-import com.nbug.common.constants.IntegralRecordConstants;
-import com.nbug.common.constants.RegularConstants;
-import com.nbug.common.constants.SmsConstants;
-import com.nbug.common.constants.SysConfigConstants;
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.model.coupon.StoreCoupon;
-import com.nbug.common.model.coupon.StoreCouponUser;
-import com.nbug.common.model.order.StoreOrder;
-import com.nbug.common.model.record.UserVisitRecord;
-import com.nbug.common.model.system.SystemUserLevel;
-import com.nbug.common.model.user.User;
-import com.nbug.common.model.user.UserBill;
-import com.nbug.common.model.user.UserBrokerageRecord;
-import com.nbug.common.model.user.UserExperienceRecord;
-import com.nbug.common.model.user.UserIntegralRecord;
-import com.nbug.common.model.user.UserLevel;
-import com.nbug.common.model.user.UserSign;
-import com.nbug.common.page.CommonPage;
-import com.nbug.common.request.AdminIntegralSearchRequest;
-import com.nbug.common.request.FundsMonitorSearchRequest;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.PasswordRequest;
-import com.nbug.common.request.RegisterThirdUserRequest;
-import com.nbug.common.request.RetailShopStairUserRequest;
-import com.nbug.common.request.StoreCouponUserSearchRequest;
-import com.nbug.common.request.UpdateUserLevelRequest;
-import com.nbug.common.request.UserBindingPhoneUpdateRequest;
-import com.nbug.common.request.UserEditRequest;
-import com.nbug.common.request.UserOperateIntegralMoneyRequest;
-import com.nbug.common.request.UserSearchRequest;
-import com.nbug.common.request.UserUpdateRequest;
-import com.nbug.common.request.UserUpdateSpreadRequest;
-import com.nbug.common.response.SpreadOrderResponse;
-import com.nbug.common.response.TopDetail;
-import com.nbug.common.response.UserCenterResponse;
-import com.nbug.common.response.UserResponse;
-import com.nbug.common.response.UserSpreadPeopleItemResponse;
-import com.nbug.common.token.FrontTokenComponent;
-import com.nbug.common.utils.CommonUtil;
-import com.nbug.common.utils.date.DateUtil;
-import com.nbug.common.utils.RedisUtil;
-import com.nbug.common.utils.XlwebUtil;
-import com.nbug.common.vo.dateLimitUtilVo;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.constants.CouponConstants;
+import com.nbug.mico.common.constants.ExperienceRecordConstants;
+import com.nbug.mico.common.constants.IntegralRecordConstants;
+import com.nbug.mico.common.constants.RegularConstants;
+import com.nbug.mico.common.constants.SmsConstants;
+import com.nbug.mico.common.constants.SysConfigConstants;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.coupon.StoreCoupon;
+import com.nbug.mico.common.model.coupon.StoreCouponUser;
+import com.nbug.mico.common.model.order.StoreOrder;
+import com.nbug.mico.common.model.record.UserVisitRecord;
+import com.nbug.mico.common.model.system.SystemUserLevel;
+import com.nbug.mico.common.model.user.User;
+import com.nbug.mico.common.model.user.UserBill;
+import com.nbug.mico.common.model.user.UserBrokerageRecord;
+import com.nbug.mico.common.model.user.UserExperienceRecord;
+import com.nbug.mico.common.model.user.UserIntegralRecord;
+import com.nbug.mico.common.model.user.UserLevel;
+import com.nbug.mico.common.model.user.UserSign;
+import com.nbug.mico.common.page.CommonPage;
+import com.nbug.mico.common.request.AdminIntegralSearchRequest;
+import com.nbug.mico.common.request.FundsMonitorSearchRequest;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.PasswordRequest;
+import com.nbug.mico.common.request.RegisterThirdUserRequest;
+import com.nbug.mico.common.request.RetailShopStairUserRequest;
+import com.nbug.mico.common.request.StoreCouponUserSearchRequest;
+import com.nbug.mico.common.request.UpdateUserLevelRequest;
+import com.nbug.mico.common.request.UserBindingPhoneUpdateRequest;
+import com.nbug.mico.common.request.UserEditRequest;
+import com.nbug.mico.common.request.UserOperateIntegralMoneyRequest;
+import com.nbug.mico.common.request.UserSearchRequest;
+import com.nbug.mico.common.request.UserUpdateRequest;
+import com.nbug.mico.common.request.UserUpdateSpreadRequest;
+import com.nbug.mico.common.response.SpreadOrderResponse;
+import com.nbug.mico.common.response.TopDetail;
+import com.nbug.mico.common.response.UserCenterResponse;
+import com.nbug.mico.common.response.UserResponse;
+import com.nbug.mico.common.response.UserSpreadPeopleItemResponse;
+import com.nbug.mico.common.token.FrontTokenComponent;
+import com.nbug.mico.common.utils.CommonUtil;
+import com.nbug.mico.common.utils.XlwebUtil;
+import com.nbug.mico.common.utils.date.DateUtil;
+import com.nbug.mico.common.utils.redis.RedisUtil;
+import com.nbug.mico.common.vo.dateLimitUtilVo;
+import com.nbug.module.infra.api.attachment.AttachmentApi;
+import com.nbug.module.infra.api.config.ConfigApi;
+import com.nbug.module.user.dal.UserDao;
 import com.nbug.module.user.service.UserBillService;
+import com.nbug.module.user.service.UserBrokerageRecordService;
 import com.nbug.module.user.service.UserExperienceRecordService;
 import com.nbug.module.user.service.UserGroupService;
+import com.nbug.module.user.service.UserIntegralRecordService;
 import com.nbug.module.user.service.UserLevelService;
 import com.nbug.module.user.service.UserService;
+import com.nbug.module.user.service.UserSignService;
+import com.nbug.module.user.service.UserTagService;
 import com.nbug.module.user.service.UserVisitRecordService;
-import com.nbug.module.user.dao.UserDao;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -74,10 +80,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
-import com.nbug.module.user.service.UserBrokerageRecordService;
-import com.nbug.module.user.service.UserIntegralRecordService;
-import com.nbug.module.user.service.UserSignService;
-import com.nbug.module.user.service.UserTagService;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -110,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     private FrontTokenComponent tokenComponet;
 
     @Autowired
-    private SystemConfigService systemConfigService;
+    private ConfigApi configApi;
 
     @Autowired
     private SystemUserLevelService systemUserLevelService;
@@ -155,7 +157,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     private UserVisitRecordService userVisitRecordService;
 
     @Autowired
-    private SystemAttachmentService systemAttachmentService;
+    private AttachmentApi attachmentApi;
 
     /**
      * 分页显示用户表
@@ -167,7 +169,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public PageInfo<UserResponse> getList(UserSearchRequest request, PageParamRequest pageParamRequest) {
         Page<User> pageUser = PageHelper.startPage(pageParamRequest.getPage(), pageParamRequest.getLimit());
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        Map<String, Object> map = CollUtil.newHashMap();
+        Map<String, Object> map = new HashMap<>();
 
         if (request.getIsPromoter() != null) {
             map.put("isPromoter", request.getIsPromoter() ? 1 : 0);
@@ -600,13 +602,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             }
         }
         // 充值开关
-        String rechargeSwitch = systemConfigService.getValueByKey(SysConfigConstants.CONFIG_KEY_RECHARGE_SWITCH);
+        String rechargeSwitch = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_RECHARGE_SWITCH).getCheckedData();
         if (StrUtil.isNotBlank(rechargeSwitch)) {
             userCenterResponse.setRechargeSwitch(Boolean.valueOf(rechargeSwitch));
         }
 
         // 判断是否展示我的推广，1.分销模式是否开启
-        String funcStatus = systemConfigService.getValueByKey(SysConfigConstants.CONFIG_KEY_BROKERAGE_FUNC_STATUS);
+        String funcStatus = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_BROKERAGE_FUNC_STATUS).getCheckedData();
         if (!funcStatus.equals("1")) {
             userCenterResponse.setIsPromoter(false);
         }
@@ -776,7 +778,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         user.setPhone(phone);
         user.setUserType(Constants.USER_LOGIN_TYPE_H5);
         user.setNickname(CommonUtil.createNickName(phone));
-        user.setAvatar(systemConfigService.getValueByKey(Constants.USER_DEFAULT_AVATAR_CONFIG_KEY));
+        user.setAvatar(configApi.getValueByKey(Constants.USER_DEFAULT_AVATAR_CONFIG_KEY).getCheckedData());
         Date nowDate = DateUtil.nowDateTime();
         user.setCreateTime(nowDate);
         user.setLastLoginTime(nowDate);
@@ -977,13 +979,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
             return false;
         }
         // 判断分销功能是否启用
-        String isOpen = systemConfigService.getValueByKey(Constants.CONFIG_KEY_STORE_BROKERAGE_IS_OPEN);
+        String isOpen = configApi.getValueByKey(Constants.CONFIG_KEY_STORE_BROKERAGE_IS_OPEN).getCheckedData();
         if (StrUtil.isBlank(isOpen) || isOpen.equals("0")) {
             return false;
         }
         if (type.equals("old")) {
             // 判断分销关系绑定类型（所有、新用户）
-            String bindType = systemConfigService.getValueByKey(Constants.CONFIG_KEY_DISTRIBUTION_TYPE);
+            String bindType = configApi.getValueByKey(Constants.CONFIG_KEY_DISTRIBUTION_TYPE).getCheckedData();
             if (StrUtil.isBlank(bindType) || bindType.equals("1")) {
                 return false;
             }
@@ -1386,7 +1388,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public Integer getCountByPayCount(int minPayCount, int maxPayCount) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.between(User::getPayCount, minPayCount, maxPayCount);
-        return userDao.selectCount(lambdaQueryWrapper);
+        return Math.toIntExact(userDao.selectCount(lambdaQueryWrapper));
     }
 
     /**
@@ -1705,7 +1707,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     public Integer getTotalNum() {
         LambdaQueryWrapper<User> lqw = Wrappers.lambdaQuery();
         lqw.select(User::getUid);
-        return userDao.selectCount(lqw);
+        return Math.toIntExact(userDao.selectCount(lqw));
     }
 
     /**
@@ -1719,7 +1721,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         QueryWrapper<User> wrapper = Wrappers.query();
         wrapper.select("uid");
         wrapper.apply("date_format(create_time, '%Y-%m-%d') between {0} and {1}", startDate, endDate);
-        return userDao.selectCount(wrapper);
+        return Math.toIntExact(userDao.selectCount(wrapper));
     }
 
     /**
@@ -1764,7 +1766,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     @Override
     public Boolean editUser(UserEditRequest request) {
         User user = getInfo();
-        user.setAvatar(systemAttachmentService.clearPrefix(request.getAvatar()));
+        user.setAvatar(attachmentApi.clearPrefix(request.getAvatar()).getCheckedData());
         user.setNickname(request.getNickname());
         return updateById(user);
     }
@@ -1792,7 +1794,7 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         QueryWrapper<User> wrapper = Wrappers.query();
         wrapper.select("uid");
         wrapper.apply("date_format(create_time, '%Y-%m-%d') = {0}", date);
-        return userDao.selectCount(wrapper);
+        return Math.toIntExact(userDao.selectCount(wrapper));
     }
 
     /**

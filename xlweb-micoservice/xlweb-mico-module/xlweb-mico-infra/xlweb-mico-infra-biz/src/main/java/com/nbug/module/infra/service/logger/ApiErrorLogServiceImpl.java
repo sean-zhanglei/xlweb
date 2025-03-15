@@ -1,15 +1,15 @@
-package com.nbug.module.infra.service.logger;
+package cn.iocoder.yudao.module.infra.service.logger;
 
 import cn.hutool.core.util.StrUtil;
-import com.nbug.common.pojo.PageResult;
-import com.nbug.common.util.object.BeanUtils;
-import com.nbug.depends.tenant.core.context.TenantContextHolder;
-import com.nbug.depends.tenant.core.util.TenantUtils;
-import com.nbug.infra.api.logger.dto.ApiErrorLogCreateReqDTO;
-import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
-import com.nbug.module.infra.dal.dataobject.logger.ApiErrorLogDO;
-import com.nbug.module.infra.dal.mysql.logger.ApiErrorLogMapper;
-import com.nbug.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
+import cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder;
+import cn.iocoder.yudao.framework.tenant.core.util.TenantUtils;
+import cn.iocoder.yudao.module.infra.api.logger.dto.ApiErrorLogCreateReqDTO;
+import cn.iocoder.yudao.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
+import cn.iocoder.yudao.module.infra.dal.dataobject.logger.ApiErrorLogDO;
+import cn.iocoder.yudao.module.infra.dal.mysql.logger.ApiErrorLogMapper;
+import cn.iocoder.yudao.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -17,15 +17,15 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
-import static com.nbug.common.exception.util.ServiceExceptionUtil.exception;
-import static com.nbug.module.infra.dal.dataobject.logger.ApiErrorLogDO.REQUEST_PARAMS_MAX_LENGTH;
-import static com.nbug.infra.enums.ErrorCodeConstants.API_ERROR_LOG_NOT_FOUND;
-import static com.nbug.infra.enums.ErrorCodeConstants.API_ERROR_LOG_PROCESSED;
+import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.module.infra.dal.dataobject.logger.ApiErrorLogDO.REQUEST_PARAMS_MAX_LENGTH;
+import static cn.iocoder.yudao.module.infra.enums.ErrorCodeConstants.API_ERROR_LOG_NOT_FOUND;
+import static cn.iocoder.yudao.module.infra.enums.ErrorCodeConstants.API_ERROR_LOG_PROCESSED;
 
 /**
  * API 错误日志 Service 实现类
  *
- * @author NBUG
+ * @author 芋道源码
  */
 @Service
 @Validated

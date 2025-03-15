@@ -7,22 +7,22 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.constants.ExperienceRecordConstants;
-import com.nbug.common.constants.IntegralRecordConstants;
-import com.nbug.common.constants.SysGroupDataConstants;
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.model.user.User;
-import com.nbug.common.model.user.UserExperienceRecord;
-import com.nbug.common.model.user.UserIntegralRecord;
-import com.nbug.common.model.user.UserSign;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.response.UserSignInfoResponse;
-import com.nbug.common.utils.date.DateUtil;
-import com.nbug.common.vo.SystemGroupDataSignConfigVo;
-import com.nbug.common.vo.UserSignMonthVo;
-import com.nbug.common.vo.UserSignVo;
-import com.nbug.module.user.dao.UserSignDao;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.constants.ExperienceRecordConstants;
+import com.nbug.mico.common.constants.IntegralRecordConstants;
+import com.nbug.mico.common.constants.SysGroupDataConstants;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.user.User;
+import com.nbug.mico.common.model.user.UserExperienceRecord;
+import com.nbug.mico.common.model.user.UserIntegralRecord;
+import com.nbug.mico.common.model.user.UserSign;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.response.UserSignInfoResponse;
+import com.nbug.mico.common.utils.date.DateUtil;
+import com.nbug.mico.common.vo.SystemGroupDataSignConfigVo;
+import com.nbug.mico.common.vo.UserSignMonthVo;
+import com.nbug.mico.common.vo.UserSignVo;
+import com.nbug.module.user.dal.UserSignDao;
 import com.nbug.module.user.service.UserExperienceRecordService;
 import com.nbug.module.user.service.UserIntegralRecordService;
 import com.nbug.module.user.service.UserLevelService;
@@ -364,7 +364,7 @@ public class UserSignServiceImpl extends ServiceImpl<UserSignDao, UserSign> impl
     private Integer getCount(Integer userId) {
         LambdaQueryWrapper<UserSign> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(UserSign::getUid, userId).eq(UserSign::getType, 1);
-        return dao.selectCount(lambdaQueryWrapper);
+        return Math.toIntExact(dao.selectCount(lambdaQueryWrapper));
     }
 
     /**
@@ -392,7 +392,7 @@ public class UserSignServiceImpl extends ServiceImpl<UserSignDao, UserSign> impl
     private Integer signCount(Integer userId) {
         LambdaQueryWrapper<UserSign> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(UserSign::getUid, userId);
-        return dao.selectCount(lambdaQueryWrapper);
+        return Math.toIntExact(dao.selectCount(lambdaQueryWrapper));
     }
 
     /**

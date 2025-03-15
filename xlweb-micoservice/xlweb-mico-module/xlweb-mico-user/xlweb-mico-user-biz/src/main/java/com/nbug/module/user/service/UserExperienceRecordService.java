@@ -1,8 +1,8 @@
 package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.user.UserExperienceRecord;
-import com.nbug.common.request.PageParamRequest;
+import com.nbug.mico.common.model.user.UserExperienceRecord;
+import com.nbug.mico.common.request.PageParamRequest;
 
 import java.util.List;
 

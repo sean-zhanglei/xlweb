@@ -1,8 +1,5 @@
 package com.nbug.module.infra.controller.admin.logger.vo.apierrorlog;
 
-import com.nbug.depends.excel.core.annotations.DictFormat;
-import com.nbug.depends.excel.core.convert.DictConvert;
-import com.nbug.infra.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,8 +25,6 @@ public class ApiErrorLogRespVO {
     private Integer userId;
 
     @Schema(description = "用户类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
-    @ExcelProperty(value = "用户类型", converter = DictConvert.class)
-    @DictFormat(cn.iocoder.yudao.module.system.enums.DictTypeConstants.USER_TYPE)
     private Integer userType;
 
     @Schema(description = "应用名", requiredMode = Schema.RequiredMode.REQUIRED, example = "dashboard")
@@ -93,8 +88,6 @@ public class ApiErrorLogRespVO {
     private Integer exceptionLineNumber;
 
     @Schema(description = "处理状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "0")
-    @ExcelProperty(value = "处理状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.API_ERROR_LOG_PROCESS_STATUS)
     private Integer processStatus;
 
     @Schema(description = "处理时间", requiredMode = Schema.RequiredMode.REQUIRED)

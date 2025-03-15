@@ -1,0 +1,4 @@
+/**
+ * user API 包，定义暴露给其它模块的 API
+ */
+package com.nbug.module.user.api;

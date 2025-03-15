@@ -11,22 +11,24 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.constants.BrokerageRecordConstants;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.model.finance.UserExtract;
-import com.nbug.common.model.user.User;
-import com.nbug.common.model.user.UserBrokerageRecord;
-import com.nbug.common.page.CommonPage;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.UserExtractRequest;
-import com.nbug.common.request.UserExtractSearchRequest;
-import com.nbug.common.response.BalanceResponse;
-import com.nbug.common.response.UserExtractRecordResponse;
-import com.nbug.common.response.UserExtractResponse;
-import com.nbug.common.utils.date.DateUtil;
-import com.nbug.common.vo.dateLimitUtilVo;
-import com.nbug.module.user.dao.UserExtractDao;
+import com.nbug.mico.common.constants.BrokerageRecordConstants;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.finance.UserExtract;
+import com.nbug.mico.common.model.user.User;
+import com.nbug.mico.common.model.user.UserBrokerageRecord;
+import com.nbug.mico.common.page.CommonPage;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.UserExtractRequest;
+import com.nbug.mico.common.request.UserExtractSearchRequest;
+import com.nbug.mico.common.response.BalanceResponse;
+import com.nbug.mico.common.response.UserExtractRecordResponse;
+import com.nbug.mico.common.response.UserExtractResponse;
+import com.nbug.mico.common.utils.date.DateUtil;
+import com.nbug.mico.common.vo.dateLimitUtilVo;
+import com.nbug.module.infra.api.attachment.AttachmentApi;
+import com.nbug.module.infra.api.config.ConfigApi;
+import com.nbug.module.user.dal.UserExtractDao;
 import com.nbug.module.user.service.UserBrokerageRecordService;
 import com.nbug.module.user.service.UserExtractService;
 import com.nbug.module.user.service.UserService;
@@ -60,10 +62,10 @@ public class UserExtractServiceImpl extends ServiceImpl<UserExtractDao, UserExtr
     private UserService userService;
 
     @Autowired
-    private SystemConfigService systemConfigService;
+    private ConfigApi configApi;
 
     @Autowired
-    private SystemAttachmentService systemAttachmentService;
+    private AttachmentApi attachmentApi;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -357,7 +359,7 @@ public class UserExtractServiceImpl extends ServiceImpl<UserExtractDao, UserExtr
     @Override
     public Boolean extractApply(UserExtractRequest request) {
         //添加判断，提现金额不能后台配置金额
-        String value = systemConfigService.getValueByKeyException(Constants.CONFIG_EXTRACT_MIN_PRICE);
+        String value = configApi.getValueByKeyException(Constants.CONFIG_EXTRACT_MIN_PRICE).getCheckedData();
         BigDecimal ten = new BigDecimal(value);
         if (request.getExtractPrice().compareTo(ten) < 0) {
             throw new XlwebException(StrUtil.format("最低提现金额{}元", ten));
@@ -382,7 +384,7 @@ public class UserExtractServiceImpl extends ServiceImpl<UserExtractDao, UserExtr
         userExtract.setBalance(money.subtract(request.getExtractPrice()));
         //存入银行名称
         if (StrUtil.isNotBlank(userExtract.getQrcodeUrl())) {
-            userExtract.setQrcodeUrl(systemAttachmentService.clearPrefix(userExtract.getQrcodeUrl()));
+            userExtract.setQrcodeUrl(attachmentApi.clearPrefix(userExtract.getQrcodeUrl()).getCheckedData());
         }
 
         // 添加佣金记录
@@ -433,7 +435,7 @@ public class UserExtractServiceImpl extends ServiceImpl<UserExtractDao, UserExtr
     public Integer getNotAuditNum() {
         LambdaQueryWrapper<UserExtract> lqw = Wrappers.lambdaQuery();
         lqw.eq(UserExtract::getStatus, 0);
-        return dao.selectCount(lqw);
+        return Math.toIntExact(dao.selectCount(lqw));
     }
 }
 

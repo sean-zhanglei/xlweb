@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
-import com.nbug.common.constants.ExperienceRecordConstants;
-import com.nbug.common.model.user.UserExperienceRecord;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.module.user.dao.UserExperienceRecordDao;
+import com.nbug.mico.common.constants.ExperienceRecordConstants;
+import com.nbug.mico.common.model.user.UserExperienceRecord;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.module.user.dal.UserExperienceRecordDao;
 import com.nbug.module.user.service.UserExperienceRecordService;
 import org.springframework.stereotype.Service;
 

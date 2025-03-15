@@ -2,13 +2,13 @@ package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.model.finance.UserExtract;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.UserExtractRequest;
-import com.nbug.common.request.UserExtractSearchRequest;
-import com.nbug.common.response.BalanceResponse;
-import com.nbug.common.response.UserExtractRecordResponse;
-import com.nbug.common.response.UserExtractResponse;
+import com.nbug.mico.common.model.finance.UserExtract;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.UserExtractRequest;
+import com.nbug.mico.common.request.UserExtractSearchRequest;
+import com.nbug.mico.common.response.BalanceResponse;
+import com.nbug.mico.common.response.UserExtractRecordResponse;
+import com.nbug.mico.common.response.UserExtractResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

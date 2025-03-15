@@ -1,7 +1,7 @@
 package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.user.UserToken;
+import com.nbug.mico.common.model.user.UserToken;
 
 /**
  * UserTokenService 接口实现

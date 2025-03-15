@@ -2,10 +2,10 @@ package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.model.user.UserBrokerageRecord;
-import com.nbug.common.request.BrokerageRecordRequest;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.vo.UserFundsMonitor;
+import com.nbug.mico.common.model.user.UserBrokerageRecord;
+import com.nbug.mico.common.request.BrokerageRecordRequest;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.vo.UserFundsMonitor;
 
 /**
 *  UserRechargeService 接口

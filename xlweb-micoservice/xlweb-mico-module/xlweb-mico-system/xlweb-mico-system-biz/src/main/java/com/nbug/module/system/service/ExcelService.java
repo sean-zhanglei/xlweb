@@ -1,15 +1,16 @@
-package com.nbug.module.system.module.system.service;
+package com.nbug.module.infra.service.excel;
 
-import com.nbug.common.request.StoreBargainSearchRequest;
-import com.nbug.common.request.StoreCombinationSearchRequest;
-import com.nbug.common.request.StoreOrderSearchRequest;
-import com.nbug.common.request.StoreProductSearchRequest;
+
+import com.nbug.mico.common.request.StoreBargainSearchRequest;
+import com.nbug.mico.common.request.StoreCombinationSearchRequest;
+import com.nbug.mico.common.request.StoreOrderSearchRequest;
+import com.nbug.mico.common.request.StoreProductSearchRequest;
 
 /**
 * StoreProductService 接口
 
 */
-public interface ExcelService{
+public interface ExcelService {
 
     /**
      * 导出砍价商品

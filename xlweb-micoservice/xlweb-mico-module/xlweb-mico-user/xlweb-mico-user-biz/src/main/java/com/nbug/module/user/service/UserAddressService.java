@@ -1,9 +1,9 @@
 package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.user.UserAddress;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.UserAddressRequest;
+import com.nbug.mico.common.model.user.UserAddress;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.UserAddressRequest;
 
 import java.util.List;
 

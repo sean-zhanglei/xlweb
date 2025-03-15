@@ -1,4 +1,4 @@
-package com.nbug.module.system.api.oauth2.dto;
+package cn.iocoder.yudao.module.system.api.oauth2.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,21 +1,16 @@
-package com.nbug.module.system.api.oauth2;
+package cn.iocoder.yudao.module.system.api.oauth2;
 
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.system.api.oauth2.dto.OAuth2AccessTokenCheckRespDTO;
-import com.nbug.module.system.api.oauth2.dto.OAuth2AccessTokenCreateReqDTO;
-import com.nbug.module.system.api.oauth2.dto.OAuth2AccessTokenRespDTO;
-import com.nbug.module.system.enums.ApiConstants;
-import io.swagger.v3.oas.annotations.Operation;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.module.system.api.oauth2.dto.OAuth2AccessTokenCheckRespDTO;
+import cn.iocoder.yudao.module.system.api.oauth2.dto.OAuth2AccessTokenCreateReqDTO;
+import cn.iocoder.yudao.module.system.api.oauth2.dto.OAuth2AccessTokenRespDTO;
+import cn.iocoder.yudao.module.system.enums.ApiConstants;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -49,7 +44,7 @@ public interface OAuth2TokenApi {
     @Operation(summary = "刷新访问令牌")
     @Parameters({
         @Parameter(name = "refreshToken", description = "刷新令牌", required = true, example = "haha"),
-        @Parameter(name = "clientId", description = "客户端编号", required = true, example = "xlwebyuanma")
+        @Parameter(name = "clientId", description = "客户端编号", required = true, example = "yudaoyuanma")
     })
     CommonResult<OAuth2AccessTokenRespDTO> refreshAccessToken(@RequestParam("refreshToken") String refreshToken,
                                                               @RequestParam("clientId") String clientId);

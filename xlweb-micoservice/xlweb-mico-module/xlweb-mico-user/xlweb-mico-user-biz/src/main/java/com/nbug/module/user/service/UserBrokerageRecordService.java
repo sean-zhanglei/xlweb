@@ -2,11 +2,11 @@ package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.model.user.UserBrokerageRecord;
-import com.nbug.common.request.BrokerageRecordRequest;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.RetailShopStairUserRequest;
-import com.nbug.common.response.SpreadCommissionDetailResponse;
+import com.nbug.mico.common.model.user.UserBrokerageRecord;
+import com.nbug.mico.common.request.BrokerageRecordRequest;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.RetailShopStairUserRequest;
+import com.nbug.mico.common.response.SpreadCommissionDetailResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

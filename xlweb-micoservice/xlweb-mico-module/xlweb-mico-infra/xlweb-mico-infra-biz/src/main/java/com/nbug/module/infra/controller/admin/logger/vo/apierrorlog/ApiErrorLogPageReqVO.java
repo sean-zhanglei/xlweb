@@ -1,6 +1,6 @@
 package com.nbug.module.infra.controller.admin.logger.vo.apierrorlog;
 
-import com.nbug.common.pojo.PageParam;
+import com.nbug.mico.common.pojo.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,8 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-import static com.nbug.common.utils.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
-
+import static com.nbug.mico.common.utils.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
 @Schema(description = "管理后台 - API 错误日志分页 Request VO")
 @Data

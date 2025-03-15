@@ -1,24 +1,23 @@
-package com.nbug.module.system.module.system.service.impl;
+package com.nbug.module.system.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.nbug.common.config.XlwebConfig;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.request.SystemConfigAdminRequest;
-import com.nbug.common.request.SystemFormCheckRequest;
-import com.nbug.common.request.SystemFormItemCheckRequest;
-import com.nbug.common.utils.RedisUtil;
-import com.nbug.common.vo.ExpressSheetVo;
-import com.nbug.common.model.system.SystemConfig;
-import com.nbug.module.system.module.system.dao.SystemConfigDao;
-import com.nbug.module.system.module.system.service.SystemAttachmentService;
-import com.nbug.module.system.module.system.service.SystemConfigService;
-import com.nbug.module.system.module.system.service.SystemFormTempService;
+import com.nbug.mico.common.config.XlwebConfig;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.system.SystemConfig;
+import com.nbug.mico.common.request.SystemConfigAdminRequest;
+import com.nbug.mico.common.request.SystemFormCheckRequest;
+import com.nbug.mico.common.request.SystemFormItemCheckRequest;
+import com.nbug.mico.common.utils.redis.RedisUtil;
+import com.nbug.mico.common.vo.ExpressSheetVo;
+import com.nbug.module.infra.dal.SystemConfigDao;
+import com.nbug.module.infra.service.attachment.SystemAttachmentService;
+import com.nbug.module.infra.service.config.SystemConfigService;
+import com.nbug.module.infra.service.formTemp.SystemFormTempService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigDao, System
     private RedisUtil redisUtil;
 
     @Autowired
-    XlwebConfig xlwebConfig;
+    private XlwebConfig xlwebConfig;
 
     private static final String redisKey = Constants.CONFIG_LIST;
 
@@ -208,7 +207,7 @@ public class SystemConfigServiceImpl extends ServiceImpl<SystemConfigDao, System
         lambdaQueryWrapper1.eq(SystemConfig::getFormId, formId);
         List<SystemConfig> systemConfigList = dao.selectList(lambdaQueryWrapper1);
         if (ObjectUtil.isNull(systemConfigList)) {
-            return CollUtil.newHashMap();
+            return new HashMap();
         }
         HashMap<String, String> map = new HashMap<>();
         for (SystemConfig systemConfig : systemConfigList) {

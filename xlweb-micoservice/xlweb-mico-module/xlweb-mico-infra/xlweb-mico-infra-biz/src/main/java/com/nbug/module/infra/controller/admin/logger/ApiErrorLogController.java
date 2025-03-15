@@ -1,14 +1,11 @@
 package com.nbug.module.infra.controller.admin.logger;
 
-import com.nbug.common.pojo.CommonResult;
-import com.nbug.common.pojo.PageParam;
-import com.nbug.common.pojo.PageResult;
-import com.nbug.common.utils.object.BeanUtils;
-import com.nbug.depends.excel.core.util.ExcelUtils;
-import com.nbug.depends.web.apilog.core.annotation.ApiAccessLog;
+import com.nbug.mico.common.pojo.CommonResult;
+import com.nbug.mico.common.pojo.PageResult;
+import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogRespVO;
-import com.nbug.module.infra.dal.dataobject.logger.ApiErrorLogDO;
+import com.nbug.module.infra.dal.logger.ApiErrorLogDO;
 import com.nbug.module.infra.service.logger.ApiErrorLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,18 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.util.List;
 
-import static com.nbug.common.pojo.CommonResult.success;
-import static com.nbug.depends.web.apilog.core.enums.OperateTypeEnum.EXPORT;
-import static com.nbug.depends.web.web.core.util.WebFrameworkUtils.getLoginUserId;
+import static com.nbug.mico.common.pojo.CommonResult.success;
+import static com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils.getLoginUserId;
 
 @Tag(name = "管理后台 - API 错误日志")
 @RestController
-@RequestMapping("/infra/api-error-log")
+@RequestMapping("/api/admin/infra/api-error-log")
 @Validated
 public class ApiErrorLogController {
 
@@ -60,19 +53,6 @@ public class ApiErrorLogController {
     public CommonResult<PageResult<ApiErrorLogRespVO>> getApiErrorLogPage(@Valid ApiErrorLogPageReqVO pageReqVO) {
         PageResult<ApiErrorLogDO> pageResult = apiErrorLogService.getApiErrorLogPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, ApiErrorLogRespVO.class));
-    }
-
-    @GetMapping("/export-excel")
-    @Operation(summary = "导出 API 错误日志 Excel")
-    @PreAuthorize("@ss.hasPermission('infra:api-error-log:export')")
-    @ApiAccessLog(operateType = EXPORT)
-    public void exportApiErrorLogExcel(@Valid ApiErrorLogPageReqVO exportReqVO,
-              HttpServletResponse response) throws IOException {
-        exportReqVO.setPageSize(PageParam.PAGE_SIZE_NONE);
-        List<ApiErrorLogDO> list = apiErrorLogService.getApiErrorLogPage(exportReqVO).getList();
-        // 导出 Excel
-        ExcelUtils.write(response, "API 错误日志.xls", "数据", ApiErrorLogRespVO.class,
-                BeanUtils.toBean(list, ApiErrorLogRespVO.class));
     }
 
 }

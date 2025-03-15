@@ -1,7 +1,7 @@
 package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.nbug.common.model.record.UserVisitRecord;
+import com.nbug.mico.common.model.record.UserVisitRecord;
 
 /**
  * UserVisitRecordService 接口

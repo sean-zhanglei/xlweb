@@ -1,14 +1,14 @@
-package com.nbug.module.infra.service.logger;
+package cn.iocoder.yudao.module.infra.service.logger;
 
-import com.nbug.common.pojo.PageResult;
-import com.nbug.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
-import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
-import com.nbug.module.infra.dal.dataobject.logger.ApiAccessLogDO;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
+import cn.iocoder.yudao.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
+import cn.iocoder.yudao.module.infra.dal.dataobject.logger.ApiAccessLogDO;
 
 /**
  * API 访问日志 Service 接口
  *
- * @author NBUG
+ * @author 芋道源码
  */
 public interface ApiAccessLogService {
 

@@ -1,13 +1,11 @@
 package com.nbug.module.user.framework.rpc.config;
 
-import cn.iocoder.yudao.module.system.api.logger.LoginLogApi;
-import cn.iocoder.yudao.module.system.api.sms.SmsCodeApi;
-import cn.iocoder.yudao.module.system.api.social.SocialClientApi;
-import cn.iocoder.yudao.module.system.api.social.SocialUserApi;
+import com.nbug.module.infra.api.attachment.AttachmentApi;
+import com.nbug.module.infra.api.config.ConfigApi;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
-@EnableFeignClients(clients = {SmsCodeApi.class, LoginLogApi.class, SocialUserApi.class, SocialClientApi.class})
+@EnableFeignClients(clients = {ConfigApi.class, AttachmentApi.class})
 public class RpcConfiguration {
 }

@@ -1,4 +1,4 @@
-package com.nbug.module.infra.enums.logger;
+package cn.iocoder.yudao.module.infra.enums.logger;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * API 异常数据的处理状态
  *
- * @author NBUG
+ * @author 芋道源码
  */
 @AllArgsConstructor
 @Getter

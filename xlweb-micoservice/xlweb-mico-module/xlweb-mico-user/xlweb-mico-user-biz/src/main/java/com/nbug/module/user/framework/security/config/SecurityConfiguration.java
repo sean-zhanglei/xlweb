@@ -1,5 +1,7 @@
 package com.nbug.module.user.framework.security.config;
 
+import com.nbug.module.system.depends.security.security.config.AuthorizeRequestsCustomizer;
+import com.nbug.module.user.enums.ApiConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,7 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 /**
  * Member 模块的 Security 配置
  */
-@Configuration("memberSecurityConfiguration")
+@Configuration("userSecurityConfiguration")
 public class SecurityConfiguration {
 
     @Bean("memberAuthorizeRequestsCustomizer")

@@ -2,10 +2,10 @@ package com.nbug.module.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.model.finance.UserRecharge;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.UserRechargeSearchRequest;
-import com.nbug.common.response.UserRechargeResponse;
+import com.nbug.mico.common.model.finance.UserRecharge;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.UserRechargeSearchRequest;
+import com.nbug.mico.common.response.UserRechargeResponse;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

@@ -10,19 +10,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.nbug.common.constants.Constants;
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.model.finance.UserRecharge;
-import com.nbug.common.model.user.User;
-import com.nbug.common.page.CommonPage;
-import com.nbug.common.request.PageParamRequest;
-import com.nbug.common.request.UserRechargeSearchRequest;
-import com.nbug.common.response.UserRechargeResponse;
-import com.nbug.common.utils.date.DateUtil;
-import com.nbug.common.vo.dateLimitUtilVo;
+import com.nbug.mico.common.constants.Constants;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.finance.UserRecharge;
+import com.nbug.mico.common.model.user.User;
+import com.nbug.mico.common.page.CommonPage;
+import com.nbug.mico.common.request.PageParamRequest;
+import com.nbug.mico.common.request.UserRechargeSearchRequest;
+import com.nbug.mico.common.response.UserRechargeResponse;
+import com.nbug.mico.common.utils.date.DateUtil;
+import com.nbug.mico.common.vo.dateLimitUtilVo;
+import com.nbug.module.user.dal.UserRechargeDao;
 import com.nbug.module.user.service.UserRechargeService;
 import com.nbug.module.user.service.UserService;
-import com.nbug.module.user.dao.UserRechargeDao;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -154,7 +154,7 @@ public class UserRechargeServiceImpl extends ServiceImpl<UserRechargeDao, UserRe
         wrapper.select("id");
         wrapper.eq("paid", 1);
         wrapper.apply("date_format(create_time, '%Y-%m-%d') = {0}", date);
-        return dao.selectCount(wrapper);
+        return Math.toIntExact(dao.selectCount(wrapper));
     }
 
     /**
