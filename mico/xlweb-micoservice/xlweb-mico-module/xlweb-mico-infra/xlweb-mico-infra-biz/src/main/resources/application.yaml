@@ -1,6 +1,3 @@
-server:
-  port: 48082
-
 spring:
   application:
     name: xlweb-mico-infra-server
@@ -21,11 +18,14 @@ spring:
   servlet:
     # 文件上传相关配置项
     multipart:
-      max-file-size: 16MB # 单个文件大小
-      max-request-size: 32MB # 设置总上传的文件大小
+      max-file-size: 50MB #设置单个文件大小
+      max-request-size: 50MB #设置单次请求文件的总大小
 
   # Jackson 配置项
   jackson:
+    locale: zh_CN
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
     serialization:
       write-dates-as-timestamps: true # 设置 LocalDateTime 的格式，使用时间戳
       write-date-timestamps-as-nanoseconds: false # 设置不使用 nanoseconds 的格式。例如说 1611460870.401，而是直接 1611460870401
@@ -37,10 +37,6 @@ spring:
     type: REDIS
     redis:
       time-to-live: 1h # 设置过期时间为 1 小时
-
-logging:
-  file:
-    name: ${user.home}/logs/${spring.application.name}.log # 日志文件名，全路径
 
 --- #################### 接口文档配置 ####################
 
@@ -60,7 +56,11 @@ knife4j:
 
 # MyBatis Plus 的配置项
 mybatis-plus:
+  mapper-locations: classpath*:mapper/*/*Mapper.xml #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  type-aliases-package: ${xlweb.info.base-package}.dal
   configuration:
+    # 配置slq打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
   global-config:
     db-config:
@@ -71,7 +71,6 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
     banner: false # 关闭控制台的 Banner 打印
-  type-aliases-package: ${xlweb.info.base-package}.dal.dataobject
   encryptor:
     password: XDV71a+xqStEA3WH # 加解密的秘钥，可使用 https://www.imaegoo.com/2020/aes-key-generator/ 网站生成
 
@@ -94,10 +93,10 @@ easy-trans:
 --- #################### 消息队列相关 ####################
 
 # rocketmq 配置项，对应 RocketMQProperties 配置类
-rocketmq:
-  # Producer 配置项
-  producer:
-    group: ${spring.application.name}_PRODUCER # 生产者分组
+#rocketmq:
+#  # Producer 配置项
+#  producer:
+#    group: ${spring.application.name}_PRODUCER # 生产者分组
 
 #spring:
 #  # Kafka 配置项，对应 KafkaProperties 配置类
@@ -131,7 +130,10 @@ xxl:
 xlweb:
   info:
     version: 1.0.0
-    base-package: com.nbug.xlweb.module.infra
+    base-package: com.nbug.module.infra
+  web:
+    admin-ui:
+      url: http://nbug.top # Admin 管理后台 UI 的地址
   xss:
     enable: false
     exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
@@ -141,21 +143,22 @@ xlweb:
     enable: true # websocket的开关
     path: /infra/ws # 路径
     sender-type: local # 消息发送的类型，可选值为 local、redis、rocketmq、kafka、rabbitmq
-    sender-rocketmq:
-      topic: ${spring.application.name}-websocket # 消息发送的 RocketMQ Topic
-      consumer-group: ${spring.application.name}-websocket-consumer # 消息发送的 RocketMQ Consumer Group
+#    sender-rocketmq:
+#      topic: ${spring.application.name}-websocket # 消息发送的 RocketMQ Topic
+#      consumer-group: ${spring.application.name}-websocket-consumer # 消息发送的 RocketMQ Consumer Group
     sender-rabbitmq:
       exchange: ${spring.application.name}-websocket-exchange # 消息发送的 RabbitMQ Exchange
       queue: ${spring.application.name}-websocket-queue # 消息发送的 RabbitMQ Queue
-    sender-kafka:
-      topic: ${spring.application.name}-websocket # 消息发送的 Kafka Topic
-      consumer-group: ${spring.application.name}-websocket-consumer # 消息发送的 Kafka Consumer Group
+#    sender-kafka:
+#      topic: ${spring.application.name}-websocket # 消息发送的 Kafka Topic
+#      consumer-group: ${spring.application.name}-websocket-consumer # 消息发送的 Kafka Consumer Group
+
   swagger:
     title: 管理后台
     description: 提供管理员管理的所有功能
     version: ${xlweb.info.version}
 #  codegen:
-#    base-package: com.nbug.xlweb
+#    base-package: com.nbug.module.infra
 #    db-schemas: ${spring.datasource.dynamic.datasource.master.name}
 #    front-type: 20 # 前端模版的类型，参见 CodegenFrontTypeEnum 枚举类
 #    unit-test-enable: false # 是否生成单元测试
@@ -165,12 +168,13 @@ xlweb:
       - /admin-api/infra/file/*/get/** # 获取图片，和租户无关
     ignore-tables:
       - infra_config
-      - infra_file_config
-      - infra_file
-      - infra_file_content
-      - infra_job
-      - infra_job_log
-      - infra_job_log
-      - infra_data_source_config
 
-debug: false
+debug: true
+logging:
+  level:
+    io.swagger.*: error
+    com.nbug.*: debug
+    org.springframework.boot.autoconfigure: ERROR
+  config: classpath:logback-spring.xml
+  file:
+    name: logs/${spring.application.name}.log # 日志文件名，全路径

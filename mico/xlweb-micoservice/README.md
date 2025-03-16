@@ -2,6 +2,7 @@
 1. Java Jdk1.8
 2. Redis 5+ 测试版本7
 3. Mysql 5.7+  测试版本8.0.18
+4. Flyway 最后支持Mysql版本 8.2.0
 
 # 微服务组件
 1. SpringCloudGateWay 网关 3.1.9

@@ -1,2 +1,2 @@
 org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.nbug.depends.mybatis.config.IdTypeEnvironmentPostProcessor
+  com.nbug.depends.mybatis.plus.config.IdTypeEnvironmentPostProcessor

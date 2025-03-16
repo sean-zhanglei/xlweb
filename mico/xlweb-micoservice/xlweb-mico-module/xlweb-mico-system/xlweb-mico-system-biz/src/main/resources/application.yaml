@@ -108,7 +108,7 @@ xxl:
 xlweb:
   info:
     version: 1.0.0
-    base-package: com.nbug.module.user
+    base-package: com.nbug.module.system
   web:
     admin-ui:
       url: http://dashboard.xlweb.iocoder.cn # Admin 管理后台 UI 的地址
