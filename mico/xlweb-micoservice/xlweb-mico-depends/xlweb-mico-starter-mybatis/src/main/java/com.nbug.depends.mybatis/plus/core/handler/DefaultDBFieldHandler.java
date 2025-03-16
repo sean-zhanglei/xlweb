@@ -1,8 +1,8 @@
 package com.nbug.depends.mybatis.plus.core.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import com.nbug.mico.common.model.dataobject.BaseDO;
-import com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils;
 import org.apache.ibatis.reflection.MetaObject;
 
 import java.time.LocalDateTime;

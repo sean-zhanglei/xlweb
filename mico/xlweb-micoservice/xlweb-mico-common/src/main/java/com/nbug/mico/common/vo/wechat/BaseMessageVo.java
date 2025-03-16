@@ -1,4 +1,4 @@
-package com.nbug.module.infra.service.wechat.vo;
+package com.nbug.mico.common.vo.wechat;
 
 import com.nbug.mico.common.utils.date.DateUtil;
 import io.swagger.v3.oas.annotations.media.Schema;

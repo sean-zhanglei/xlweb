@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
 import com.nbug.depends.protect.idempotent.core.keyresolver.IdempotentKeyResolver;
-import com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils;
+import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import org.aspectj.lang.JoinPoint;
 
 /**

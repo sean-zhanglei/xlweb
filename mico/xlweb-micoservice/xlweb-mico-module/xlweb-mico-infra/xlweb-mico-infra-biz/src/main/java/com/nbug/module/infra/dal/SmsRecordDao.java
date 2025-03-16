@@ -1,7 +1,7 @@
-package com.nbug.service.dao;
+package com.nbug.module.infra.dal;
 
-import com.nbug.common.model.sms.SmsRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.nbug.mico.common.model.sms.SmsRecord;
 
 /**
  * 短信发送记录表 Mapper 接口

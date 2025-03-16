@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.nbug.depends.protect.ratelimiter.core.annotation.RateLimiter;
 import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
-import com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils;
+import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import org.aspectj.lang.JoinPoint;
 
 /**

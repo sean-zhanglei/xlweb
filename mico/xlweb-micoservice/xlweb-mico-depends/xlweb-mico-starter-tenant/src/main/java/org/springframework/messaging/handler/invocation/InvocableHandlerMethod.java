@@ -16,8 +16,8 @@
 
 package org.springframework.messaging.handler.invocation;
 
-import com.nbug.module.system.depends.tenant.core.context.TenantContextHolder;
-import com.nbug.module.system.depends.tenant.core.util.TenantUtils;
+import com.nbug.depends.tenant.core.context.TenantContextHolder;
+import com.nbug.depends.tenant.core.util.TenantUtils;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-import static com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils.HEADER_TENANT_ID;
+import static com.nbug.depends.web.web.core.util.WebFrameworkUtils.HEADER_TENANT_ID;
 
 /**
  * Extension of {@link HandlerMethod} that invokes the underlying method with

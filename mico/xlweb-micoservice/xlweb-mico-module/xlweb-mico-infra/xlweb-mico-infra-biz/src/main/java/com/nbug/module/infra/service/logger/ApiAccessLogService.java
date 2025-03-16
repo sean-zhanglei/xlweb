@@ -1,10 +1,10 @@
 package com.nbug.module.infra.service.logger;
 
 
+import com.nbug.mico.common.model.logger.ApiAccessLog;
 import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
-import com.nbug.module.infra.dal.logger.ApiAccessLogDO;
 
 /**
  * API 访问日志 Service 接口
@@ -26,7 +26,7 @@ public interface ApiAccessLogService {
      * @param pageReqVO 分页查询
      * @return API 访问日志分页
      */
-    PageResult<ApiAccessLogDO> getApiAccessLogPage(ApiAccessLogPageReqVO pageReqVO);
+    PageResult<ApiAccessLog> getApiAccessLogPage(ApiAccessLogPageReqVO pageReqVO);
 
     /**
      * 清理 exceedDay 天前的访问日志

@@ -1,39 +1,56 @@
-package com.nbug.module.infra.api.config;
+package com.nbug.module.infra.api.wechat;
 
 import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.mico.common.vo.ExpressSheetVo;
+import com.nbug.mico.common.token.WeChatOauthToken;
+import com.nbug.mico.common.vo.CreateOrderRequestVo;
+import com.nbug.mico.common.vo.CreateOrderResponseVo;
+import com.nbug.mico.common.vo.WeChatAuthorizeLoginUserInfoVo;
+import com.nbug.mico.common.vo.WeChatMiniAuthorizeVo;
+import com.nbug.mico.common.vo.WxRefundResponseVo;
+import com.nbug.mico.common.vo.WxRefundVo;
 import com.nbug.module.infra.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.List;
+@FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
+@Tag(name = "RPC 服务 - 微信")
+public interface WechatNewApi {
 
-@FeignClient(name = ApiConstants.NAME) // TODO 芋艿：fallbackFactory =
-@Tag(name = "RPC 服务 - 参数配置")
-public interface ConfigApi {
+    String PREFIX = ApiConstants.PREFIX + "/wechatNew";
 
-    String PREFIX = ApiConstants.PREFIX + "/config";
+    @PostMapping(PREFIX + "/payUnifiedorder")
+    @Operation(summary = "微信预下单接口(统一下单)")
+    @Parameter(name = "unifiedorderVo", description = "统一下单参数", required = true)
+    public CommonResult<CreateOrderResponseVo> payUnifiedorder(CreateOrderRequestVo unifiedorderVo);
 
-    @GetMapping(PREFIX + "/getValueByKeyException")
-    @Operation(summary = "根据 name 获取 value 找不到抛异常")
-    @Parameter(name = "name", description = "name", required = true)
-    CommonResult<String> getValueByKeyException(String name);
+    @PostMapping(PREFIX + "/payRefund")
+    @Operation(summary = "微信退款接口")
+    @Parameters({
+            @Parameter(name = "wxRefundVo", description = "微信退款参数", required = true),
+            @Parameter(name = "path", description = "退款路径", required = true)
+    })
+    public CommonResult<WxRefundResponseVo> payRefund(WxRefundVo wxRefundVo, String path);
 
-    @GetMapping(PREFIX + "/getValueByKey")
-    @Operation(summary = "根据menu name 获取 value")
-    @Parameter(name = "key", description = "key", required = true)
-    CommonResult<String> getValueByKey(String key);
+    @GetMapping(PREFIX + "/miniAuthCode")
+    @Operation(summary = "微信小程序授权登录")
+    @Parameter(name = "code", description = "微信授权码", required = true)
+    public CommonResult<WeChatMiniAuthorizeVo> miniAuthCode(String code);
 
-    @GetMapping(PREFIX + "/getDeliveryInfo")
-    @Operation(summary = "获取面单默认配置信息")
-    public CommonResult<ExpressSheetVo> getDeliveryInfo();
+    @GetMapping(PREFIX + "/getOauth2AccessToken")
+    @Operation(summary = "微信授权登录")
+    @Parameter(name = "code", description = "微信授权码", required = true)
+    public CommonResult<WeChatOauthToken> getOauth2AccessToken(String code);
 
-    @GetMapping(PREFIX + "/getValuesByKes")
-    @Operation(summary = "同时获取多个配置")
-    @Parameter(name = "keys", description = "keys", required = true)
-    public CommonResult<List<String>> getValuesByKes(List<String> keys);
-
+    @GetMapping(PREFIX + "/getSnsUserInfo")
+    @Operation(summary = "获取开放平台用户信息")
+    @Parameters({
+            @Parameter(name = "accessToken", description = "accessToken", required = true),
+            @Parameter(name = "openid", description = "openid", required = true)
+    })
+    public CommonResult<WeChatAuthorizeLoginUserInfoVo> getSnsUserInfo(String accessToken, String openid);
 }

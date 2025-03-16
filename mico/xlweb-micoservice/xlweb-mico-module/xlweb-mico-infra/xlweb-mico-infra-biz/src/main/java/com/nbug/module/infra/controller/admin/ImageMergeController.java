@@ -1,14 +1,17 @@
-package com.nbug.admin.pub;
+package com.nbug.module.infra.controller.admin;
 
-import com.nbug.common.response.CommonResult;
-import com.nbug.common.utils.ImageMergeUtil;
-import com.nbug.common.vo.ImageMergeUtilVo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import com.nbug.mico.common.pojo.CommonResult;
+import com.nbug.mico.common.utils.ImageMergeUtil;
+import com.nbug.mico.common.vo.ImageMergeUtilVo;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +24,11 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("api/public/qrcode")
-@Api(tags = "图片操作")
+@Tag(name = "图片操作")
 public class ImageMergeController {
 
     @PreAuthorize("hasAuthority('public:qrcode:merge:list')")
-    @ApiOperation(value = "合并图片返回文件")
+    @Operation(summary = "合并图片返回文件")
     @RequestMapping(value = "/mergeList", method = RequestMethod.POST)
     public CommonResult<Map<String, String>> mergeList(@RequestBody @Validated List<ImageMergeUtilVo> list){
         Map<String, String> map = new HashMap<>();

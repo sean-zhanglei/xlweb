@@ -1,10 +1,10 @@
-package cn.iocoder.yudao.module.infra.dal.mysql.logger;
+package com.nbug.module.infra.dal.logger;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
-import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
-import cn.iocoder.yudao.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
-import cn.iocoder.yudao.module.infra.dal.dataobject.logger.ApiErrorLogDO;
+import com.nbug.depends.mybatis.plus.core.mapper.BaseMapperX;
+import com.nbug.depends.mybatis.plus.core.query.LambdaQueryWrapperX;
+import com.nbug.mico.common.model.logger.ApiErrorLog;
+import com.nbug.mico.common.pojo.PageResult;
+import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,20 +14,20 @@ import java.time.LocalDateTime;
 /**
  * API 错误日志 Mapper
  *
- * @author 芋道源码
+ * @author NBUG
  */
 @Mapper
-public interface ApiErrorLogMapper extends BaseMapperX<ApiErrorLogDO> {
+public interface ApiErrorLogDao extends BaseMapperX<ApiErrorLog> {
 
-    default PageResult<ApiErrorLogDO> selectPage(ApiErrorLogPageReqVO reqVO) {
-        return selectPage(reqVO, new LambdaQueryWrapperX<ApiErrorLogDO>()
-                .eqIfPresent(ApiErrorLogDO::getUserId, reqVO.getUserId())
-                .eqIfPresent(ApiErrorLogDO::getUserType, reqVO.getUserType())
-                .eqIfPresent(ApiErrorLogDO::getApplicationName, reqVO.getApplicationName())
-                .likeIfPresent(ApiErrorLogDO::getRequestUrl, reqVO.getRequestUrl())
-                .betweenIfPresent(ApiErrorLogDO::getExceptionTime, reqVO.getExceptionTime())
-                .eqIfPresent(ApiErrorLogDO::getProcessStatus, reqVO.getProcessStatus())
-                .orderByDesc(ApiErrorLogDO::getId)
+    default PageResult<ApiErrorLog> selectPage(ApiErrorLogPageReqVO reqVO) {
+        return selectPage(reqVO, new LambdaQueryWrapperX<ApiErrorLog>()
+                .eqIfPresent(ApiErrorLog::getUserId, reqVO.getUserId())
+                .eqIfPresent(ApiErrorLog::getUserType, reqVO.getUserType())
+                .eqIfPresent(ApiErrorLog::getApplicationName, reqVO.getApplicationName())
+                .likeIfPresent(ApiErrorLog::getRequestUrl, reqVO.getRequestUrl())
+                .betweenIfPresent(ApiErrorLog::getExceptionTime, reqVO.getExceptionTime())
+                .eqIfPresent(ApiErrorLog::getProcessStatus, reqVO.getProcessStatus())
+                .orderByDesc(ApiErrorLog::getId)
         );
     }
 
@@ -38,7 +38,7 @@ public interface ApiErrorLogMapper extends BaseMapperX<ApiErrorLogDO> {
      * @param limit 删除条数，防止一次删除太多
      * @return 删除条数
      */
-    @Delete("DELETE FROM infra_api_error_log WHERE create_time < #{createTime} LIMIT #{limit}")
+    @Delete("DELETE FROM eb_infra_api_error_log WHERE create_time < #{createTime} LIMIT #{limit}")
     Integer deleteByCreateTimeLt(@Param("createTime") LocalDateTime createTime, @Param("limit")Integer limit);
 
 }

@@ -1,8 +1,8 @@
-package com.nbug.module.system.depends.web.desensitize.core.handler;
+package com.nbug.depends.web.desensitize.core.handler;
 
-import com.nbug.module.system.depends.web.desensitize.core.DesensitizeTest;
-import com.nbug.module.system.depends.web.desensitize.core.base.handler.DesensitizationHandler;
-import com.nbug.module.system.depends.web.desensitize.core.annotation.Address;
+import com.nbug.depends.web.desensitize.core.DesensitizeTest;
+import com.nbug.depends.web.desensitize.core.base.handler.DesensitizationHandler;
+import com.nbug.depends.web.desensitize.core.annotation.Address;
 
 /**
  * {@link Address} 的脱敏处理器

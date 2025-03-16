@@ -1,14 +1,14 @@
 package com.nbug.module.infra.service.logger;
 
 import cn.hutool.core.util.StrUtil;
+import com.nbug.depends.tenant.core.context.TenantContextHolder;
+import com.nbug.depends.tenant.core.util.TenantUtils;
+import com.nbug.mico.common.model.logger.ApiAccessLog;
 import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
-import com.nbug.module.infra.dal.logger.ApiAccessLogDO;
 import com.nbug.module.infra.dal.logger.ApiAccessLogDao;
-import com.nbug.module.system.depends.tenant.core.context.TenantContextHolder;
-import com.nbug.module.system.depends.tenant.core.util.TenantUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -16,8 +16,9 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
-import static com.nbug.module.infra.dal.logger.ApiAccessLogDO.REQUEST_PARAMS_MAX_LENGTH;
-import static com.nbug.module.infra.dal.logger.ApiAccessLogDO.RESULT_MSG_MAX_LENGTH;
+import static com.nbug.mico.common.model.logger.ApiAccessLog.REQUEST_PARAMS_MAX_LENGTH;
+import static com.nbug.mico.common.model.logger.ApiAccessLog.RESULT_MSG_MAX_LENGTH;
+
 
 /**
  * API 访问日志 Service 实现类
@@ -34,7 +35,7 @@ public class ApiAccessLogServiceImpl implements ApiAccessLogService {
 
     @Override
     public void createApiAccessLog(ApiAccessLogCreateReqDTO createDTO) {
-        ApiAccessLogDO apiAccessLog = BeanUtils.toBean(createDTO, ApiAccessLogDO.class);
+        ApiAccessLog apiAccessLog = BeanUtils.toBean(createDTO, ApiAccessLog.class);
         apiAccessLog.setRequestParams(StrUtil.maxLength(apiAccessLog.getRequestParams(), REQUEST_PARAMS_MAX_LENGTH));
         apiAccessLog.setResultMsg(StrUtil.maxLength(apiAccessLog.getResultMsg(), RESULT_MSG_MAX_LENGTH));
         if (TenantContextHolder.getTenantId() != null) {
@@ -46,7 +47,7 @@ public class ApiAccessLogServiceImpl implements ApiAccessLogService {
     }
 
     @Override
-    public PageResult<ApiAccessLogDO> getApiAccessLogPage(ApiAccessLogPageReqVO pageReqVO) {
+    public PageResult<ApiAccessLog> getApiAccessLogPage(ApiAccessLogPageReqVO pageReqVO) {
         return apiAccessLogDao.selectPage(pageReqVO);
     }
 

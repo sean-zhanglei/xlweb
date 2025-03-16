@@ -1,6 +1,7 @@
-package cn.iocoder.yudao.module.infra.enums;
+package com.nbug.module.infra.enums;
 
-import cn.iocoder.yudao.framework.common.exception.ErrorCode;
+
+import com.nbug.mico.common.exception.ErrorCode;
 
 /**
  * Infra 错误码枚举类

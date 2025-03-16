@@ -1,6 +1,6 @@
-package com.nbug.service.dao;
+package com.nbug.module.infra.dal;
 
-import com.nbug.common.model.wechat.WechatQrcode;
+import com.nbug.mico.common.model.wechat.WechatQrcode;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -17,7 +17,6 @@ import com.nbug.mico.common.utils.SecurityUtil;
 import com.nbug.mico.common.vo.LoginUserVo;
 import com.nbug.mico.common.vo.MenuTree;
 import com.nbug.module.infra.api.validateCode.ValidateCodeApi;
-import com.nbug.module.system.depends.web.web.core.filter.TokenComponent;
 import com.nbug.module.system.service.AdminLoginService;
 import com.nbug.module.system.service.SystemAdminService;
 import com.nbug.module.system.service.SystemConfigService;
@@ -47,7 +46,7 @@ import java.util.stream.Stream;
 public class AdminLoginServiceImpl implements AdminLoginService {
 
     @Resource
-    private TokenComponent tokenComponent;
+    private com.nbug.admin.filter.TokenComponent tokenComponent;
 
     @Resource
     private AuthenticationManager authenticationManager;

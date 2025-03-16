@@ -1,11 +1,11 @@
 package com.nbug.module.infra.controller.admin.logger;
 
+import com.nbug.mico.common.model.logger.ApiErrorLog;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogRespVO;
-import com.nbug.module.infra.dal.logger.ApiErrorLogDO;
 import com.nbug.module.infra.service.logger.ApiErrorLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
+import static com.nbug.depends.web.web.core.util.WebFrameworkUtils.getLoginUserId;
 import static com.nbug.mico.common.pojo.CommonResult.success;
-import static com.nbug.module.system.depends.web.web.core.util.WebFrameworkUtils.getLoginUserId;
 
 @Tag(name = "管理后台 - API 错误日志")
 @RestController
@@ -51,7 +51,7 @@ public class ApiErrorLogController {
     @Operation(summary = "获得 API 错误日志分页")
     @PreAuthorize("@ss.hasPermission('infra:api-error-log:query')")
     public CommonResult<PageResult<ApiErrorLogRespVO>> getApiErrorLogPage(@Valid ApiErrorLogPageReqVO pageReqVO) {
-        PageResult<ApiErrorLogDO> pageResult = apiErrorLogService.getApiErrorLogPage(pageReqVO);
+        PageResult<ApiErrorLog> pageResult = apiErrorLogService.getApiErrorLogPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, ApiErrorLogRespVO.class));
     }
 

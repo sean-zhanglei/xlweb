@@ -1,10 +1,10 @@
 package com.nbug.module.infra.service.logger;
 
 
+import com.nbug.mico.common.model.logger.ApiErrorLog;
 import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.module.infra.api.logger.dto.ApiErrorLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
-import com.nbug.module.infra.dal.logger.ApiErrorLogDO;
 
 /**
  * API 错误日志 Service 接口
@@ -26,7 +26,7 @@ public interface ApiErrorLogService {
      * @param pageReqVO 分页查询
      * @return API 错误日志分页
      */
-    PageResult<ApiErrorLogDO> getApiErrorLogPage(ApiErrorLogPageReqVO pageReqVO);
+    PageResult<ApiErrorLog> getApiErrorLogPage(ApiErrorLogPageReqVO pageReqVO);
 
     /**
      * 更新 API 错误日志已处理

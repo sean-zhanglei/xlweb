@@ -1,4 +1,4 @@
-package com.nbug.mico.common.acpect;
+package com.nbug.module.infra.acpect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

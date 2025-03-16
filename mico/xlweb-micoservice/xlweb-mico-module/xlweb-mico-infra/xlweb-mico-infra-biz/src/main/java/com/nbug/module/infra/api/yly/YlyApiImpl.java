@@ -1,26 +1,33 @@
-package com.nbug.module.infra.api.file;
+package com.nbug.module.infra.api.yly;
 
-import com.nbug.common.pojo.CommonResult;
-import com.nbug.infra.api.file.dto.FileCreateReqDTO;
-import com.nbug.module.infra.service.file.FileService;
+import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
+import com.nbug.mico.common.pojo.CommonResult;
+import com.nbug.module.infra.service.Yly.YlyPrintService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.nbug.common.pojo.CommonResult.success;
-
 @RestController // 提供 RESTful API 接口，给 Feign 调用
 @Validated
-public class FileApiImpl implements FileApi {
+public class YlyApiImpl implements  YlyApiApi{
 
     @Resource
-    private FileService fileService;
+    private YlyPrintService ylyPrintService;
 
+    /**
+     * 易联云打印商品信息
+     * @param ordId 订单id
+     * @param isAuto 是否自动打印
+     */
     @Override
-    public CommonResult<String> createFile(FileCreateReqDTO createReqDTO) {
-        return success(fileService.createFile(createReqDTO.getName(), createReqDTO.getPath(),
-                createReqDTO.getContent()));
+    public CommonResult<String> YlyPrint(String ordId, boolean isAuto) {
+        try {
+            ylyPrintService.YlyPrint(ordId, isAuto);
+            return CommonResult.success("success");
+        } catch (Exception e) {
+            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

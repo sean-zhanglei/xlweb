@@ -1,8 +1,8 @@
-package com.nbug.module.system.depends.web.desensitize.core.annotation;
+package com.nbug.depends.web.desensitize.core.annotation;
 
-import com.nbug.module.system.depends.web.desensitize.core.DesensitizeTest;
-import com.nbug.module.system.depends.web.desensitize.core.base.annotation.DesensitizeBy;
-import com.nbug.module.system.depends.web.desensitize.core.handler.AddressHandler;
+import com.nbug.depends.web.desensitize.core.DesensitizeTest;
+import com.nbug.depends.web.desensitize.core.base.annotation.DesensitizeBy;
+import com.nbug.depends.web.desensitize.core.handler.AddressHandler;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 
 import java.lang.annotation.Documented;

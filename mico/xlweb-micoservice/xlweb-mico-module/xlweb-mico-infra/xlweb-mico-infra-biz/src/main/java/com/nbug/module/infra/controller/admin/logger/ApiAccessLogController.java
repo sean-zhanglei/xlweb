@@ -1,11 +1,11 @@
 package com.nbug.module.infra.controller.admin.logger;
 
+import com.nbug.mico.common.model.logger.ApiAccessLog;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogRespVO;
-import com.nbug.module.infra.dal.logger.ApiAccessLogDO;
 import com.nbug.module.infra.service.logger.ApiAccessLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +33,7 @@ public class ApiAccessLogController {
     @Operation(summary = "获得API 访问日志分页")
     @PreAuthorize("@ss.hasPermission('infra:api-access-log:query')")
     public CommonResult<PageResult<ApiAccessLogRespVO>> getApiAccessLogPage(@Valid ApiAccessLogPageReqVO pageReqVO) {
-        PageResult<ApiAccessLogDO> pageResult = apiAccessLogService.getApiAccessLogPage(pageReqVO);
+        PageResult<ApiAccessLog> pageResult = apiAccessLogService.getApiAccessLogPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, ApiAccessLogRespVO.class));
     }
 

@@ -1,4 +1,4 @@
-package com.nbug.module.infra.service.wechat.vo;
+package com.nbug.mico.common.vo.wechat;
 
 import com.nbug.mico.common.constants.WeChatConstants;
 import io.swagger.v3.oas.annotations.media.Schema;

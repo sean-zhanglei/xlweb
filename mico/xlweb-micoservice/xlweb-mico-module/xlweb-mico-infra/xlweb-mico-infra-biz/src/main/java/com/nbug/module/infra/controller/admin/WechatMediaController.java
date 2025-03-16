@@ -1,10 +1,11 @@
-package com.nbug.admin.controller;
+package com.nbug.module.infra.controller.admin;
 
-import com.nbug.common.response.CommonResult;
-import com.nbug.service.service.WechatMediaService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import com.nbug.mico.common.pojo.CommonResult;
+import com.nbug.module.infra.service.wechat.WechatMediaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/wechat/media")
-@Api(tags = "微信开放平台 -- 素材")
+@Tag(name = "微信开放平台 -- 素材")
 public class WechatMediaController {
 
     @Autowired
@@ -33,11 +34,15 @@ public class WechatMediaController {
      * 上传
      */
     @PreAuthorize("hasAuthority('admin:wechat:media:upload')")
-    @ApiOperation(value = "上传")
+    @Operation(summary = "上传")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @Parameters(value = {
+            @Parameter(name = "media", description = "待上传素材图片文件", required = true),
+            @Parameter(name = "type", description = "媒体文件类型，分别有图片（image）、语音（voice", required = true)
+    })
     public CommonResult<Map<String, String>> upload(
-            @RequestParam("media") @ApiParam(name = "media", value = "待上传素材图片文件", required = true) MultipartFile file,
-            @RequestParam("type") @ApiParam(name = "type", value = "媒体文件类型，分别有图片（image）、语音（voice", required = true, allowableValues = "range[image,voice]") String type
+            @RequestParam("media") MultipartFile file,
+            @RequestParam("type")  String type
     ) {
         return CommonResult.success(wechatMediaService.upload(file, type));
     }
