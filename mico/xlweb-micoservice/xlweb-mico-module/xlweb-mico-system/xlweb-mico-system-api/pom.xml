@@ -33,6 +33,11 @@
             <artifactId>easy-trans-spring-boot-starter</artifactId>
             <scope>provided</scope> <!-- 设置为 provided，主要是 PageParam 使用到 -->
         </dependency>
+        <dependency>
+            <groupId>com.fhs-opensource</groupId>
+            <artifactId>easy-trans-mybatis-plus-extend</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- Web 相关 -->
         <dependency>
             <groupId>org.springdoc</groupId>

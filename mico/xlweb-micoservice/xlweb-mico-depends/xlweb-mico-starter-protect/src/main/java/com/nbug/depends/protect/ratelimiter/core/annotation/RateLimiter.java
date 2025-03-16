@@ -1,12 +1,12 @@
-package cn.iocoder.yudao.framework.ratelimiter.core.annotation;
+package com.nbug.depends.protect.ratelimiter.core.annotation;
 
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
-import cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl.ExpressionIdempotentKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl.ClientIpRateLimiterKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl.DefaultRateLimiterKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl.ServerNodeRateLimiterKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl.UserRateLimiterKeyResolver;
+import com.nbug.depends.protect.idempotent.core.keyresolver.impl.ExpressionIdempotentKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.ClientIpRateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.DefaultRateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.ServerNodeRateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.UserRateLimiterKeyResolver;
+import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 限流注解
  *
- * @author 芋道源码
+ * @author NBUG
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

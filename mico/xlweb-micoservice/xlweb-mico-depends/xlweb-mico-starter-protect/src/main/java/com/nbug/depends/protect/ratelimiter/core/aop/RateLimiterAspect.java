@@ -1,12 +1,12 @@
-package cn.iocoder.yudao.framework.ratelimiter.core.aop;
+package com.nbug.depends.protect.ratelimiter.core.aop;
 
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.framework.ratelimiter.core.annotation.RateLimiter;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
-import cn.iocoder.yudao.framework.ratelimiter.core.redis.RateLimiterRedisDAO;
+import com.nbug.depends.protect.ratelimiter.core.annotation.RateLimiter;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.redis.RateLimiterRedisDAO;
+import com.nbug.mico.common.exception.ServiceException;
+import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
+import com.nbug.mico.common.utils.collection.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * 拦截声明了 {@link RateLimiter} 注解的方法，实现限流操作
  *
- * @author 芋道源码
+ * @author NBUG
  */
 @Aspect
 @Slf4j

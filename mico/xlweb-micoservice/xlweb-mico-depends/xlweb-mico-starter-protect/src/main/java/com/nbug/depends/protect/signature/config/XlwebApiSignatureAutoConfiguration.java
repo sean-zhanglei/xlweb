@@ -1,8 +1,8 @@
 package com.nbug.depends.protect.signature.config;
 
-import com.nbug.depends.protect.redis.config.XlwebRedisAutoConfiguration;
 import com.nbug.depends.protect.signature.core.aop.ApiSignatureAspect;
 import com.nbug.depends.protect.signature.core.redis.ApiSignatureRedisDAO;
+import com.nbug.depends.redis.config.XlwebRedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;

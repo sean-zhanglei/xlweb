@@ -1,9 +1,9 @@
-package cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl;
+package com.nbug.depends.protect.idempotent.core.keyresolver.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import cn.iocoder.yudao.framework.idempotent.core.annotation.Idempotent;
-import cn.iocoder.yudao.framework.idempotent.core.keyresolver.IdempotentKeyResolver;
+import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
+import com.nbug.depends.protect.idempotent.core.keyresolver.IdempotentKeyResolver;
 import org.aspectj.lang.JoinPoint;
 
 /**
@@ -11,7 +11,7 @@ import org.aspectj.lang.JoinPoint;
  *
  * 为了避免 Key 过长，使用 MD5 进行“压缩”
  *
- * @author 芋道源码
+ * @author NBUG
  */
 public class DefaultIdempotentKeyResolver implements IdempotentKeyResolver {
 

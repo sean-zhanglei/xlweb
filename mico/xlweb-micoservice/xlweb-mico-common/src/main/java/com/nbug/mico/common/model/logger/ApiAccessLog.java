@@ -1,30 +1,32 @@
-package cn.iocoder.yudao.module.infra.dal.dataobject.logger;
+package com.nbug.mico.common.model.logger;
 
-import cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
-import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import com.nbug.mico.common.enums.UserTypeEnum;
+import com.nbug.mico.common.model.dataobject.BaseDO;
+import com.nbug.mico.common.pojo.CommonResult;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 /**
  * API 访问日志
  *
- * @author 芋道源码
+ * @author NBUG
  */
-@TableName("infra_api_access_log")
-@KeySequence(value = "infra_api_access_log_seq")
+@TableName("eb_infra_api_access_log")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiAccessLogDO extends BaseDO {
+public class ApiAccessLog extends BaseDO {
 
     /**
      * {@link #requestParams} 的最大长度
@@ -107,7 +109,6 @@ public class ApiAccessLogDO extends BaseDO {
     /**
      * 操作分类
      *
-     * 枚举 {@link OperateTypeEnum}
      */
     private Integer operateType;
 

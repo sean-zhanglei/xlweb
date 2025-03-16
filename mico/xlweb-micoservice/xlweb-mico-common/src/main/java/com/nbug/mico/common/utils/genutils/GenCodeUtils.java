@@ -1,23 +1,28 @@
-package com.nbug.common.utils.genutils;
+package com.nbug.mico.common.utils.genutils;
 
 
-import com.nbug.common.exception.XlwebException;
-import com.nbug.common.model.gencode.mysql.ColumnEntity;
-import com.nbug.common.model.gencode.mysql.TableEntity;
-import com.nbug.common.utils.DateUtil;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import com.nbug.mico.common.exception.XlwebException;
+import com.nbug.mico.common.model.gencode.mysql.ColumnEntity;
+import com.nbug.mico.common.model.gencode.mysql.TableEntity;
+import com.nbug.mico.common.utils.date.DateUtil;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 

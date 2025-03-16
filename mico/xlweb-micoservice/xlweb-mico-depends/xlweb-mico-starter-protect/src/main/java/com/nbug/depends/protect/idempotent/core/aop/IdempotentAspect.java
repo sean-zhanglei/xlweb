@@ -1,11 +1,11 @@
-package cn.iocoder.yudao.framework.idempotent.core.aop;
+package com.nbug.depends.protect.idempotent.core.aop;
 
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.framework.idempotent.core.annotation.Idempotent;
-import cn.iocoder.yudao.framework.idempotent.core.keyresolver.IdempotentKeyResolver;
-import cn.iocoder.yudao.framework.idempotent.core.redis.IdempotentRedisDAO;
+import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
+import com.nbug.depends.protect.idempotent.core.keyresolver.IdempotentKeyResolver;
+import com.nbug.depends.protect.idempotent.core.redis.IdempotentRedisDAO;
+import com.nbug.mico.common.exception.ServiceException;
+import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
+import com.nbug.mico.common.utils.collection.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * 拦截声明了 {@link Idempotent} 注解的方法，实现幂等操作
  *
- * @author 芋道源码
+ * @author NBUG
  */
 @Aspect
 @Slf4j

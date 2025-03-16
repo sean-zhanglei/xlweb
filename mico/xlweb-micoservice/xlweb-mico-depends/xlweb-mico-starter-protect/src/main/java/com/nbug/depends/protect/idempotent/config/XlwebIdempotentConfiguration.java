@@ -6,7 +6,7 @@ import com.nbug.depends.protect.idempotent.core.keyresolver.impl.DefaultIdempote
 import com.nbug.depends.protect.idempotent.core.keyresolver.impl.ExpressionIdempotentKeyResolver;
 import com.nbug.depends.protect.idempotent.core.keyresolver.impl.UserIdempotentKeyResolver;
 import com.nbug.depends.protect.idempotent.core.redis.IdempotentRedisDAO;
-import com.nbug.depends.protect.redis.config.XlwebRedisAutoConfiguration;
+import com.nbug.depends.redis.config.XlwebRedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;

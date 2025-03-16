@@ -16,11 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.nbug</groupId>
             <artifactId>xlweb-mico-common</artifactId>
             <scope>provided</scope>

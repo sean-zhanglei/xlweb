@@ -1,8 +1,8 @@
-package cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl;
+package com.nbug.depends.protect.ratelimiter.core.keyresolver.impl;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.iocoder.yudao.framework.ratelimiter.core.annotation.RateLimiter;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.annotation.RateLimiter;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 /**
  * 基于 Spring EL 表达式的 {@link RateLimiterKeyResolver} 实现类
  *
- * @author 芋道源码
+ * @author NBUG
  */
 public class ExpressionRateLimiterKeyResolver implements RateLimiterKeyResolver {
 

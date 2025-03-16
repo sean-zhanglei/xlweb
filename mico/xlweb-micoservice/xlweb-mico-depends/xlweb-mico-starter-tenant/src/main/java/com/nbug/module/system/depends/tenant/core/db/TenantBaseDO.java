@@ -1,6 +1,6 @@
 package com.nbug.module.system.depends.tenant.core.db;
 
-import com.nbug.depends.mybatis.plus.core.dataobject.BaseDO;
+import com.nbug.mico.common.model.dataobject.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

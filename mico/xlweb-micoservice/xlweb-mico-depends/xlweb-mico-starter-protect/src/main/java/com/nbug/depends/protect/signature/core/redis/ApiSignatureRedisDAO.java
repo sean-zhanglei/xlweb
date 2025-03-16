@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.signature.core.redis;
+package com.nbug.depends.protect.signature.core.redis;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

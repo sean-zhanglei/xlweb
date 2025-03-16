@@ -19,10 +19,81 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-common</artifactId>
+        </dependency>
+
+        <!-- Spring 核心 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- Web 相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-web</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-system-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- spring boot 配置所需依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- RPC 远程调用相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-rpc</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- redis 相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- lock4j -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>redisson-spring-boot-starter</artifactId>
+                    <groupId>org.redisson</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 工具类相关 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+
+        <dependency>
+            <!-- Spring Boot 通用操作日志组件，基于注解实现 -->
+            <!-- 此组件解决的问题是：「谁」在「什么时间」对「什么」做了「什么事」 -->
+            <groupId>io.github.mouzt</groupId>
+            <artifactId>bizlog-sdk</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,26 +1,22 @@
 package com.nbug.mico.common.model.logger;
 
-import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.nbug.mico.common.enums.UserTypeEnum;
+import com.nbug.mico.common.model.dataobject.BaseDO;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
-import java.io.Serializable;
 
 /**
  * 登录日志表
  *
  * 注意，包括登录和登出两种行为
  *
- * @author 芋道源码
+ * @author NBUG
  */
-@TableName("system_login_log")
-@KeySequence("system_login_log_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
+@TableName("eb_system_login_log")
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class LoginLog implements Serializable {
+public class LoginLog extends BaseDO {
 
     /**
      * 日志主键
@@ -29,7 +25,6 @@ public class LoginLog implements Serializable {
     /**
      * 日志类型
      *
-     * 枚举 {@link LoginLogTypeEnum}
      */
     private Integer logType;
     /**
@@ -55,7 +50,6 @@ public class LoginLog implements Serializable {
     /**
      * 登录结果
      *
-     * 枚举 {@link LoginResultEnum}
      */
     private Integer result;
     /**

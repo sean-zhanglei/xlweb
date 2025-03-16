@@ -1,4 +1,4 @@
-package com.nbug.common.utils.genutils;
+package com.nbug.mico.common.utils.genutils;
 
 import java.io.Serializable;
 import java.util.List;

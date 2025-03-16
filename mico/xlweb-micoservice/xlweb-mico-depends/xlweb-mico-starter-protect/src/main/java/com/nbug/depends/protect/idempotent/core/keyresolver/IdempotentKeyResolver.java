@@ -1,12 +1,12 @@
-package cn.iocoder.yudao.framework.idempotent.core.keyresolver;
+package com.nbug.depends.protect.idempotent.core.keyresolver;
 
-import cn.iocoder.yudao.framework.idempotent.core.annotation.Idempotent;
+import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
 import org.aspectj.lang.JoinPoint;
 
 /**
  * 幂等 Key 解析器接口
  *
- * @author 芋道源码
+ * @author NBUG
  */
 public interface IdempotentKeyResolver {
 

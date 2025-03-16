@@ -1,10 +1,10 @@
-package cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.impl;
+package com.nbug.depends.protect.ratelimiter.core.keyresolver.impl;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.iocoder.yudao.framework.ratelimiter.core.annotation.RateLimiter;
-import cn.iocoder.yudao.framework.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.annotation.RateLimiter;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
+import com.nbug.mico.common.utils.ServletUtils;
 import org.aspectj.lang.JoinPoint;
 
 /**
@@ -12,7 +12,7 @@ import org.aspectj.lang.JoinPoint;
  *
  * 为了避免 Key 过长，使用 MD5 进行“压缩”
  *
- * @author 芋道源码
+ * @author NBUG
  */
 public class ClientIpRateLimiterKeyResolver implements RateLimiterKeyResolver {
 

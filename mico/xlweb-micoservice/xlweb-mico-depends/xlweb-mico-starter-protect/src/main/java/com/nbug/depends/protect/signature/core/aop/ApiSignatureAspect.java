@@ -1,14 +1,14 @@
-package cn.iocoder.yudao.framework.signature.core.aop;
+package com.nbug.depends.protect.signature.core.aop;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.iocoder.yudao.framework.signature.core.annotation.ApiSignature;
-import cn.iocoder.yudao.framework.signature.core.redis.ApiSignatureRedisDAO;
+import com.nbug.depends.protect.signature.core.annotation.ApiSignature;
+import com.nbug.depends.protect.signature.core.redis.ApiSignatureRedisDAO;
+import com.nbug.mico.common.exception.ServiceException;
+import com.nbug.mico.common.utils.ServletUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.BAD_REQUEST;
+import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.BAD_REQUEST;
 
 /**
  * 拦截声明了 {@link ApiSignature} 注解的方法，实现签名
