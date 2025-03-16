@@ -1,4 +1,5 @@
 HELP.md
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
@@ -44,4 +45,6 @@ src/main/.DS_Store
 
 
 
-xx
+### 项目日志
+/logs/
+derby.log
