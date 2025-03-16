@@ -1,4 +1,4 @@
-com.nbug.depends.protect.idempotent.config.XlwebIdempotentConfiguration
-com.nbug.depends.protect.lock4j.config.XlwebLock4jConfiguration
-com.nbug.depends.protect.ratelimiter.config.XlwebRateLimiterConfiguration
-com.nbug.depends.protect.signature.config.XlwebApiSignatureAutoConfiguration
+cn.iocoder.yudao.framework.idempotent.config.YudaoIdempotentConfiguration
+cn.iocoder.yudao.framework.lock4j.config.YudaoLock4jConfiguration
+cn.iocoder.yudao.framework.ratelimiter.config.YudaoRateLimiterConfiguration
+cn.iocoder.yudao.framework.signature.config.YudaoApiSignatureAutoConfiguration

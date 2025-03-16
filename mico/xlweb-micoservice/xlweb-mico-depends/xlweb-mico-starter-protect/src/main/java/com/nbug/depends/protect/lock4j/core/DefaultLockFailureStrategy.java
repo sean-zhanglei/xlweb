@@ -1,8 +1,8 @@
-package com.nbug.depends.protect.lock4j.core;
+package cn.iocoder.yudao.framework.lock4j.core;
 
+import cn.iocoder.yudao.framework.common.exception.ServiceException;
+import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
 import com.baomidou.lock.LockFailureStrategy;
-import com.nbug.mico.common.exception.ServiceException;
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;

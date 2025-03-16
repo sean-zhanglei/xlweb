@@ -1,9 +1,9 @@
-package com.nbug.depends.protect.idempotent.core.annotation;
+package cn.iocoder.yudao.framework.idempotent.core.annotation;
 
-import com.nbug.depends.protect.idempotent.core.keyresolver.IdempotentKeyResolver;
-import com.nbug.depends.protect.idempotent.core.keyresolver.impl.DefaultIdempotentKeyResolver;
-import com.nbug.depends.protect.idempotent.core.keyresolver.impl.ExpressionIdempotentKeyResolver;
-import com.nbug.depends.protect.idempotent.core.keyresolver.impl.UserIdempotentKeyResolver;
+import cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl.DefaultIdempotentKeyResolver;
+import cn.iocoder.yudao.framework.idempotent.core.keyresolver.IdempotentKeyResolver;
+import cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl.ExpressionIdempotentKeyResolver;
+import cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl.UserIdempotentKeyResolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 幂等注解
  *
- * @author NBUG
+ * @author 芋道源码
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

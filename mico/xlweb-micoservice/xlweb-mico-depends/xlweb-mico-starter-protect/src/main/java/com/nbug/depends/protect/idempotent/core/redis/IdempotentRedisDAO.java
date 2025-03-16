@@ -1,4 +1,4 @@
-package com.nbug.depends.protect.idempotent.core.redis;
+package cn.iocoder.yudao.framework.idempotent.core.redis;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 幂等 Redis DAO
  *
- * @author NBUG
+ * @author 芋道源码
  */
 @AllArgsConstructor
 public class IdempotentRedisDAO {

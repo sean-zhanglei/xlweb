@@ -1,14 +1,8 @@
-package com.nbug.depends.protect.signature.core.annotation;
+package cn.iocoder.yudao.framework.signature.core.annotation;
 
+import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 

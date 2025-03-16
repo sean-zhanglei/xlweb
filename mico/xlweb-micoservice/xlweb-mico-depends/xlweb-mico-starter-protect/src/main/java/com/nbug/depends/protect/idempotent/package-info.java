@@ -9,4 +9,4 @@
  * 此时，我们偏向使用 Lock4j 组件。原则上，一个组件只提供一种单一的能力。
  *  2. 考虑到组件的通用性，我们并未像 it4alla/idempotent 组件一样使用 Redisson RMap 结构，而是直接使用 Redis 的 String 数据格式。
  */
-package com.nbug.depends.protect.idempotent;
+package cn.iocoder.yudao.framework.idempotent;

@@ -2,13 +2,9 @@ package com.nbug.depends.protect.ratelimiter.config;
 
 import com.nbug.depends.protect.ratelimiter.core.aop.RateLimiterAspect;
 import com.nbug.depends.protect.ratelimiter.core.keyresolver.RateLimiterKeyResolver;
-import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.ClientIpRateLimiterKeyResolver;
-import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.DefaultRateLimiterKeyResolver;
-import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.ExpressionRateLimiterKeyResolver;
-import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.ServerNodeRateLimiterKeyResolver;
-import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.UserRateLimiterKeyResolver;
+import com.nbug.depends.protect.ratelimiter.core.keyresolver.impl.*;
 import com.nbug.depends.protect.ratelimiter.core.redis.RateLimiterRedisDAO;
-import com.nbug.depends.redis.config.XlwebRedisAutoConfiguration;
+import com.nbug.depends.protect.redis.config.XlwebRedisAutoConfiguration;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;

@@ -3,4 +3,4 @@
  *
  * @see <a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3>微信支付 —— 安全规范</a>
  */
-package com.nbug.depends.protect.signature;
+package cn.iocoder.yudao.framework.signature;

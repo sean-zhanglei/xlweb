@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/infra/wechat")
+@RequestMapping("api/infra/wechat")
 @Tag(name = "企业微信消息推送")
 public class WeChatWxWorkPushController {
 

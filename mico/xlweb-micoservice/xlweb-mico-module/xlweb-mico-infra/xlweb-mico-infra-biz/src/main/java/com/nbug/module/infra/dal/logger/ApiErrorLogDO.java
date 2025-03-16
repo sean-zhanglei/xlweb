@@ -1,33 +1,29 @@
-package com.nbug.module.infra.dal.logger;
+package cn.iocoder.yudao.module.infra.dal.dataobject.logger;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
+import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import cn.iocoder.yudao.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.nbug.mico.common.enums.UserTypeEnum;
-import com.nbug.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.apache.ibatis.type.JdbcType;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 /**
  * API 异常数据
  *
- * @author NUBG
+ * @author 芋道源码
  */
-@TableName("eb_api_error_log")
+@TableName("infra_api_error_log")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiErrorLogDO {
+@KeySequence(value = "infra_api_error_log_seq")
+public class ApiErrorLogDO extends BaseDO {
 
     /**
      * {@link #requestParams} 的最大长度
@@ -158,38 +154,8 @@ public class ApiErrorLogDO {
     /**
      * 处理用户编号
      *
-     * 关联 com.nbug.xlweb.adminserver.modules.system.dal.dataobject.user.SysUserDO.SysUserDO#getId()
+     * 关联 cn.iocoder.yudao.adminserver.modules.system.dal.dataobject.user.SysUserDO.SysUserDO#getId()
      */
     private Long processUserId;
 
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    /**
-     * 最后更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    /**
-     * 创建者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT, jdbcType = JdbcType.VARCHAR)
-    private String creator;
-    /**
-     * 更新者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.VARCHAR)
-    private String updater;
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    private Boolean deleted;
 }

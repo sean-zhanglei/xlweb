@@ -1,9 +1,9 @@
-package com.nbug.depends.protect.lock4j.core;
+package cn.iocoder.yudao.framework.lock4j.core;
 
 /**
  * Lock4j Redis Key 枚举类
  *
- * @author NBUG
+ * @author 芋道源码
  */
 public interface Lock4jRedisKeyConstants {
 

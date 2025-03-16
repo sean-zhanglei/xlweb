@@ -1,12 +1,12 @@
-package com.nbug.depends.protect.ratelimiter.core.keyresolver;
+package cn.iocoder.yudao.framework.ratelimiter.core.keyresolver;
 
-import com.nbug.depends.protect.ratelimiter.core.annotation.RateLimiter;
+import cn.iocoder.yudao.framework.ratelimiter.core.annotation.RateLimiter;
 import org.aspectj.lang.JoinPoint;
 
 /**
  * 限流 Key 解析器接口
  *
- * @author NBUG
+ * @author 芋道源码
  */
 public interface RateLimiterKeyResolver {
 

@@ -1,30 +1,23 @@
-package com.nbug.module.infra.dal.logger;
+package cn.iocoder.yudao.module.infra.dal.dataobject.logger;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import cn.iocoder.yudao.framework.apilog.core.enums.OperateTypeEnum;
+import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.nbug.depends.mybatis.plus.core.dataobject.BaseDO;
-import com.nbug.mico.common.enums.UserTypeEnum;
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.system.depends.web.apilog.core.enums.OperateTypeEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.apache.ibatis.type.JdbcType;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 /**
  * API 访问日志
  *
- * @author NUBG
+ * @author 芋道源码
  */
-@TableName("eb_api_access_log")
+@TableName("infra_api_access_log")
+@KeySequence(value = "infra_api_access_log_seq")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -143,35 +136,5 @@ public class ApiAccessLogDO extends BaseDO {
      * 目前使用的 {@link CommonResult#getMsg()} 属性
      */
     private String resultMsg;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    /**
-     * 最后更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    /**
-     * 创建者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT, jdbcType = JdbcType.VARCHAR)
-    private String creator;
-    /**
-     * 更新者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.VARCHAR)
-    private String updater;
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    private Boolean deleted;
 
 }

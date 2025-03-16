@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @Slf4j
 @RestController
-@RequestMapping("api/admin/infra/jsconfig")
+@RequestMapping("api/infra/jsconfig")
 @Tag(name = "公共JS配置")
 public class GetJSConfigController {
 

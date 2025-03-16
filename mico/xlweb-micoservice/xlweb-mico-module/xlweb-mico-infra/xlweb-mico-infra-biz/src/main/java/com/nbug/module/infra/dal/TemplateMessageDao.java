@@ -1,8 +1,8 @@
-package com.nbug.module.infra.dal;
+package com.nbug.service.dao;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.nbug.mico.common.model.wechat.TemplateMessage;
+import com.nbug.common.model.wechat.TemplateMessage;
 
 /**
  * 微信模板 Mapper 接口

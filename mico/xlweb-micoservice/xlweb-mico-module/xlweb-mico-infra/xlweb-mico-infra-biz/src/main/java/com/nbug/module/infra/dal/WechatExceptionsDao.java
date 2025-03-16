@@ -1,7 +1,7 @@
-package com.nbug.module.infra.dal;
+package com.nbug.service.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.nbug.mico.common.model.wechat.WechatExceptions;
+import com.nbug.common.model.wechat.WechatExceptions;
 
 /**
  *  微信异常表 Mapper 接口

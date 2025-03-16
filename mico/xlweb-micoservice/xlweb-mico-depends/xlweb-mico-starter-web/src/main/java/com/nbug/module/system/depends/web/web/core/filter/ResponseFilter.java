@@ -1,14 +1,9 @@
-package com.nbug.module.system.depends.web.web.core.filter;
+package com.nbug.admin.filter;
 
 
-import com.nbug.mico.common.utils.RequestUtil;
+import com.nbug.common.utils.RequestUtil;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

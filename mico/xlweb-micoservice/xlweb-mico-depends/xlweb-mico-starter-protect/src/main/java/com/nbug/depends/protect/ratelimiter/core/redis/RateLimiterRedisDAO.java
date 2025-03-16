@@ -1,11 +1,7 @@
-package com.nbug.depends.protect.ratelimiter.core.redis;
+package cn.iocoder.yudao.framework.ratelimiter.core.redis;
 
 import lombok.AllArgsConstructor;
-import org.redisson.api.RRateLimiter;
-import org.redisson.api.RateIntervalUnit;
-import org.redisson.api.RateLimiterConfig;
-import org.redisson.api.RateType;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 限流 Redis DAO
  *
- * @author NBUG
+ * @author 芋道源码
  */
 @AllArgsConstructor
 public class RateLimiterRedisDAO {

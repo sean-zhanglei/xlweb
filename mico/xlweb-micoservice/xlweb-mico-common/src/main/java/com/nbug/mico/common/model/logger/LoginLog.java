@@ -1,42 +1,36 @@
 package com.nbug.mico.common.model.logger;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.nbug.mico.common.enums.UserTypeEnum;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-import org.apache.ibatis.type.JdbcType;
+import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 登录日志表
  *
  * 注意，包括登录和登出两种行为
  *
- * @author NUBG
+ * @author 芋道源码
  */
-
+@TableName("system_login_log")
+@KeySequence("system_login_log_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-@TableName("eb_system_login_log")
-@Schema(name = "登录日志")
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class LoginLog implements Serializable {
 
     /**
      * 日志主键
      */
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-
+    private Long id;
+    /**
+     * 日志类型
+     *
+     * 枚举 {@link LoginLogTypeEnum}
+     */
     private Integer logType;
     /**
      * 链路追踪编号
@@ -58,9 +52,10 @@ public class LoginLog implements Serializable {
      * 冗余，因为账号可以变更
      */
     private String username;
-
     /**
      * 登录结果
+     *
+     * 枚举 {@link LoginResultEnum}
      */
     private Integer result;
     /**
@@ -71,35 +66,5 @@ public class LoginLog implements Serializable {
      * 浏览器 UA
      */
     private String userAgent;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
-    /**
-     * 最后更新时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
-    /**
-     * 创建者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT, jdbcType = JdbcType.VARCHAR)
-    private String creator;
-    /**
-     * 更新者，目前使用 SysUser 的 id 编号
-     *
-     * 使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.VARCHAR)
-    private String updater;
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    private Boolean deleted;
 
 }

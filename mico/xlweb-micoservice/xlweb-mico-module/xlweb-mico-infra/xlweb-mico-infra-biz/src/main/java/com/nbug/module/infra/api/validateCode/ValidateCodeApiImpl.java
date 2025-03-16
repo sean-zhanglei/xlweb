@@ -1,8 +1,7 @@
-package com.nbug.module.infra.api.validateCode;
+package com.nbug.module.infra.api.attachment;
 
 import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.infra.service.validateCode.ValidateCodeService;
-import com.nbug.mico.common.vo.ValidateCode;
+import com.nbug.module.infra.service.attachment.SystemAttachmentService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,25 +9,29 @@ import javax.annotation.Resource;
 
 @RestController // 提供 RESTful API 接口，给 Feign 调用
 @Validated
-public class ValidateCodeApiImpl implements ValidateCodeApi {
+public class AttachmentApiImpl implements AttachmentApi {
 
     @Resource
-    private ValidateCodeService validateCodeService;
+    private SystemAttachmentService systemAttachmentService;
 
     /**
-     * 验证验证码
+     * 清除 cdn url， 在保存数据的时候使用
+     * @param path
+     * @return
      */
     @Override
-    public CommonResult<Boolean> check(String key, String code) {
-        return CommonResult.success(validateCodeService.check(key, code));
+    public CommonResult<String> clearPrefix(String path) {
+        return CommonResult.success(systemAttachmentService.clearPrefix(path));
     }
 
     /**
-     * 获取图片验证码
-     * @return CommonResult
+     * 给图片加前缀
+     * @param path String 路径
+     * @return String
      */
     @Override
-    public CommonResult<ValidateCode> get() {
-        return CommonResult.success(validateCodeService.get());
+    public CommonResult<String> prefixImage(String path) {
+        return CommonResult.success(systemAttachmentService.prefixImage(path));
     }
+
 }

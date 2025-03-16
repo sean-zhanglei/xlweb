@@ -1,11 +1,9 @@
-package com.nbug.module.system.depends.security.security.core.filter;
+package com.nbug.module.system.depends.web.web.core.filter;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.nbug.mico.common.vo.LoginUserVo;
-import com.nbug.module.system.depends.web.web.core.filter.TokenComponent;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;

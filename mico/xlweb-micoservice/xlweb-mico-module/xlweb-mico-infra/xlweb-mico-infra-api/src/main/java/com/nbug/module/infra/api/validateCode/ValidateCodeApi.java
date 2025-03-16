@@ -1,31 +1,25 @@
-package com.nbug.module.infra.api.validateCode;
+package com.nbug.module.infra.api.attachment;
 
 import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.mico.common.vo.ValidateCode;
 import com.nbug.module.infra.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
-@Tag(name = "RPC 服务 - 验证码")
-public interface ValidateCodeApi {
+@FeignClient(name = ApiConstants.NAME) // TODO 芋艿：fallbackFactory =
+@Tag(name = "RPC 服务 - 参数配置")
+public interface AttachmentApi {
 
-    String PREFIX = ApiConstants.PREFIX + "/validateCode";
+    String PREFIX = ApiConstants.PREFIX + "/config";
 
-    @GetMapping(PREFIX + "/get")
-    @Operation(summary = "获取验证码")
-    public CommonResult<ValidateCode> get();
+    @GetMapping(PREFIX + "/clearPrefix")
+    @Operation(summary = "清除 cdn url， 在保存数据的时候使用")
+    CommonResult<String> clearPrefix(String path);
 
-    @PostMapping(PREFIX + "/check")
-    @Operation(summary = "校验验证码")
-    @Parameters({
-            @Parameter(name = "key", description = "验证码的 key", required = true),
-            @Parameter(name = "code", description = "验证码的 code", required = true)
-    })
-    public CommonResult<Boolean> check(String key, String code);
+    @GetMapping(PREFIX + "/prefixImage")
+    @Operation(summary = "给图片加前缀")
+    @Parameter(name = "path", description = "路径", required = true)
+    public CommonResult<String> prefixImage(String path);
 }

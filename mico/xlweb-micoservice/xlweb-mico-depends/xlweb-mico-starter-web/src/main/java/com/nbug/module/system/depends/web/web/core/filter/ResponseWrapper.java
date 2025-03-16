@@ -1,4 +1,4 @@
-package com.nbug.module.system.depends.web.web.core.filter;
+package com.nbug.admin.filter;
 
 
 import javax.servlet.ServletOutputStream;

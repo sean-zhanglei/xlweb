@@ -1,9 +1,10 @@
-package com.nbug.module.infra.controller.admin;
+package com.nbug.admin.controller;
 
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.infra.service.wechat.WechatPublicService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.alibaba.fastjson.JSONObject;
+import com.nbug.common.response.CommonResult;
+import com.nbug.service.service.WechatPublicService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,16 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 微信缓存表 前端控制器
 
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/infra/wechat/menu")
-@Tag(name = "微信开放平台 -- 菜单管理")
+@RequestMapping("api/admin/wechat/menu")
+@Api(tags = "微信开放平台 -- 菜单管理")
 public class WeChatController {
 
     @Autowired
@@ -31,7 +30,7 @@ public class WeChatController {
      * 获取微信菜单
      */
     @PreAuthorize("hasAuthority('admin:wechat:menu:public:get')")
-    @Operation(summary = "获取自定义菜单")
+    @ApiOperation(value = "获取自定义菜单")
     @RequestMapping(value = "/public/get", method = RequestMethod.GET)
     public CommonResult<Object> get() {
         return CommonResult.success(wechatPublicService.getCustomizeMenus());
@@ -42,26 +41,26 @@ public class WeChatController {
      * @param data 菜单数据，具体json格式参考微信开放平台
      */
     @PreAuthorize("hasAuthority('admin:wechat:menu:public:create')")
-    @Operation(summary = "保存自定义菜单")
+    @ApiOperation(value = "保存自定义菜单")
     @RequestMapping(value = "/public/create", method = RequestMethod.POST)
-    public CommonResult<String> create(@RequestBody String data) {
+    public CommonResult<JSONObject> create(@RequestBody String data) {
         if (wechatPublicService.createMenus(data)) {
-            return CommonResult.success("success");
+            return CommonResult.success();
         }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        return CommonResult.failed();
     }
 
     /**
      * 删除微信菜单
      */
     @PreAuthorize("hasAuthority('admin:wechat:menu:public:delete')")
-    @Operation(summary = "删除自定义菜单")
+    @ApiOperation(value = "删除自定义菜单")
     @RequestMapping(value = "/public/delete", method = RequestMethod.GET)
-    public CommonResult<String> delete() {
+    public CommonResult<JSONObject> delete() {
         if (wechatPublicService.deleteMenus()) {
-            return CommonResult.success("success");
+            return CommonResult.success();
         }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        return CommonResult.failed();
     }
 }
 

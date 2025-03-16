@@ -1,8 +1,8 @@
-package com.nbug.depends.protect.idempotent.core.keyresolver.impl;
+package cn.iocoder.yudao.framework.idempotent.core.keyresolver.impl;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
-import com.nbug.depends.protect.idempotent.core.keyresolver.IdempotentKeyResolver;
+import cn.iocoder.yudao.framework.idempotent.core.annotation.Idempotent;
+import cn.iocoder.yudao.framework.idempotent.core.keyresolver.IdempotentKeyResolver;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 /**
  * 基于 Spring EL 表达式，
  *
- * @author NBUG
+ * @author 芋道源码
  */
 public class ExpressionIdempotentKeyResolver implements IdempotentKeyResolver {
 

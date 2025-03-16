@@ -1,10 +1,10 @@
-package com.nbug.module.system.depends.web.web.core.filter;
+package com.nbug.admin.filter;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.nbug.mico.common.constants.Constants;
-import com.nbug.mico.common.utils.redis.RedisUtil;
-import com.nbug.mico.common.vo.LoginUserVo;
+import com.nbug.common.constants.Constants;
+import com.nbug.common.utils.RedisUtil;
+import com.nbug.common.vo.LoginUserVo;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

@@ -1,7 +1,7 @@
-package com.nbug.module.infra.dal;
+package com.nbug.service.dao;
 
+import com.nbug.common.model.system.SystemAttachment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.nbug.mico.common.model.system.SystemAttachment;
 
 /**
  * 附件管理表 Mapper 接口

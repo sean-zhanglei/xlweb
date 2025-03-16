@@ -1,11 +1,10 @@
-package com.nbug.module.infra.controller.admin;
+package com.nbug.admin.controller;
 
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.infra.service.wechat.WechatMediaService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.nbug.common.response.CommonResult;
+import com.nbug.service.service.WechatMediaService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,8 +22,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/infra/wechat/media")
-@Tag(name = "微信开放平台 -- 素材")
+@RequestMapping("api/admin/wechat/media")
+@Api(tags = "微信开放平台 -- 素材")
 public class WechatMediaController {
 
     @Autowired
@@ -34,15 +33,11 @@ public class WechatMediaController {
      * 上传
      */
     @PreAuthorize("hasAuthority('admin:wechat:media:upload')")
-    @Operation(summary = "上传")
-    @Parameters({
-            @Parameter(name = "media", description = "待上传素材图片文件", required = true),
-            @Parameter(name = "type", description = "媒体文件类型，分别有图片（image）、语音（voice", required = true)
-    })
+    @ApiOperation(value = "上传")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public CommonResult<Map<String, String>> upload(
-            @RequestParam("media") MultipartFile file,
-            @RequestParam("type") String type
+            @RequestParam("media") @ApiParam(name = "media", value = "待上传素材图片文件", required = true) MultipartFile file,
+            @RequestParam("type") @ApiParam(name = "type", value = "媒体文件类型，分别有图片（image）、语音（voice", required = true, allowableValues = "range[image,voice]") String type
     ) {
         return CommonResult.success(wechatMediaService.upload(file, type));
     }
