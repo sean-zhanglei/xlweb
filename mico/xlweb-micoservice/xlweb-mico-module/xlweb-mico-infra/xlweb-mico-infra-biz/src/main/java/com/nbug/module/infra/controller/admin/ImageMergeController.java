@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/public/qrcode")
+@RequestMapping("infra/qrcode")
 @Tag(name = "图片操作")
 public class ImageMergeController {
 

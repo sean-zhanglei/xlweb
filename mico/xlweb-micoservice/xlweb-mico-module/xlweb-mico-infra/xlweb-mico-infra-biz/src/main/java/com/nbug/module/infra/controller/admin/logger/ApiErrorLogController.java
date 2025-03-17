@@ -28,7 +28,7 @@ import static com.nbug.mico.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - API 错误日志")
 @RestController
-@RequestMapping("/api/admin/infra/api-error-log")
+@RequestMapping("infra/api-error-log")
 @Validated
 public class ApiErrorLogController {
 

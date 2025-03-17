@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/front/user/upload")
+@RequestMapping("infra/user/upload")
 @Tag(name = "上传文件")
 public class UploadFrontController {
 

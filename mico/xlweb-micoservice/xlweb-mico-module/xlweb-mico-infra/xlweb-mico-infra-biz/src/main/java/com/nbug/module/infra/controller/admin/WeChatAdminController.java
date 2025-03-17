@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController("WeChatAdminController")
-@RequestMapping("api/admin/wechat")
+@RequestMapping("infra/wechat")
 @Tag(name = "微信 -- 开放平台 admin")
 public class WeChatAdminController {
 

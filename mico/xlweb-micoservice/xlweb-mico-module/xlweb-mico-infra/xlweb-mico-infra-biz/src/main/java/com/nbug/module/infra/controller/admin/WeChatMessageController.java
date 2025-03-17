@@ -22,7 +22,7 @@ import java.io.PrintWriter;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/public/wechat/message")
+@RequestMapping("infra/wechat/message")
 @Tag(name = "微信开放平台 -- 消息")
 public class WeChatMessageController {
 

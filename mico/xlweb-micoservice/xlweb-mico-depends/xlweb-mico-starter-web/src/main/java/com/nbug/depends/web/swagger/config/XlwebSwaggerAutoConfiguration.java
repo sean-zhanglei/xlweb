@@ -118,7 +118,7 @@ public class XlwebSwaggerAutoConfiguration {
     public static GroupedOpenApi buildGroupedOpenApi(String group, String path) {
         return GroupedOpenApi.builder()
                 .group(group)
-                .pathsToMatch("/admin-api/" + path + "/**", "/app-api/" + path + "/**")
+                .pathsToMatch("/api/admin/" + path + "/**", "/api/front/" + path + "/**")
                 .addOperationCustomizer((operation, handlerMethod) -> operation
                         .addParametersItem(buildTenantHeaderParameter())
                         .addParametersItem(buildSecurityHeaderParameter()))

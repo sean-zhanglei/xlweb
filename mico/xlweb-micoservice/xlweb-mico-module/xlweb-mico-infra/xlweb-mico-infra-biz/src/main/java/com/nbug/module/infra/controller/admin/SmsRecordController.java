@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/sms")
+@RequestMapping("infra/sms")
 @Tag(name = "短信服务")
 public class SmsRecordController {
 

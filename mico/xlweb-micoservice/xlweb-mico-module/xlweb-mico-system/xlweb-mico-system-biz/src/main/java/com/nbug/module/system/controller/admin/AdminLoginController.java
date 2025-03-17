@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/login")
+@RequestMapping("api/admin/system/login")
 @Tag(name = "管理端登录服务")
 public class AdminLoginController {
 

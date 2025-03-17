@@ -23,7 +23,7 @@ import static com.nbug.mico.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - API 访问日志")
 @RestController
-@RequestMapping("/api/admin/infra/api-access-log")
+@RequestMapping("infra/api-access-log")
 @Validated
 public class ApiAccessLogController {
 

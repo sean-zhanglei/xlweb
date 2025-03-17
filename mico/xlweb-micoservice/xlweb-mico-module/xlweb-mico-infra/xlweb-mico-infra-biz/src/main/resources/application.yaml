@@ -165,7 +165,7 @@ xlweb:
   tenant: # 多租户相关配置项
     enable: true
     ignore-urls:
-      - /admin-api/infra/file/*/get/** # 获取图片，和租户无关
+      - api/admin/infra/file/*/get/** # 获取图片，和租户无关
     ignore-tables:
       - infra_config
 

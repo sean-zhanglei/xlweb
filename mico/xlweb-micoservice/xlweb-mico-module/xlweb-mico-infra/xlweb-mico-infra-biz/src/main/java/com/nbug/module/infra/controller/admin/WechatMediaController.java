@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/wechat/media")
+@RequestMapping("infra/wechat/media")
 @Tag(name = "微信开放平台 -- 素材")
 public class WechatMediaController {
 

@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/express/shipping/region")
+@RequestMapping("api/admin/system/express/shipping/region")
 @Tag(name = "设置 -- 物流 -- 付费")
 public class ShippingTemplatesRegionController {
 

@@ -9,6 +9,7 @@
         <module>xlweb-mico-gateway</module>
         <module>xlweb-mico-nacos</module>
         <module>xlweb-mico-module</module>
+        <module>xxl-job-admin</module>
     </modules>
     <!--<parent>
         <groupId>org.springframework.boot</groupId>

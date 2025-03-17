@@ -21,7 +21,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/infra/wechat/template")
+@RequestMapping("infra/wechat/template")
 @Tag(name = "微信 -- 消息模版") //配合swagger使用
 @Validated
 public class SystemTemplateMessageController {

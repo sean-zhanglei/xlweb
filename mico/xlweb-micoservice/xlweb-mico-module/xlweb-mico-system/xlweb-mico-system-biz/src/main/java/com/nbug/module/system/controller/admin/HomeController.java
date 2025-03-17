@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/statistics/home")
+@RequestMapping("api/admin/system/statistics/home")
 @Tag(name = "统计 -- 主页")
 public class HomeController {
 

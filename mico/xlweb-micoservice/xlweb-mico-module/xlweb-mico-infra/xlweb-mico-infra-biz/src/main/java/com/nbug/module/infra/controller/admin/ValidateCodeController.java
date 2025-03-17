@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/validate/code")
+@RequestMapping("infra/validate/code")
 @Tag(name = "验证码服务")
 public class ValidateCodeController {
 

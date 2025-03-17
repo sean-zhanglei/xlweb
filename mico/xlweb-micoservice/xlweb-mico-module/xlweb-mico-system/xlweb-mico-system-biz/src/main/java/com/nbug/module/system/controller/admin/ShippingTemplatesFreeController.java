@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/express/shipping/free")
+@RequestMapping("api/admin/system/express/shipping/free")
 @Tag(name = "设置 -- 物流 -- 免费")
 public class ShippingTemplatesFreeController {
 
