@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("infra/jsconfig")
-@Tag(name = "公共JS配置")
+@Tag(name = "管理后台 - 公共JS配置")
 public class GetJSConfigController {
 
     @Autowired

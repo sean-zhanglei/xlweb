@@ -30,8 +30,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/article")
-@Tag(name = "文章管理")
+@RequestMapping("system/article")
+@Tag(name = "管理后台 - 文章管理")
 public class ArticleController {
 
     @Autowired

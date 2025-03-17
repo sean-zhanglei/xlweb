@@ -8,7 +8,7 @@ import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
-import com.nbug.module.infra.dal.logger.ApiAccessLogDao;
+import com.nbug.module.infra.dal.ApiAccessLogDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("infra/yly")
-@Tag(name = "易联云 打印订单小票") //配合swagger使用
+@Tag(name = "管理后台 - 易联云 打印订单小票") //配合swagger使用
 public class YlyPrintController {
 
 

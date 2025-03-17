@@ -30,8 +30,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/role")
-@Tag(name = "设置 -- 权限管理 -- 身份管理")
+@RequestMapping("system/role")
+@Tag(name = "管理后台 - 设置 -- 权限管理 -- 身份管理")
 public class SystemRoleController {
 
     @Autowired

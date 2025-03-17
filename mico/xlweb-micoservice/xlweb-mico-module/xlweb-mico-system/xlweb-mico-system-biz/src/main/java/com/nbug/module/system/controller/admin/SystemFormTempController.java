@@ -28,8 +28,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/form/temp")
-@Tag(name = "设置 -- 表单模板")
+@RequestMapping("system/form/temp")
+@Tag(name = "管理后台 - 设置 -- 表单模板")
 public class SystemFormTempController {
 
     @Autowired

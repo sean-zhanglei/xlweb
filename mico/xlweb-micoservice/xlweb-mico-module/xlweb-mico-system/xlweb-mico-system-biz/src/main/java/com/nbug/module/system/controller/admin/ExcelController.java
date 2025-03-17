@@ -25,8 +25,8 @@ import java.util.HashMap;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/export/excel")
-@Tag(name = "导出 -- Excel")
+@RequestMapping("system/export/excel")
+@Tag(name = "管理后台 - 导出 -- Excel")
 public class ExcelController {
 
     @Autowired

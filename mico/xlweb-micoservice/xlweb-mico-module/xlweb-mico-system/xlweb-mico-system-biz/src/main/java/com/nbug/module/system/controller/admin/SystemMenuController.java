@@ -29,8 +29,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/menu")
-@Tag(name = "系统菜单管理")
+@RequestMapping("system/menu")
+@Tag(name = "管理后台 - 系统菜单管理")
 public class SystemMenuController {
 
     @Autowired

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nbug.module.store.dal.UserDao">
 
-    <select id="getSpreadPeopleList" resultType="com.nbug.common.response.UserSpreadPeopleItemResponse" parameterType="map">
+    <select id="getSpreadPeopleList" resultType="com.nbug.mico.common.response.UserSpreadPeopleItemResponse" parameterType="map">
         SELECT u.uid,u.nickname, u.avatar, DATE_FORMAT(u.spread_time, '%Y-%m-%d %H:%i:%s') AS `time`, u.spread_count AS childCount FROM eb_user AS u
          where 1 = 1
         <if test="userIdList != null and userIdList !='' ">
@@ -14,7 +14,7 @@
         ORDER BY #{sortKey} #{sortValue}
     </select>
 
-    <select id="findAdminList" resultType="com.nbug.common.model.user.User" parameterType="Map">
+    <select id="findAdminList" resultType="com.nbug.mico.common.model.user.User" parameterType="Map">
         SELECT u.* FROM eb_user AS u
         <if test='userType != null and userType != "" and userType == "wechat"'>
             INNER JOIN eb_user_token AS ut on u.uid = ut.uid and ut.type = 1

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("infra/payment/callback")
-@Tag(name = "支付回调")
+@Tag(name = "管理后台 - 支付回调")
 public class WechatPayCallbackController {
 
     @Autowired

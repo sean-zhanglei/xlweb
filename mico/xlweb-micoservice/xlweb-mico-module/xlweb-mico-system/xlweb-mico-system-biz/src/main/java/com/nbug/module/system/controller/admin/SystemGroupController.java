@@ -28,8 +28,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/group")
-@Tag(name = "设置 -- 组合数据")
+@RequestMapping("system/group")
+@Tag(name = "管理后台 - 设置 -- 组合数据")
 public class SystemGroupController {
 
     @Autowired

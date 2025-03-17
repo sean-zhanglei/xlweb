@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController("ArticleFrontController")
-@RequestMapping("api/front/system/article")
-@Tag(name = "文章")
+@RequestMapping("system/article")
+@Tag(name = "应用后台 - 文章")
 public class ArticleController {
 
     @Autowired

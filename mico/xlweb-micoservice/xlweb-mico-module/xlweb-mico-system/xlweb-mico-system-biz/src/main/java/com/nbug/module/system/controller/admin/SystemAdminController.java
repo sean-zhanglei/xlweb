@@ -33,8 +33,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/admin")
-@Tag(name = "后台用户服务")
+@RequestMapping("system/admin")
+@Tag(name = "管理后台 - 后台用户服务")
 public class SystemAdminController {
 
     @Autowired

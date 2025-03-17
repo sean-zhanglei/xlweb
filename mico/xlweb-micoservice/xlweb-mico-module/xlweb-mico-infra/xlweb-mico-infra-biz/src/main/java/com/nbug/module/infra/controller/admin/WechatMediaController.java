@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("infra/wechat/media")
-@Tag(name = "微信开放平台 -- 素材")
+@Tag(name = "管理后台 - 微信开放平台 -- 素材")
 public class WechatMediaController {
 
     @Autowired

@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/store/order")
-@Tag(name = "设置 -- 提货点 -- 核销订单") //配合swagger使用
+@RequestMapping("system/store/order")
+@Tag(name = "管理后台 - 设置 -- 提货点 -- 核销订单") //配合swagger使用
 public class SystemWriteOffOrderController {
 
     @Autowired

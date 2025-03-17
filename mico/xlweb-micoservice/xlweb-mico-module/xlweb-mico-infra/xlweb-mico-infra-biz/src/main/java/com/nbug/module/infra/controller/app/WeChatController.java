@@ -34,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @RestController("WeChatFrontController")
 @RequestMapping("infra/wechat")
-@Tag(name = "微信 -- 开放平台")
+@Tag(name = "应用后台 - 微信 -- 开放平台")
 public class WeChatController {
 
     @Autowired

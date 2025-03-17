@@ -11,8 +11,8 @@
     <select id="getRefundTotal" resultType="java.lang.Integer">
         select count(id) from eb_store_order where ${where} and refund_status = 2
     </select>
-    <select id="getOrderVerificationDetail" parameterType="com.nbug.common.request.PageParamRequest"
-            resultType="com.nbug.common.response.StoreStaffDetail">
+    <select id="getOrderVerificationDetail" parameterType="com.nbug.mico.common.request.PageParamRequest"
+            resultType="com.nbug.mico.common.response.StoreStaffDetail">
         select sum(o.`pay_price`) as price, count(o.`id`) as count, DATE_FORMAT(o.`create_time`, '%Y-%m-%d') as time
         from `eb_store_order` o
         where o.`is_del` = 0 and o.`paid` = 1 and o.`refund_status` = 0
@@ -24,8 +24,8 @@
         </if>
         GROUP by DATE_FORMAT(o.`create_time`, '%Y-%m-%d') order by o.`create_time` desc limit #{ page },#{ limit };
     </select>
-    <select id="getOrderStatisticsPriceDetail" parameterType="com.nbug.common.request.StoreDateRangeSqlPram"
-            resultType="com.nbug.common.response.StoreOrderStatisticsChartItemResponse">
+    <select id="getOrderStatisticsPriceDetail" parameterType="com.nbug.mico.common.request.StoreDateRangeSqlPram"
+            resultType="com.nbug.mico.common.response.StoreOrderStatisticsChartItemResponse">
         select sum(o.pay_price) as num,date_format(o.create_time, '%Y-%m-%d') as time
         from eb_store_order o
         where o.is_del >= 0 and o.paid >= 1 and o.refund_status >= 0
@@ -34,8 +34,8 @@
         group by date_format(o.create_time, '%Y-%m-%d')
         order by o.create_time desc;
     </select>
-    <select id="getOrderStatisticsOrderCountDetail" parameterType="com.nbug.common.request.StoreDateRangeSqlPram"
-            resultType="com.nbug.common.response.StoreOrderStatisticsChartItemResponse">
+    <select id="getOrderStatisticsOrderCountDetail" parameterType="com.nbug.mico.common.request.StoreDateRangeSqlPram"
+            resultType="com.nbug.mico.common.response.StoreOrderStatisticsChartItemResponse">
         select count(id) as num, date_format(o.create_time, '%Y-%m-%d') as time
         from eb_store_order o
         where o.is_del >= 0 and o.paid >= 1 and o.refund_status >= 0
@@ -45,7 +45,7 @@
         order by o.create_time asc;
     </select>
 
-    <select id="getBrokerageData" resultType="com.nbug.common.response.OrderBrokerageData">
+    <select id="getBrokerageData" resultType="com.nbug.mico.common.response.OrderBrokerageData">
         select count(*) as num, sum(o.pay_price) as price
         from eb_store_order as o
         right join eb_user_brokerage_record as br on br.link_id = o.order_id and br.status = 3 and br.uid = #{spreadId}

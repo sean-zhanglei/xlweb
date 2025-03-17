@@ -31,8 +31,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/store")
-@Tag(name = "设置 -- 提货点 -- 提货点")
+@RequestMapping("system/store")
+@Tag(name = "管理后台 - 设置 -- 提货点 -- 提货点")
 public class SystemStoreController {
 
     @Autowired

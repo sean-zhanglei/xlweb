@@ -34,8 +34,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/express")
-@Tag(name = "设置 -- 物流 -- 公司")
+@RequestMapping("system/express")
+@Tag(name = "管理后台 - 设置 -- 物流 -- 公司")
 public class ExpressController {
 
     @Autowired

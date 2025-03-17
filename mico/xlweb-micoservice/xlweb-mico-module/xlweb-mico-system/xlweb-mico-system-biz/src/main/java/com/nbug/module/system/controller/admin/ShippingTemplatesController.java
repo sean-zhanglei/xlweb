@@ -28,8 +28,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/express/shipping/templates")
-@Tag(name = "设置 -- 物流 -- 模板")
+@RequestMapping("system/express/shipping/templates")
+@Tag(name = "管理后台 - 设置 -- 物流 -- 模板")
 public class ShippingTemplatesController {
 
     @Autowired

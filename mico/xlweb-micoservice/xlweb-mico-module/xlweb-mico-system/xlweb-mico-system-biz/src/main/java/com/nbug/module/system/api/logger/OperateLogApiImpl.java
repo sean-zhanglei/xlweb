@@ -19,14 +19,14 @@ public class OperateLogApiImpl implements OperateLogApi {
     private OperateLogService operateLogService;
 
     @Override
-    public CommonResult<Boolean> createOperateLog(OperateLog createReqDTO) {
-        operateLogService.createOperateLog(createReqDTO);
+    public CommonResult<Boolean> createOperateLog(OperateLog createReq) {
+        operateLogService.createOperateLog(createReq);
         return success(true);
     }
 
     @Override
-    public CommonResult<PageResult<OperateLog>> getOperateLogPage(OperateLog pageReqDTO) {
-        PageResult<OperateLog> operateLogPage = operateLogService.getOperateLogPage(pageReqDTO);
+    public CommonResult<PageResult<OperateLog>> getOperateLogPage(OperateLog pageReq) {
+        PageResult<OperateLog> operateLogPage = operateLogService.getOperateLogPage(pageReq);
         return success(operateLogPage);
     }
 

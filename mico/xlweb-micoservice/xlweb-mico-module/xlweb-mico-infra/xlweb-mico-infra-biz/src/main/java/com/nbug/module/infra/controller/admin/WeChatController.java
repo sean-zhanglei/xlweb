@@ -21,7 +21,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("infra/wechat/menu")
-@Tag(name = "微信开放平台 -- 菜单管理")
+@Tag(name = "管理后台 - 微信开放平台 -- 菜单管理")
 public class WeChatController {
 
     @Autowired

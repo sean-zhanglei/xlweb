@@ -26,8 +26,8 @@ import java.util.Map;
 
  */
 @Controller
-@RequestMapping("api/admin/system/codegen")
-@Tag(name = "代码生成")
+@RequestMapping("system/codegen")
+@Tag(name = "管理后台 - 代码生成")
 public class CodeGenerator {
 
     @Autowired

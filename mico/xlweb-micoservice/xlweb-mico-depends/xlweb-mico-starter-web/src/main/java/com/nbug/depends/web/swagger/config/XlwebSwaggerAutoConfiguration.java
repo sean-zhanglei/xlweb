@@ -106,19 +106,34 @@ public class XlwebSwaggerAutoConfiguration {
     /**
      * 所有模块的 API 分组
      */
-    @Bean
-    public GroupedOpenApi allGroupedOpenApi() {
-        return buildGroupedOpenApi("all", "");
+    @Bean("admin")
+    public GroupedOpenApi adminGroupedOpenApi() {
+        return buildAdminGroupedOpenApi("admin", "");
     }
 
-    public static GroupedOpenApi buildGroupedOpenApi(String group) {
-        return buildGroupedOpenApi(group, group);
+    @Bean("front")
+    public GroupedOpenApi frontGroupedOpenApi() {
+        return buildFrontGroupedOpenApi("front", "");
     }
 
-    public static GroupedOpenApi buildGroupedOpenApi(String group, String path) {
+//    public static GroupedOpenApi buildGroupedOpenApi(String group) {
+//        return buildGroupedOpenApi(group, group);
+//    }
+
+    public static GroupedOpenApi buildAdminGroupedOpenApi(String group, String path) {
         return GroupedOpenApi.builder()
                 .group(group)
-                .pathsToMatch("/api/admin/" + path + "/**", "/api/front/" + path + "/**")
+                .pathsToMatch("/api/admin/" + path + "/**")
+                .addOperationCustomizer((operation, handlerMethod) -> operation
+                        .addParametersItem(buildTenantHeaderParameter())
+                        .addParametersItem(buildSecurityHeaderParameter()))
+                .build();
+    }
+
+    public static GroupedOpenApi buildFrontGroupedOpenApi(String group, String path) {
+        return GroupedOpenApi.builder()
+                .group(group)
+                .pathsToMatch("/api/front/" + path + "/**")
                 .addOperationCustomizer((operation, handlerMethod) -> operation
                         .addParametersItem(buildTenantHeaderParameter())
                         .addParametersItem(buildSecurityHeaderParameter()))

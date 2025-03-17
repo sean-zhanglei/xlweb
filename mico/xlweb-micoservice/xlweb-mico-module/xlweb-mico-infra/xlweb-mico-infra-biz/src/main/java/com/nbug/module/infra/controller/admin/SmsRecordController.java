@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("infra/sms")
-@Tag(name = "短信服务")
+@Tag(name = "管理后台 - 短信服务")
 public class SmsRecordController {
 
     @Autowired

@@ -8,7 +8,7 @@ import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.mico.common.utils.object.BeanUtils;
 import com.nbug.module.infra.api.logger.dto.ApiErrorLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogPageReqVO;
-import com.nbug.module.infra.dal.logger.ApiErrorLogDao;
+import com.nbug.module.infra.dal.ApiErrorLogDao;
 import com.nbug.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

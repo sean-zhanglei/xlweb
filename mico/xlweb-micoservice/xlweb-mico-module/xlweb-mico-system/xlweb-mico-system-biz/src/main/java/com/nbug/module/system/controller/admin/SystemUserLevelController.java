@@ -28,8 +28,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/user/level")
-@Tag(name = "设置 -- 会员等级")
+@RequestMapping("system/user/level")
+@Tag(name = "管理后台 - 设置 -- 会员等级")
 public class SystemUserLevelController {
 
     @Autowired

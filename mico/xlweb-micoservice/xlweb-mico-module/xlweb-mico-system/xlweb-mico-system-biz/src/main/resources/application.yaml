@@ -57,7 +57,7 @@ knife4j:
 # MyBatis Plus 的配置项
 mybatis-plus:
   mapper-locations: classpath*:mapper/*/*Mapper.xml #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
-  type-aliases-package: ${xlweb.info.base-package}.dal
+  type-aliases-package: ${xlweb.info.base-package-dal}
   configuration:
     # 配置slq打印日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -131,6 +131,7 @@ xlweb:
   info:
     version: 1.0.0
     base-package: com.nbug.module.system
+    base-package-dal: com.nbug.module.system.dal
   web:
     admin-ui:
       url: http://nbug.top # Admin 管理后台 UI 的地址

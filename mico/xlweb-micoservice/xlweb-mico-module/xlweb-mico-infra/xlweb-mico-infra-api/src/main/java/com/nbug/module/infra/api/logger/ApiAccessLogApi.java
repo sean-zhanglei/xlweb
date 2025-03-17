@@ -4,6 +4,7 @@ import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import com.nbug.module.infra.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.scheduling.annotation.Async;
@@ -19,7 +20,8 @@ public interface ApiAccessLogApi {
 
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建 API 访问日志")
-    CommonResult<Boolean> createApiAccessLog(@Validated @RequestBody ApiAccessLogCreateReqDTO createDTO);
+    @Parameter(name = "createDTO", description = "创建 API 访问日志")
+    public CommonResult<Boolean> createApiAccessLog(@Validated @RequestBody ApiAccessLogCreateReqDTO createDTO);
 
     /**
      * 【异步】创建 API 访问日志

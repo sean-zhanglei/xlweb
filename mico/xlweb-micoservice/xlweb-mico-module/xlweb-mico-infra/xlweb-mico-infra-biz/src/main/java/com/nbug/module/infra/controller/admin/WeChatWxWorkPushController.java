@@ -27,7 +27,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("infra/wechat")
-@Tag(name = "企业微信消息推送")
+@Tag(name = "管理后台 - 企业微信消息推送")
 public class WeChatWxWorkPushController {
 
     private static String url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=";

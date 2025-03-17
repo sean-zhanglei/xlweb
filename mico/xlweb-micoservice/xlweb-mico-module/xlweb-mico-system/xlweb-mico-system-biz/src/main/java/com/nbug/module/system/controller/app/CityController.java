@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController("CityFrontController")
-@RequestMapping("api/front/system/city")
-@Tag(name = "城市服务")
+@RequestMapping("system/city")
+@Tag(name = "应用后台 - 城市服务")
 public class CityController {
 
     @Autowired

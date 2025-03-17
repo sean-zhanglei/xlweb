@@ -4,6 +4,7 @@ import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.module.infra.api.logger.dto.ApiErrorLogCreateReqDTO;
 import com.nbug.module.infra.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.scheduling.annotation.Async;
@@ -19,7 +20,8 @@ public interface ApiErrorLogApi {
 
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建 API 异常日志")
-    CommonResult<Boolean> createApiErrorLog(@Validated @RequestBody ApiErrorLogCreateReqDTO createDTO);
+    @Parameter(name = "createDTO", description = "创建 API 异常日志")
+    public CommonResult<Boolean> createApiErrorLog(@Validated @RequestBody ApiErrorLogCreateReqDTO createDTO);
 
     /**
      * 【异步】创建 API 异常日志

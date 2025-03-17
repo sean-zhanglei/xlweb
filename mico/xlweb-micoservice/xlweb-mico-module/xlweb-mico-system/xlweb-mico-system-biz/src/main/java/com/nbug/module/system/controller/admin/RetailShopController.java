@@ -33,8 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/store/retail")
-@Tag(name = "分销")
+@RequestMapping("system/store/retail")
+@Tag(name = "管理后台 - 分销")
 public class RetailShopController {
 
     @Autowired

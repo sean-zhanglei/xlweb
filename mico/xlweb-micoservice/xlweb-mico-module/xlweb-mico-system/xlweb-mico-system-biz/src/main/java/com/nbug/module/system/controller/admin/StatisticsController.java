@@ -27,8 +27,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/statistic")
-@Tag(name = "统计 -- APIS")
+@RequestMapping("system/statistic")
+@Tag(name = "管理后台 - 统计 -- APIS")
 public class StatisticsController {
 
     @Autowired

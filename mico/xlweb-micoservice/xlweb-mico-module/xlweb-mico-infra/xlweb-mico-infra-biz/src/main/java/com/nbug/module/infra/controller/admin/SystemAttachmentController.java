@@ -30,7 +30,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("infra/attachment")
-@Tag(name = "附件管理") //配合swagger使用
+@Tag(name = "管理后台 - 附件管理") //配合swagger使用
 public class SystemAttachmentController {
 
     @Autowired

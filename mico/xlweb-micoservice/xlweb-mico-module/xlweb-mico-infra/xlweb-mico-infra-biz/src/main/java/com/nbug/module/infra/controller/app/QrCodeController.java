@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("infra/qrcode")
-@Tag(name = "二维码服务")
+@Tag(name = "应用后台 - 二维码服务")
 public class QrCodeController {
 
     @Autowired

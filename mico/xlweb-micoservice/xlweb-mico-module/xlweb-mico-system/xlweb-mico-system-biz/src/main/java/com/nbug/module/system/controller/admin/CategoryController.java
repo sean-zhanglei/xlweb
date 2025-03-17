@@ -37,8 +37,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/category")
-@Tag(name = "分类服务")
+@RequestMapping("system/category")
+@Tag(name = "管理后台 - 分类服务")
 public class CategoryController {
 
     @Autowired

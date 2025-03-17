@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController("StoreController")
-@RequestMapping("api/front/system/store")
-@Tag(name = "提货点")
+@RequestMapping("system/store")
+@Tag(name = "应用后台 - 提货点")
 public class SystemStoreController {
     @Autowired
     private SystemStoreService systemStoreService;

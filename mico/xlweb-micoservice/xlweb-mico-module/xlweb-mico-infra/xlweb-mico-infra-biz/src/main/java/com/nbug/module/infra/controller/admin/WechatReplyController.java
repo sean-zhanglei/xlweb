@@ -30,7 +30,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("infra/wechat/keywords/reply")
-@Tag(name = "微信开放平台 -- 微信关键字回复")
+@Tag(name = "管理后台 - 微信开放平台 -- 微信关键字回复")
 public class WechatReplyController {
 
     @Autowired

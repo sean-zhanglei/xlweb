@@ -5,6 +5,7 @@ import com.nbug.module.infra.api.sms.NotificationApi;
 import com.nbug.module.infra.api.sms.SmsApi;
 import com.nbug.module.infra.api.sms.SmsTemplateApi;
 import com.nbug.module.infra.api.sms.TemplateMessageApi;
+import com.nbug.module.infra.api.validateCode.ValidateCodeApi;
 import com.nbug.module.infra.api.wechat.WechatNewApi;
 import com.nbug.module.infra.api.yly.YlyApiApi;
 import com.nbug.module.store.api.storeBargain.StoreBargainApi;
@@ -31,21 +32,26 @@ import com.nbug.module.user.api.userAddress.UserAddressApi;
 import com.nbug.module.user.api.userBill.UserBillApi;
 import com.nbug.module.user.api.userBrokerageRecord.UserBrokerageRecordApi;
 import com.nbug.module.user.api.userExperience.UserExperienceApi;
+import com.nbug.module.user.api.userExtract.UserExtractApi;
 import com.nbug.module.user.api.userIntegralRecord.UserIntegralRecordApi;
 import com.nbug.module.user.api.userLevel.UserLevelApi;
 import com.nbug.module.user.api.userToken.UserTokenApi;
+import com.nbug.module.user.api.userVisitRecord.UserVisitRecordApi;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
-@EnableFeignClients(clients = {StoreOrderApi.class, UserTokenApi.class, ConfigApi.class,
-        UserApi.class, SmsApi.class, UserBillApi.class, TemplateMessageApi.class, UserLevelApi.class,
-        UserBrokerageRecordApi.class, UserIntegralRecordApi.class, UserExperienceApi.class, YlyApiApi.class,
-        NotificationApi.class, SmsTemplateApi.class, UserAddressApi.class, AttachmentApi.class,
+@EnableFeignClients(clients = {
+        SmsApi.class, WechatNewApi.class, ValidateCodeApi.class, YlyApiApi.class,
+        NotificationApi.class, SmsTemplateApi.class, AttachmentApi.class,
         StoreOrderStatusApi.class, StoreOrderInfoApi.class, StoreProductCouponApi.class, StoreOrderStatusApi.class,
         StoreCouponUserApi.class, StoreCartApi.class, StoreOrderStatusApi.class, StoreOrderTaskApi.class,
         StoreProductReplyApi.class, StoreProductApi.class, StoreBargainApi.class, StoreCombinationApi.class,
         StoreSeckillApi.class, StorePinkApi.class, StoreCouponApi.class, StoreProductAttrValueApi.class,
-        StoreBargainUserApi.class, StoreSeckillMangerApi.class, WechatNewApi.class, SystemUserLevelApi.class})
+        StoreBargainUserApi.class, StoreSeckillMangerApi.class, StoreOrderApi.class,
+        SystemUserLevelApi.class, ConfigApi.class, TemplateMessageApi.class,
+        UserVisitRecordApi.class, UserExtractApi.class, UserTokenApi.class,
+        UserBrokerageRecordApi.class, UserIntegralRecordApi.class, UserExperienceApi.class,
+        UserApi.class, UserBillApi.class, UserLevelApi.class, UserAddressApi.class})
 public class RpcConfiguration {
 }

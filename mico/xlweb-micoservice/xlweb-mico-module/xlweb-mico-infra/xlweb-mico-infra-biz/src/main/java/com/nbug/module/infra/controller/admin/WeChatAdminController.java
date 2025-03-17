@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController("WeChatAdminController")
 @RequestMapping("infra/wechat")
-@Tag(name = "微信 -- 开放平台 admin")
+@Tag(name = "管理后台 - 微信 -- 开放平台 admin")
 public class WeChatAdminController {
 
     @Autowired

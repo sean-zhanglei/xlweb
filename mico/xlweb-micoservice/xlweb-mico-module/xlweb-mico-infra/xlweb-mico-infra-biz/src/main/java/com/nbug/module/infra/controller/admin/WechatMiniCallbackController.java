@@ -23,7 +23,7 @@ import java.io.PrintWriter;
 @Slf4j
 @RestController
 @RequestMapping("infra/wechat/mini/callback")
-@Tag(name = "微信开放平台 -- 小程序回调")
+@Tag(name = "管理后台 - 微信开放平台 -- 小程序回调")
 public class WechatMiniCallbackController {
 
     @Autowired

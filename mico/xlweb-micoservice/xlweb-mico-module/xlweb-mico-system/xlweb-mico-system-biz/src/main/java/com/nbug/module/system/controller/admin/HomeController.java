@@ -21,8 +21,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/statistics/home")
-@Tag(name = "统计 -- 主页")
+@RequestMapping("system/statistics/home")
+@Tag(name = "管理后台 - 统计 -- 主页")
 public class HomeController {
 
     @Autowired

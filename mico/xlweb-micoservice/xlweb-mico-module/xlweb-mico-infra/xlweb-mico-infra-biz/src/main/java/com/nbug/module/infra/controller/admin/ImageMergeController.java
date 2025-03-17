@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("infra/qrcode")
-@Tag(name = "图片操作")
+@Tag(name = "管理后台 - 图片操作")
 public class ImageMergeController {
 
     @PreAuthorize("hasAuthority('public:qrcode:merge:list')")

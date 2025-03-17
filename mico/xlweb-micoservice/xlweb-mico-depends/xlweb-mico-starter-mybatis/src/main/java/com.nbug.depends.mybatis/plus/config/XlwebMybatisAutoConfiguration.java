@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 @AutoConfiguration(before = MybatisPlusAutoConfiguration.class) // 目的：先于 MyBatis Plus 自动配置，避免 @MapperScan 可能扫描不到 Mapper 打印 warn 日志
-@MapperScan(basePackages = "${xlweb.info.base-package}.dal",
+@MapperScan(basePackages = "${xlweb.info.base-package-dal}",
         lazyInitialization = "${mybatis.lazy-initialization:false}") // Mapper 懒加载，目前仅用于单元测试
 public class XlwebMybatisAutoConfiguration {
 

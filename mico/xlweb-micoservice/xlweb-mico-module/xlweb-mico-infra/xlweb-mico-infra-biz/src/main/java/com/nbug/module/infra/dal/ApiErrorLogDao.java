@@ -1,4 +1,4 @@
-package com.nbug.module.infra.dal.logger;
+package com.nbug.module.infra.dal;
 
 import com.nbug.depends.mybatis.plus.core.mapper.BaseMapperX;
 import com.nbug.depends.mybatis.plus.core.query.LambdaQueryWrapperX;

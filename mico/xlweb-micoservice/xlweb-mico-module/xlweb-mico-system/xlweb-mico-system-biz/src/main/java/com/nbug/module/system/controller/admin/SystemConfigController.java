@@ -29,8 +29,8 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/system/config")
-@Tag(name = "设置 -- Config")
+@RequestMapping("system/config")
+@Tag(name = "管理后台 - 设置 -- Config")
 public class SystemConfigController {
 
     @Autowired
