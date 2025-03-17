@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,36 +30,37 @@ public interface UserIntegralRecordApi {
             @Parameter(name = "orderNo", description = "订单号", required = true),
             @Parameter(name = "uid", description = "用户id", required = true)
     })
-    public CommonResult<List<UserIntegralRecord>> findListByOrderIdAndUid(String orderNo, Integer uid);
+    public CommonResult<List<UserIntegralRecord>> findListByOrderIdAndUid(@RequestParam String orderNo,
+                                                                          @RequestParam Integer uid);
 
-    @GetMapping(PREFIX + "/saveBatch")
+    @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "保存用户积分记录")
     @Parameter(name = "userIntegralRecords", description = "用户积分记录", required = true)
-    public CommonResult<Boolean> saveBatch(List<UserIntegralRecord> userIntegralRecords);
+    public CommonResult<Boolean> saveBatch(@RequestParam List<UserIntegralRecord> userIntegralRecords);
 
-    @GetMapping(PREFIX + "/updateBatchById")
+    @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新用户积分记录")
     @Parameter(name = "userIntegralRecords", description = "用户积分记录", required = true)
-    public CommonResult<Boolean> updateBatchById(List<UserIntegralRecord> userIntegralRecords);
+    public CommonResult<Boolean> updateBatchById(@RequestParam List<UserIntegralRecord> userIntegralRecords);
 
     @GetMapping(PREFIX + "/getIntegralBasic")
     @Operation(summary = "积分统计顶部")
     @Parameter(name = "time", description = "时间", required = true)
-    public CommonResult<MyRecord> getIntegralBasic(String time);
+    public CommonResult<MyRecord> getIntegralBasic(@RequestParam String time);
 
     @GetMapping(PREFIX + "/getIntegralTrend")
     @Operation(summary = "积分统计折线图")
     @Parameter(name = "time", description = "时间", required = true)
-    public CommonResult<MyRecord> getIntegralTrend(String time);
+    public CommonResult<MyRecord> getIntegralTrend(@RequestParam String time);
 
     @GetMapping(PREFIX + "/getIntegralChannel")
     @Operation(summary = "积分来源分析")
     @Parameter(name = "time", description = "时间", required = true)
-    public CommonResult<MyRecord> getIntegralChannel(String time);
+    public CommonResult<MyRecord> getIntegralChannel(@RequestParam String time);
 
     @GetMapping(PREFIX + "/getIntegralType")
     @Operation(summary = "积分消耗分析")
     @Parameter(name = "time", description = "时间", required = true)
-    public CommonResult<MyRecord> getIntegralType(String time);
+    public CommonResult<MyRecord> getIntegralType(@RequestParam String time);
 
 }

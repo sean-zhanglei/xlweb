@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -19,11 +20,11 @@ public interface UserAddressApi {
     @GetMapping(PREFIX + "/getDefaultByUid")
     @Operation(summary = "获取默认地址")
     @Parameter(name = "uid", description = "用户ID", required = true)
-    public CommonResult<UserAddress> getDefaultByUid(Integer uid);
+    public CommonResult<UserAddress> getDefaultByUid(@RequestParam Integer uid);
 
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获取地址ById")
     @Parameter(name = "addressId", description = "地址Id", required = true)
-    public CommonResult<UserAddress> getById(Integer addressId);
+    public CommonResult<UserAddress> getById(@RequestParam Integer addressId);
 
 }

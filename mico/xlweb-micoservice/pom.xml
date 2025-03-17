@@ -544,11 +544,11 @@
             </dependency>
 
 
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongodb-driver-core</artifactId>
-                <version>3.8.2</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.mongodb</groupId>-->
+<!--                <artifactId>mongodb-driver-core</artifactId>-->
+<!--                <version>3.8.2</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>com.vaadin.external.google</groupId>
                 <artifactId>android-json</artifactId>

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 
@@ -25,7 +26,10 @@ public interface SmsApi {
             @Parameter(name = "price", description = "修改后的价格", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendOrderEditPriceNotice(String phone, String orderNo, BigDecimal price, String msgTempKey);
+    public CommonResult<Boolean> sendOrderEditPriceNotice(@RequestParam String phone,
+                                                          @RequestParam String orderNo,
+                                                          @RequestParam BigDecimal price,
+                                                          @RequestParam String msgTempKey);
 
 
     @PostMapping(PREFIX + "/sendOrderReceiptNotice")
@@ -36,7 +40,10 @@ public interface SmsApi {
             @Parameter(name = "realName", description = "收货人姓名", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendOrderReceiptNotice( String phone, String orderNo, String realName, String msgTempKey);
+    public CommonResult<Boolean> sendOrderReceiptNotice(@RequestParam String phone,
+                                                        @RequestParam String orderNo,
+                                                        @RequestParam String realName,
+                                                        @RequestParam String msgTempKey);
 
     @PostMapping(PREFIX + "/sendOrderDeliverNotice")
     @Operation(summary = "发送订单发货提醒短信")
@@ -47,27 +54,37 @@ public interface SmsApi {
             @Parameter(name = "orderNo", description = "订单编号", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendOrderDeliverNotice(String phone, String nickName, String storeName, String orderNo, String msgTempKey);
+    public CommonResult<Boolean> sendOrderDeliverNotice(@RequestParam String phone,
+                                                        @RequestParam String nickName,
+                                                        @RequestParam String storeName,
+                                                        @RequestParam String orderNo,
+                                                        @RequestParam String msgTempKey);
 
     @PostMapping(PREFIX + "/sendPaySuccess")
-    @Operation(summary = "发送订单支付成功提醒短信")
+    @Operation(summary = "发送支付成功短信")
     @Parameters({
             @Parameter(name = "phone", description = "手机号", required = true),
             @Parameter(name = "orderNo", description = "订单编号", required = true),
             @Parameter(name = "payPrice", description = "支付金额", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendPaySuccess(String phone, String orderNo, BigDecimal payPrice, String msgTempKey);
+    public CommonResult<Boolean> sendPaySuccess(@RequestParam String phone,
+                                                @RequestParam String orderNo,
+                                                @RequestParam BigDecimal payPrice,
+                                                @RequestParam String msgTempKey);
 
-    @PostMapping(PREFIX + "/sendPaySuccess")
-    @Operation(summary = "发送订单支付成功提醒短信")
+    @PostMapping(PREFIX + "/sendOrderPaySuccessNotice")
+    @Operation(summary = "发送订单支付成功管理员提醒短信")
     @Parameters({
             @Parameter(name = "phone", description = "手机号", required = true),
             @Parameter(name = "orderNo", description = "订单编号", required = true),
             @Parameter(name = "payPrice", description = "支付金额", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendOrderPaySuccessNotice( String phone, String orderNo, String realName, String msgTempKey);
+    public CommonResult<Boolean> sendOrderPaySuccessNotice(@RequestParam String phone,
+                                                           @RequestParam String orderNo,
+                                                           @RequestParam String realName,
+                                                           @RequestParam String msgTempKey);
 
     @PostMapping(PREFIX + "/sendCreateOrderNotice")
     @Operation(summary = "发送管理员下单短信提醒短信")
@@ -77,7 +94,10 @@ public interface SmsApi {
             @Parameter(name = "realName", description = "用户昵称", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendCreateOrderNotice( String phone, String orderNo, String realName, String msgTempKey);
+    public CommonResult<Boolean> sendCreateOrderNotice(@RequestParam String phone,
+                                                       @RequestParam String orderNo,
+                                                       @RequestParam String realName,
+                                                       @RequestParam String msgTempKey);
 
     @PostMapping(PREFIX + "/sendOrderRefundApplyNotice")
     @Operation(summary = "发送用户退款管理员提醒短信")
@@ -87,11 +107,14 @@ public interface SmsApi {
             @Parameter(name = "realName", description = "用户昵称", required = true),
             @Parameter(name = "msgTempKey", description = "短信模板编号", required = true)
     })
-    public CommonResult<Boolean> sendOrderRefundApplyNotice( String phone, String orderNo, String realName, String msgTempKey);
+    public CommonResult<Boolean> sendOrderRefundApplyNotice(@RequestParam String phone,
+                                                            @RequestParam String orderNo,
+                                                            @RequestParam String realName,
+                                                            @RequestParam String msgTempKey);
 
 
     @PostMapping(PREFIX + "/sendCommonCode")
     @Operation(summary = "发送公共验证码")
     @Parameter(name = "phone", description = "手机号", required = true)
-    public CommonResult<Boolean> sendCommonCode(String phone);
+    public CommonResult<Boolean> sendCommonCode(@RequestParam String phone);
 }

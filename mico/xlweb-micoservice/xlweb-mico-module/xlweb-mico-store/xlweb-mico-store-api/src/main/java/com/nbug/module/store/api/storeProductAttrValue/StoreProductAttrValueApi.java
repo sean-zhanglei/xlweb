@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -20,18 +21,22 @@ public interface StoreProductAttrValueApi {
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "根据id获取商品属性值")
     @Parameter(name = "id", description = "商品属性值Id", required = true)
-    public CommonResult<StoreProductAttrValue> getById(Integer id);
+    public CommonResult<StoreProductAttrValue> getById(@RequestParam Integer id);
 
     @GetMapping(PREFIX + "/getByProductIdAndSkuAndType")
     @Operation(summary = "根据商品id、sku、类型获取商品属性值")
     @Parameter(name = "productId", description = "商品Id", required = true)
-    public CommonResult<StoreProductAttrValue> getByProductIdAndSkuAndType(Integer productId, String suk, Integer type);
+    public CommonResult<StoreProductAttrValue> getByProductIdAndSkuAndType(@RequestParam Integer productId,
+                                                                           @RequestParam String suk,
+                                                                           @RequestParam Integer type);
 
 
     @GetMapping(PREFIX + "/getByIdAndProductIdAndType")
     @Operation(summary = "根据商品属性值id、商品id、类型获取商品属性值")
     @Parameter(name = "id", description = "商品属性值Id", required = true)
-    public CommonResult<StoreProductAttrValue> getByIdAndProductIdAndType(Integer id, Integer productId, Integer type);
+    public CommonResult<StoreProductAttrValue> getByIdAndProductIdAndType(@RequestParam Integer id,
+                                                                          @RequestParam Integer productId,
+                                                                          @RequestParam Integer type);
 
 
     @GetMapping(PREFIX + "/operationStock")
@@ -42,5 +47,8 @@ public interface StoreProductAttrValueApi {
             @Parameter(name = "operationType", description = "操作类型", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> operationStock(Integer id, Integer num, String operationType, Integer type);
+    public CommonResult<Boolean> operationStock(@RequestParam Integer id,
+                                                @RequestParam Integer num,
+                                                @RequestParam String operationType,
+                                                @RequestParam Integer type);
 }

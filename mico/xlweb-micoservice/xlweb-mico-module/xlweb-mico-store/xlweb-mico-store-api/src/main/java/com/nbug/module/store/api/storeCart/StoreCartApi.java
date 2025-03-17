@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface StoreCartApi {
     @PostMapping(PREFIX + "/deleteCartByIds")
     @Operation(summary = "批量删除购物车")
     @Parameter(name = "ids", description = "购物车id集合", required = true)
-    public CommonResult<Boolean> deleteCartByIds(List<Long> ids);
+    public CommonResult<Boolean> deleteCartByIds(@RequestParam List<Long> ids);
 
 
     @GetMapping(PREFIX + "/getByIdAndUid")
@@ -33,6 +34,7 @@ public interface StoreCartApi {
             @Parameter(name = "id", description = "购物车id", required = true),
             @Parameter(name = "uid", description = "用户id", required = true)
     })
-    public CommonResult<StoreCart> getByIdAndUid(Long id, Integer uid);
+    public CommonResult<StoreCart> getByIdAndUid(@RequestParam Long id,
+                                                 @RequestParam Integer uid);
 
 }

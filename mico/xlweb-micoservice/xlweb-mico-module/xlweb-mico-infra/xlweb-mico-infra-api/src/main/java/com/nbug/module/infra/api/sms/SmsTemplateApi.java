@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
 @Tag(name = "RPC 服务 - 短信模板")
@@ -18,5 +19,5 @@ public interface SmsTemplateApi {
     @GetMapping(PREFIX + "/getDetail")
     @Operation(summary = "获取短信模板")
     @Parameter(name = "id", description = "短信模板编号", required = true)
-    public CommonResult<SmsTemplate> getDetail(Integer id);
+    public CommonResult<SmsTemplate> getDetail(@RequestParam Integer id);
 }

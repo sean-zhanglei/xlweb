@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -31,7 +33,7 @@ public interface UserApi {
     @GetMapping(PREFIX + "/getValidateCodeRedisKey")
     @Operation(summary = "检测手机验证码key")
     @Parameter(name = "phone", description = "检测手机验证码key", required = true)
-    public CommonResult<String> getValidateCodeRedisKey(String phone);
+    public CommonResult<String> getValidateCodeRedisKey(@RequestParam String phone);
 
 
     @PostMapping(PREFIX + "/updateIntegral")
@@ -42,12 +44,14 @@ public interface UserApi {
             @Parameter(name = "type", description = "类型", required = true)
     })
 
-    public CommonResult<Boolean> updateIntegral(User user, Integer integral, String type);
+    public CommonResult<Boolean> updateIntegral(@RequestParam User user,
+                                                @RequestParam Integer integral,
+                                                @RequestParam String type);
 
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获取用户ById")
     @Parameter(name = "id", description = "id", required = true)
-    public CommonResult<User> getById(Integer id);
+    public CommonResult<User> getById(@RequestParam Integer id);
 
     @PostMapping(PREFIX + "/operationNowMoney")
     @Operation(summary = "添加/扣减积分")
@@ -57,7 +61,10 @@ public interface UserApi {
             @Parameter(name = "nowMoney", description = "现金", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> operationNowMoney(Integer uid, BigDecimal price, BigDecimal nowMoney, String type);
+    public CommonResult<Boolean> operationNowMoney(@RequestParam Integer uid,
+                                                   @RequestParam BigDecimal price,
+                                                   @RequestParam BigDecimal nowMoney,
+                                                   @RequestParam String type);
 
 
     @GetMapping(PREFIX + "/getInfoException")
@@ -79,12 +86,12 @@ public interface UserApi {
     @PostMapping(PREFIX + "/updateById")
     @Operation(summary = "更新用户ById")
     @Parameter(name = "user", description = "用户", required = true)
-    public CommonResult<Boolean> updateById(User user);
+    public CommonResult<Boolean> updateById(@RequestParam User user);
 
     @GetMapping(PREFIX + "/getMapListInUid")
     @Operation(summary = "根据用户id获取用户列表 map模式")
     @Parameter(name = "uidList", description = "uid List", required = true)
-    public CommonResult<HashMap<Integer, User>> getMapListInUid(List<Integer> uidList);
+    public CommonResult<HashMap<Integer, User>> getMapListInUid(@RequestParam List<Integer> uidList);
 
 
     @PostMapping(PREFIX + "/updateNowMoney")
@@ -94,18 +101,20 @@ public interface UserApi {
             @Parameter(name = "price", description = "金额", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> updateNowMoney(User user, BigDecimal price, String type);
+    public CommonResult<Boolean> updateNowMoney(@RequestParam User user,
+                                                @RequestParam BigDecimal price,
+                                                @RequestParam String type);
 
 
     @PostMapping(PREFIX + "/clearGroupByGroupId")
     @Operation(summary = "清空分组")
     @Parameter(name = "groupId", description = "分组id", required = true)
-    public CommonResult<Boolean> clearGroupByGroupId(String groupId);
+    public CommonResult<Boolean> clearGroupByGroupId(@RequestParam String groupId);
 
     @PostMapping(PREFIX + "/removeLevelByLevelId")
     @Operation(summary = "清除对应的用户等级")
     @Parameter(name = "levelId", description = "等级Id", required = true)
-    public CommonResult<Boolean> removeLevelByLevelId(Integer levelId);
+    public CommonResult<Boolean> removeLevelByLevelId(@RequestParam Integer levelId);
 
 
     @GetMapping(PREFIX + "/getAdminSpreadPeopleList")
@@ -115,7 +124,9 @@ public interface UserApi {
             @Parameter(name = "dateLimit", description = "时间范围"),
             @Parameter(name = "pageRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<User>> getAdminSpreadPeopleList(String keywords, String dateLimit, PageParamRequest pageRequest);
+    public CommonResult<PageInfo<User>> getAdminSpreadPeopleList(@RequestParam String keywords,
+                                                                 @RequestParam String dateLimit,
+                                                                 @Validated @RequestParam PageParamRequest pageRequest);
 
 
     @GetMapping(PREFIX + "/getCountByPayCount")
@@ -124,17 +135,18 @@ public interface UserApi {
             @Parameter(name = "minPayCount", description = "最小支付金额", required = true),
             @Parameter(name = "maxPayCount", description = "最大支付金额", required = true)
     })
-    public CommonResult<Integer> getCountByPayCount(int minPayCount, int maxPayCount);
+    public CommonResult<Integer> getCountByPayCount(@RequestParam int minPayCount,
+                                                    @RequestParam int maxPayCount);
 
     @GetMapping(PREFIX + "/getAddUserCountGroupDate")
     @Operation(summary = "按开始结束时间查询每日新增用户数量")
     @Parameter(name = "date", description = "日期", required = true)
-    public CommonResult<Map<Object, Object>> getAddUserCountGroupDate(String date);
+    public CommonResult<Map<Object, Object>> getAddUserCountGroupDate(@RequestParam String date);
 
     @GetMapping(PREFIX + "/getRegisterNumByDate")
     @Operation(summary = "根据日期获取注册用户数量")
     @Parameter(name = "date", description = "日期", required = true)
-    public CommonResult<Integer> getRegisterNumByDate(String date);
+    public CommonResult<Integer> getRegisterNumByDate(@RequestParam String date);
 
     @GetMapping(PREFIX + "/getUserListBySpreadLevel")
     @Operation(summary = "根据条件获取推广人列表")
@@ -142,7 +154,8 @@ public interface UserApi {
             @Parameter(name = "request", description = "请求参数", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<User>> getUserListBySpreadLevel(RetailShopStairUserRequest request, PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<User>> getUserListBySpreadLevel(@Validated @RequestParam RetailShopStairUserRequest request,
+                                                                 @Validated @RequestParam PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getOrderListBySpreadLevel")
     @Operation(summary = "根据条件获取推广人订单")
@@ -150,10 +163,11 @@ public interface UserApi {
             @Parameter(name = "request", description = "请求参数", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<SpreadOrderResponse>> getOrderListBySpreadLevel(RetailShopStairUserRequest request, PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<SpreadOrderResponse>> getOrderListBySpreadLevel(@Validated @RequestParam RetailShopStairUserRequest request,
+                                                                                 @Validated @RequestParam PageParamRequest pageParamRequest);
 
     @PostMapping(PREFIX + "/clearSpread")
     @Operation(summary = "根据用户id清除用户当前推广人")
     @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<Boolean> clearSpread(Integer uid);
+    public CommonResult<Boolean> clearSpread(@RequestParam Integer uid);
 }

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -27,18 +28,20 @@ public interface StoreOrderStatusApi {
             @Parameter(name = "type", description = "类型", required = true),
             @Parameter(name = "message", description = "消息", required = true)
     })
-    public CommonResult<Boolean> createLog(Integer orderId, String type, String message);
+    public CommonResult<Boolean> createLog(@RequestParam Integer orderId,
+                                           @RequestParam String type,
+                                           @RequestParam String message);
 
 
     @GetMapping(PREFIX + "/getByEntity")
     @Operation(summary = "根据实体参数获取")
     @Parameter(name = "storeOrderStatus", description = "订单操作记录", required = true)
-    public CommonResult<List<StoreOrderStatus>> getByEntity(StoreOrderStatus storeOrderStatus);
+    public CommonResult<List<StoreOrderStatus>> getByEntity(@RequestParam StoreOrderStatus storeOrderStatus);
 
 
     @GetMapping(PREFIX + "/getLastByOrderId")
     @Operation(summary = "根据订单Id获取最后一个")
     @Parameter(name = "orderId", description = "订单Id", required = true)
-    public CommonResult<StoreOrderStatus> getLastByOrderId(Integer orderId);
+    public CommonResult<StoreOrderStatus> getLastByOrderId(@RequestParam Integer orderId);
 
 }

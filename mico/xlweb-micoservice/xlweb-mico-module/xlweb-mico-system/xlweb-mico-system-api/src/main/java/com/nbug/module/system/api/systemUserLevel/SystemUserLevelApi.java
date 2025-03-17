@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface SystemUserLevelApi {
     @GetMapping(PREFIX + "/getByLevelId")
     @Operation(summary = "根据等级id获取等级信息")
     @Parameter(name = "levelId", description = "等级id", required = true)
-    public CommonResult<SystemUserLevel> getByLevelId(Integer levelId);
+    public CommonResult<SystemUserLevel> getByLevelId(@RequestParam Integer levelId);
 
 
     @GetMapping(PREFIX + "/getUsableList")

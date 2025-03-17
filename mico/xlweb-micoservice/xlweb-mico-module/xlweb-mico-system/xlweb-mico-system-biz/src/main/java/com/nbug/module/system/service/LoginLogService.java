@@ -22,8 +22,8 @@ public interface LoginLogService {
     /**
      * 创建登录日志
      *
-     * @param reqDTO 日志信息
+     * @param req 日志信息
      */
-    void createLoginLog(@Valid LoginLog reqDTO);
+    void createLoginLog(@Valid LoginLog req);
 
 }

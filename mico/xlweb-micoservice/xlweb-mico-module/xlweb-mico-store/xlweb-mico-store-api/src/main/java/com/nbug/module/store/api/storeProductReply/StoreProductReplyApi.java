@@ -8,7 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,11 +25,11 @@ public interface StoreProductReplyApi {
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存评论")
     @Parameter(name = "replyLists", description = "回复列表", required = true)
-    public CommonResult<Boolean> saveBatch(List<StoreProductReply> replyLists);
+    public CommonResult<Boolean> saveBatch(@RequestParam List<StoreProductReply> replyLists);
 
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建评论")
     @Parameter(name = "request", description = "评论", required = true)
-    public CommonResult<Boolean> create( StoreProductReplyAddRequest request);
+    public CommonResult<Boolean> create(@Validated @RequestBody StoreProductReplyAddRequest request);
 
 }

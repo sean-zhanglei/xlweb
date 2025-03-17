@@ -13,8 +13,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,12 +30,12 @@ public interface StoreCouponUserApi {
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获得优惠券")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
-    public CommonResult<StoreCouponUser> getById(Integer id);
+    public CommonResult<StoreCouponUser> getById(@RequestParam Integer id);
 
     @PostMapping(PREFIX + "/updateById")
     @Operation(summary = "更新优惠券")
     @Parameter(name = "storeCouponUser", description = "更新优惠券", required = true)
-    public CommonResult<Boolean> updateById(StoreCouponUser storeCouponUser);
+    public CommonResult<Boolean> updateById(@RequestParam StoreCouponUser storeCouponUser);
 
     @PostMapping(PREFIX + "/paySuccessGiveAway")
     @Operation(summary = "支付成功赠送优惠券")
@@ -41,17 +43,18 @@ public interface StoreCouponUserApi {
             @Parameter(name = "couponId", description = "优惠券ID", required = true, example = "1024"),
             @Parameter(name = "uid", description = "用户ID", required = true, example = "1024")
     })
-    public CommonResult<MyRecord> paySuccessGiveAway(Integer couponId, Integer uid);
+    public CommonResult<MyRecord> paySuccessGiveAway(@RequestParam Integer couponId,
+                                                     @RequestParam Integer uid);
 
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存优惠券")
     @Parameter(name = "storeCouponUsers", description = "优惠券", required = true)
-    public CommonResult<Boolean> saveBatch(List<StoreCouponUser> storeCouponUsers);
+    public CommonResult<Boolean> saveBatch(@RequestParam List<StoreCouponUser> storeCouponUsers);
 
     @GetMapping(PREFIX + "/getUseCount")
     @Operation(summary = "获取可用优惠券数量")
     @Parameter(name = "uid", description = "用户ID", required = true, example = "1024")
-    public CommonResult<Integer> getUseCount(Integer uid);
+    public CommonResult<Integer> getUseCount(@RequestParam Integer uid);
 
     @GetMapping(PREFIX + "/findListByUid")
     @Operation(summary = "获取用户优惠券列表")
@@ -59,7 +62,8 @@ public interface StoreCouponUserApi {
             @Parameter(name = "uid", description = "用户ID", required = true, example = "1024"),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<List<StoreCouponUser>> findListByUid(Integer uid, PageParamRequest pageParamRequest);
+    public CommonResult<List<StoreCouponUser>> findListByUid(@RequestParam Integer uid,
+                                                             @Validated @RequestParam PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getMyCouponList")
     @Operation(summary = "获取我的优惠券")
@@ -67,11 +71,12 @@ public interface StoreCouponUserApi {
             @Parameter(name = "type", description = "类型", required = true, example = "usable-可用，unusable-不可用"),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true),
     })
-    public CommonResult<CommonPage<StoreCouponUserResponse>> getMyCouponList(String type, PageParamRequest pageParamRequest);
+    public CommonResult<CommonPage<StoreCouponUserResponse>> getMyCouponList(@RequestParam String type,
+                                                                             @Validated @RequestParam PageParamRequest pageParamRequest);
 
 
     @PostMapping(PREFIX + "/receiveCoupon")
     @Operation(summary = "领取优惠券")
     @Parameter(name = "request", description = "用户领取优惠券请求对象", required = true)
-    public CommonResult<Boolean> receiveCoupon(UserCouponReceiveRequest request);
+    public CommonResult<Boolean> receiveCoupon(@Validated UserCouponReceiveRequest request);
 }

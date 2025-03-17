@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public interface StoreProductCouponApi {
     @GetMapping(PREFIX + "/getListByProductId")
     @Operation(summary = "获取商品优惠券列表")
     @Parameter(name = "productId", description = "商品Id", required = true)
-    public CommonResult<List<StoreProductCoupon>> getListByProductId(Integer productId);
+    public CommonResult<List<StoreProductCoupon>> getListByProductId(@RequestParam Integer productId);
 
 }

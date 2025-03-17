@@ -116,7 +116,8 @@ public class SystemAdminController {
     @PreAuthorize("hasAuthority('admin:system:admin:update:status')")
     @Operation(summary = "修改后台管理员状态")
     @RequestMapping(value = "/updateStatus", method = RequestMethod.GET)
-    public CommonResult<Object> updateStatus(@RequestParam(value = "id") @Valid Integer id, @RequestParam(value = "status") @Valid Boolean status) {
+    public CommonResult<Object> updateStatus(@RequestParam(value = "id") @Valid Integer id,
+                                             @RequestParam(value = "status") @Valid Boolean status) {
         if (systemAdminService.updateStatus(id, status)) {
             return CommonResult.success("修改成功");
         }

@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -28,17 +30,19 @@ public interface StoreCombinationApi {
             @Parameter(name = "num", description = "商品数量", required = true),
             @Parameter(name = "type", description = "操作类型", required = true)
     })
-    public CommonResult<Boolean> operationStock(Integer id, Integer num, String type);
+    public CommonResult<Boolean> operationStock(@RequestParam Integer id,
+                                                @RequestParam Integer num,
+                                                @RequestParam String type);
 
     @PostMapping(PREFIX + "/getByIdException")
     @Operation(summary = "根据id获取拼团商品信息")
     @Parameter(name = "id", description = "商品Id", required = true)
-    public CommonResult<StoreCombination> getByIdException(Integer combinationId);
+    public CommonResult<StoreCombination> getByIdException(@RequestParam Integer combinationId);
 
     @PostMapping(PREFIX + "/getById")
     @Operation(summary = "根据id获取拼团商品信息")
     @Parameter(name = "id", description = "商品Id", required = true)
-    public CommonResult<StoreCombination> getById(Integer id);
+    public CommonResult<StoreCombination> getById(@RequestParam Integer id);
 
     @PostMapping(PREFIX + "/getList")
     @Operation(summary = "获取拼团商品列表")
@@ -46,6 +50,7 @@ public interface StoreCombinationApi {
             @Parameter(name = "request", description = "查询参数", required = true),
             @Parameter(name = "pageParamReques", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<StoreCombinationResponse>> getList(StoreCombinationSearchRequest request, PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<StoreCombinationResponse>> getList(@Validated @RequestParam StoreCombinationSearchRequest request,
+                                                                    @Validated @RequestParam PageParamRequest pageParamRequest);
 
 }

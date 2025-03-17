@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,12 +23,12 @@ public interface ConfigApi {
     @GetMapping(PREFIX + "/getValueByKeyException")
     @Operation(summary = "根据 name 获取 value 找不到抛异常")
     @Parameter(name = "name", description = "name", required = true)
-    CommonResult<String> getValueByKeyException(String name);
+    CommonResult<String> getValueByKeyException(@RequestParam String name);
 
     @GetMapping(PREFIX + "/getValueByKey")
     @Operation(summary = "根据menu name 获取 value")
     @Parameter(name = "key", description = "key", required = true)
-    CommonResult<String> getValueByKey(String key);
+    CommonResult<String> getValueByKey(@RequestParam String key);
 
     @GetMapping(PREFIX + "/getDeliveryInfo")
     @Operation(summary = "获取面单默认配置信息")
@@ -36,12 +37,12 @@ public interface ConfigApi {
     @GetMapping(PREFIX + "/getValuesByKes")
     @Operation(summary = "同时获取多个配置")
     @Parameter(name = "keys", description = "keys", required = true)
-    public CommonResult<List<String>> getValuesByKes(List<String> keys);
+    public CommonResult<List<String>> getValuesByKes(@RequestParam List<String> keys);
 
     @GetMapping(PREFIX + "/info")
     @Operation(summary = "根据formId查询数据")
     @Parameter(name = "formId", description = "formId", required = true)
-    public CommonResult<HashMap<String, String>> info(Integer formId);
+    public CommonResult<HashMap<String, String>> info(@RequestParam Integer formId);
 
     @GetMapping(PREFIX + "/getColorConfig")
     @Operation(summary = "获取颜色配置")

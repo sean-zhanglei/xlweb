@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface AdminApi {
     @GetMapping(PREFIX + "/getMapInId")
     @Operation(summary = "根据id获取管理员信息")
     @Parameter(name = "adminIdList", description = "管理员ID集合", required = true)
-    public CommonResult<HashMap<Integer, SystemAdmin>> getMapInId(List<Integer> adminIdList);
+    public CommonResult<HashMap<Integer, SystemAdmin>> getMapInId(@RequestParam List<Integer> adminIdList);
 
     @GetMapping(PREFIX + "/findIsSmsList")
     @Operation(summary = "获取短信通知管理员列表")
@@ -30,5 +31,5 @@ public interface AdminApi {
     @GetMapping(PREFIX + "/selectUserByUserName")
     @Operation(summary = "根据用户名获取管理员信息")
     @Parameter(name = "username", description = "用户名", required = true)
-    public CommonResult<SystemAdmin> selectUserByUserName(String username);
+    public CommonResult<SystemAdmin> selectUserByUserName(@RequestParam String username);
 }

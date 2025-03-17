@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
@@ -24,12 +25,13 @@ public interface WeChatPayApi {
             @Parameter(name = "userRecharge", description = "充值参数", required = true),
             @Parameter(name = "clientIp", description = "客户端IP", required = true)
     })
-    public CommonResult<Map<String, String>> unifiedRecharge(UserRecharge userRecharge, String clientIp);
+    public CommonResult<Map<String, String>> unifiedRecharge(@RequestParam UserRecharge userRecharge,
+                                                             @RequestParam String clientIp);
 
 
     @PostMapping(PREFIX + "/queryPayResult")
     @Operation(summary = "查询支付结果")
     @Parameter(name = "orderNo", description = "订单号", required = true)
-    public CommonResult<Boolean> queryPayResult(String orderNo);
+    public CommonResult<Boolean> queryPayResult(@RequestParam String orderNo);
 
 }

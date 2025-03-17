@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -26,10 +27,12 @@ public interface StoreSeckillApi {
             @Parameter(name = "num", description = "商品数量", required = true),
             @Parameter(name = "type", description = "操作类型", required = true)
     })
-    public CommonResult<Boolean> operationStock(Integer id, Integer num, String type);
+    public CommonResult<Boolean> operationStock(@RequestParam Integer id,
+                                                @RequestParam Integer num,
+                                                @RequestParam String type);
 
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "根据id获取商品信息")
     @Parameter(name = "id", description = "商品Id", required = true)
-    public CommonResult<StoreSeckill> getByIdException(Integer id);
+    public CommonResult<StoreSeckill> getByIdException(@RequestParam Integer id);
 }

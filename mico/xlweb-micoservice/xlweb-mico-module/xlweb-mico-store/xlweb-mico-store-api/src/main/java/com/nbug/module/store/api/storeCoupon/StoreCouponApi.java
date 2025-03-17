@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,7 +27,9 @@ public interface StoreCouponApi {
             @Parameter(name = "num", description = "优惠券数量", required = true),
             @Parameter(name = "isLimited", description = "是否限时", required = true)
     })
-    public CommonResult<Boolean> deduction(Integer id, Integer num, Boolean isLimited);
+    public CommonResult<Boolean> deduction(@RequestParam Integer id,
+                                           @RequestParam Integer num,
+                                           @RequestParam Boolean isLimited);
 
     @PostMapping(PREFIX + "/findRegisterList")
     @Operation(summary = "获取优惠券列表")

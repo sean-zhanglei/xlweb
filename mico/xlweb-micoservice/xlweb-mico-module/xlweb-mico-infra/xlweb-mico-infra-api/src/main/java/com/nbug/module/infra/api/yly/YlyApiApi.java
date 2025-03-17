@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
 @Tag(name = "RPC 服务 - 易联云")
@@ -21,5 +22,6 @@ public interface YlyApiApi {
             @Parameter(name = "ordId", description = "订单编号", required = true),
             @Parameter(name = "isAuto", description = "是否自动打印", required = true)
     })
-    public CommonResult<String> YlyPrint(String ordId, boolean isAuto);
+    public CommonResult<String> YlyPrint(@RequestParam String ordId,
+                                         @RequestParam boolean isAuto);
 }

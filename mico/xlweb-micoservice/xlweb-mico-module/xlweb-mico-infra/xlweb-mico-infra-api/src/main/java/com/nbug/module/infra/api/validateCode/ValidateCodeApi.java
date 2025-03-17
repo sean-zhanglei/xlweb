@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
 @Tag(name = "RPC 服务 - 验证码")
@@ -27,5 +28,6 @@ public interface ValidateCodeApi {
             @Parameter(name = "key", description = "验证码的 key", required = true),
             @Parameter(name = "code", description = "验证码的 code", required = true)
     })
-    public CommonResult<Boolean> check(String key, String code);
+    public CommonResult<Boolean> check(@RequestParam String key,
+                                       @RequestParam String code);
 }

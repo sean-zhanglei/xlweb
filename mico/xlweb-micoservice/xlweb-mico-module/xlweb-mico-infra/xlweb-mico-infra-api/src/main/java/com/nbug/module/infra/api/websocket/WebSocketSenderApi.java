@@ -7,10 +7,9 @@ import com.nbug.module.infra.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import javax.validation.Valid;
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
 @Tag(name = "RPC 服务 - WebSocket 发送器的") // 对 WebSocketMessageSender 进行封装，提供给其它模块使用
@@ -20,7 +19,7 @@ public interface WebSocketSenderApi {
 
     @PostMapping(PREFIX + "/send")
     @Operation(summary = "发送 WebSocket 消息")
-    CommonResult<Boolean> send(@Valid @RequestBody WebSocketSendReqDTO message);
+    CommonResult<Boolean> send(@Validated @RequestBody WebSocketSendReqDTO message);
 
     /**
      * 发送消息给指定用户

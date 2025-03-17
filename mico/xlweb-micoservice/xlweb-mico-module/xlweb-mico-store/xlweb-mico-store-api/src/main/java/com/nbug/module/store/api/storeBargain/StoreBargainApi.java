@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -30,12 +32,14 @@ public interface StoreBargainApi {
             @Parameter(name = "num", description = "商品数量", required = true),
             @Parameter(name = "type", description = "操作类型", required = true)
     })
-    public CommonResult<Boolean> operationStock(Integer id, Integer num, String type);
+    public CommonResult<Boolean> operationStock(@RequestParam Integer id,
+                                                @RequestParam Integer num,
+                                                @RequestParam String type);
 
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "根据id获取商品信息")
     @Parameter(name = "id", description = "商品Id", required = true)
-    public CommonResult<StoreBargain> getByIdException(Integer id);
+    public CommonResult<StoreBargain> getByIdException(@RequestParam Integer id);
 
 
     @GetMapping(PREFIX + "/getList")
@@ -44,5 +48,6 @@ public interface StoreBargainApi {
             @Parameter(name = "request", description = "查询参数", required = true),
             @Parameter(name = "pageParamReques", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<StoreBargainResponse>> getList(StoreBargainSearchRequest request, PageParamRequest pageParamReques);
+    public CommonResult<PageInfo<StoreBargainResponse>> getList(@Validated @RequestParam StoreBargainSearchRequest request,
+                                                                @Validated @RequestParam PageParamRequest pageParamReques);
 }

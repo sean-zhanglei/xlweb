@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -19,5 +20,5 @@ public interface StoreSeckillMangerApi {
     @PostMapping(PREFIX + "/getById")
     @Operation(summary = "根据id获取商品秒杀管理")
     @Parameter(name = "id", description = "Id", required = true)
-    public CommonResult<StoreSeckillManger> getById(Integer id);
+    public CommonResult<StoreSeckillManger> getById(@RequestParam Integer id);
 }

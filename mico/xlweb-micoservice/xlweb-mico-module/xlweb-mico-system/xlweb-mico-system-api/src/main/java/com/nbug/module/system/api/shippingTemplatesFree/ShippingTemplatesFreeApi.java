@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
 @Tag(name = "RPC 服务 - 免费运费模版")
@@ -22,5 +23,6 @@ public interface ShippingTemplatesFreeApi {
             @Parameter(name = "tempId", description = "模板ID", required = true),
             @Parameter(name = "cityId", description = "城市ID", required = true)
     })
-    public CommonResult<ShippingTemplatesFree> getByTempIdAndCityId(Integer tempId, Integer cityId);
+    public CommonResult<ShippingTemplatesFree> getByTempIdAndCityId(@RequestParam Integer tempId,
+                                                                    @RequestParam Integer cityId);
 }

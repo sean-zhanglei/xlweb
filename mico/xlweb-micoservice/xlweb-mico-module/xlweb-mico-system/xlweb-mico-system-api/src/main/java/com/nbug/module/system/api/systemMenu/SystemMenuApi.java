@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface SystemMenuApi {
     @GetMapping(PREFIX + "/findPermissionByUserId")
     @Operation(summary = "根据用户id获取权限")
     @Parameter(name = "userId", description = "用户id", required = true)
-    public CommonResult<List<SystemMenu>> findPermissionByUserId(Integer userId);
+    public CommonResult<List<SystemMenu>> findPermissionByUserId(@RequestParam Integer userId);
 }

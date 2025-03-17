@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,7 +28,8 @@ public interface UserBrokerageRecordApi {
             @Parameter(name = "linkId", description = "关联id", required = true),
             @Parameter(name = "linkType", description = "关联类型", required = true)
     })
-    public CommonResult<List<UserBrokerageRecord>> findListByLinkIdAndLinkType(String linkId, String linkType);
+    public CommonResult<List<UserBrokerageRecord>> findListByLinkIdAndLinkType(@RequestParam String linkId,
+                                                                               @RequestParam String linkType);
 
     @GetMapping(PREFIX + "/getByLinkIdAndLinkType")
     @Operation(summary = "根据linkId和linkType查询用户佣金记录")
@@ -35,26 +37,27 @@ public interface UserBrokerageRecordApi {
             @Parameter(name = "linkId", description = "关联id", required = true),
             @Parameter(name = "linkType", description = "关联类型", required = true)
     })
-    public CommonResult<UserBrokerageRecord> getByLinkIdAndLinkType(String linkId, String linkType);
+    public CommonResult<UserBrokerageRecord> getByLinkIdAndLinkType(@RequestParam String linkId,
+                                                                    @RequestParam String linkType);
 
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新用户佣金记录")
     @Parameter(name = "userBrokerageRecords", description = "用户佣金记录信息", required = true)
-    public CommonResult<Boolean> updateBatchById(List<UserBrokerageRecord> userBrokerageRecords);
+    public CommonResult<Boolean> updateBatchById(@RequestParam List<UserBrokerageRecord> userBrokerageRecords);
 
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存用户佣金记录")
     @Parameter(name = "userBrokerageRecords", description = "用户佣金记录信息", required = true)
-    public CommonResult<Boolean> saveBatch(List<UserBrokerageRecord> userBrokerageRecords);
+    public CommonResult<Boolean> saveBatch(@RequestParam List<UserBrokerageRecord> userBrokerageRecords);
 
 
     @GetMapping(PREFIX + "/getSpreadListByUid")
     @Operation(summary = "根据uid查询用户佣金记录")
     @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(Integer uid);
+    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(@RequestParam Integer uid);
 
     @GetMapping(PREFIX + "/getFreezePrice")
     @Operation(summary = "获取冻结期佣金")
     @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<BigDecimal> getFreezePrice(Integer uid);
+    public CommonResult<BigDecimal> getFreezePrice(@RequestParam Integer uid);
 }

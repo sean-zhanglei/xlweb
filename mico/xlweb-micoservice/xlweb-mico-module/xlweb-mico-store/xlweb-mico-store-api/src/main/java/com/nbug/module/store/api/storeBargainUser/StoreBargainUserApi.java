@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -19,6 +20,6 @@ public interface StoreBargainUserApi {
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获取ById")
     @Parameter(name = "id", description = "Id", required = true)
-    public CommonResult<StoreBargainUser> getById(Integer id);
+    public CommonResult<StoreBargainUser> getById(@RequestParam Integer id);
 
 }

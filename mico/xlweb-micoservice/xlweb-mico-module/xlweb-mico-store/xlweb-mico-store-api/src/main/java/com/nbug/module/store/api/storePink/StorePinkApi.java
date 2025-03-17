@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface StorePinkApi {
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获取ById")
     @Parameter(name = "id", description = "Id", required = true)
-    public CommonResult<StorePink> getById(Integer id);
+    public CommonResult<StorePink> getById(@RequestParam Integer id);
 
     @GetMapping(PREFIX + "/getListByCidAndKid")
     @Operation(summary = "获取ById")
@@ -31,21 +32,22 @@ public interface StorePinkApi {
             @Parameter(name = "cid", description = "商品Id", required = true),
             @Parameter(name = "kid", description = "拼团Id", required = true)
     })
-    public CommonResult<List<StorePink>> getListByCidAndKid(Integer cid, Integer kid);
+    public CommonResult<List<StorePink>> getListByCidAndKid(@RequestParam Integer cid,
+                                                            @RequestParam Integer kid);
 
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新ById")
     @Parameter(name = "storePinks", description = "拼团信息", required = true)
-    public CommonResult<Boolean> updateBatchById(List<StorePink> storePinks);
+    public CommonResult<Boolean> updateBatchById(@RequestParam List<StorePink> storePinks);
 
 
     @GetMapping(PREFIX + "/getCountByKid")
     @Operation(summary = "获取ById")
     @Parameter(name = "pinkId", description = "拼团Id", required = true)
-    public CommonResult<Integer> getCountByKid(Integer pinkId);
+    public CommonResult<Integer> getCountByKid(@RequestParam Integer pinkId);
 
     @PostMapping(PREFIX + "/save")
     @Operation(summary = "保存")
     @Parameter(name = "storePink", description = "拼团信息", required = true)
-    public CommonResult<Boolean> save(StorePink storePink);
+    public CommonResult<Boolean> save(@RequestParam StorePink storePink);
 }

@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -27,7 +30,7 @@ public interface UserCenterApi {
     @PostMapping(PREFIX + "/registerBindingPhone")
     @Operation(summary = "微信注册绑定手机号")
     @Parameter(name = "request", description = "微信绑定手机号请求对象", required = true)
-    public CommonResult<LoginResponse> registerBindingPhone(WxBindingPhoneRequest request);
+    public CommonResult<LoginResponse> registerBindingPhone(@Validated @RequestBody WxBindingPhoneRequest request);
 
     @PostMapping(PREFIX + "/weChatAuthorizeLogin")
     @Operation(summary = "通过微信code登录")
@@ -35,7 +38,8 @@ public interface UserCenterApi {
             @Parameter(name = "code", description = "code码", required = true),
             @Parameter(name = "spreadUid", description = "推荐人id")
     })
-    public CommonResult<LoginResponse> weChatAuthorizeLogin(String code, Integer spreadUid);
+    public CommonResult<LoginResponse> weChatAuthorizeLogin(@RequestParam String code,
+                                                            @RequestParam Integer spreadUid);
 
 
     @PostMapping(PREFIX + "/weChatAuthorizeProgramLogin")
@@ -44,5 +48,6 @@ public interface UserCenterApi {
             @Parameter(name = "code", description = "code码", required = true),
             @Parameter(name = "request", description = "微信绑定手机号请求对象", required = true)
     })
-    public CommonResult<LoginResponse> weChatAuthorizeProgramLogin(String code, RegisterThirdUserRequest request);
+    public CommonResult<LoginResponse> weChatAuthorizeProgramLogin(@RequestParam String code,
+                                                                   @Validated @RequestParam RegisterThirdUserRequest request);
 }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -24,6 +25,7 @@ public interface UserTokenApi {
             @Parameter(name = "userId", description = "用户ID", required = true),
             @Parameter(name = "type", description = "用户类型", required = true)
     })
-    CommonResult<UserToken> getTokenByUserId(Integer userId, int type);
+    CommonResult<UserToken> getTokenByUserId(@RequestParam Integer userId,
+                                             @RequestParam int type);
 
 }

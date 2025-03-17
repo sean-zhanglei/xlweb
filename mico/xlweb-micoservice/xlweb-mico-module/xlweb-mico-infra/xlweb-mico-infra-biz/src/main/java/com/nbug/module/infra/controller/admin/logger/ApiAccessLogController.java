@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class ApiAccessLogController {
     @GetMapping("/page")
     @Operation(summary = "获得API 访问日志分页")
     @PreAuthorize("@ss.hasPermission('infra:api-access-log:query')")
-    public CommonResult<PageResult<ApiAccessLogRespVO>> getApiAccessLogPage(@Valid ApiAccessLogPageReqVO pageReqVO) {
+    public CommonResult<PageResult<ApiAccessLogRespVO>> getApiAccessLogPage(@Valid @RequestBody ApiAccessLogPageReqVO pageReqVO) {
         PageResult<ApiAccessLog> pageResult = apiAccessLogService.getApiAccessLogPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, ApiAccessLogRespVO.class));
     }

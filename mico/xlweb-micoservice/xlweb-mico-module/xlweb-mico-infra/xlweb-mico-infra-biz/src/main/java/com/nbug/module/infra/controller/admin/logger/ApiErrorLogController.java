@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,7 @@ public class ApiErrorLogController {
     @GetMapping("/page")
     @Operation(summary = "获得 API 错误日志分页")
     @PreAuthorize("@ss.hasPermission('infra:api-error-log:query')")
-    public CommonResult<PageResult<ApiErrorLogRespVO>> getApiErrorLogPage(@Valid ApiErrorLogPageReqVO pageReqVO) {
+    public CommonResult<PageResult<ApiErrorLogRespVO>> getApiErrorLogPage(@Valid @RequestBody ApiErrorLogPageReqVO pageReqVO) {
         PageResult<ApiErrorLog> pageResult = apiErrorLogService.getApiErrorLogPage(pageReqVO);
         return success(BeanUtils.toBean(pageResult, ApiErrorLogRespVO.class));
     }

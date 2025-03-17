@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,19 +26,19 @@ public interface StoreOrderInfoApi {
     @GetMapping(PREFIX + "/getOrderListByOrderId")
     @Operation(summary = "获取订单详情")
     @Parameter(name = "orderId", description = "订单Id", required = true)
-    public CommonResult<List<StoreOrderInfoOldVo>> getOrderListByOrderId(Integer orderId);
+    public CommonResult<List<StoreOrderInfoOldVo>> getOrderListByOrderId(@RequestParam Integer orderId);
 
 
     @GetMapping(PREFIX + "/getListByOrderNo")
     @Operation(summary = "获取订单详情-订单编号")
     @Parameter(name = "orderNo", description = "订单号", required = true)
-    public CommonResult<List<StoreOrderInfo>> getListByOrderNo(String orderNo);
+    public CommonResult<List<StoreOrderInfo>> getListByOrderNo(@RequestParam String orderNo);
 
 
     @GetMapping(PREFIX + "/getVoListByOrderId")
     @Operation(summary = "获取订单详情vo列表")
     @Parameter(name = "orderId", description = "订单Id", required = true)
-    public CommonResult<List<StoreOrderInfoVo>> getVoListByOrderId(Integer orderId);
+    public CommonResult<List<StoreOrderInfoVo>> getVoListByOrderId(@RequestParam Integer orderId);
 
     @GetMapping(PREFIX + "/getByUniAndOrderId")
     @Operation(summary = "通过订单编号和规格号查询")
@@ -45,11 +46,12 @@ public interface StoreOrderInfoApi {
             @Parameter(name = "uni", description = "唯一标识", required = true),
             @Parameter(name = "orderId", description = "订单Id", required = true)
     })
-    public CommonResult<StoreOrderInfo> getByUniAndOrderId(String uni, Integer orderId);
+    public CommonResult<StoreOrderInfo> getByUniAndOrderId(@RequestParam String uni,
+                                                           @RequestParam Integer orderId);
 
     @PostMapping(PREFIX + "/saveOrderInfos")
     @Operation(summary = "保存订单详情")
     @Parameter(name = "storeOrderInfos", description = "订单详情列表", required = true)
-    public CommonResult<Boolean> saveOrderInfos(List<StoreOrderInfo> storeOrderInfos);
+    public CommonResult<Boolean> saveOrderInfos(@RequestParam List<StoreOrderInfo> storeOrderInfos);
 
 }
