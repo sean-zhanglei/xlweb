@@ -78,7 +78,7 @@ spring:
 xxl:
   job:
     admin:
-      addresses: http://127.0.0.1:9090/xxl-job-admin # 调度中心部署跟地址
+      addresses: http://127.0.0.1:8080/xxl-job-admin # 调度中心部署跟地址
 
 --- #################### 服务保障相关配置 ####################
 
