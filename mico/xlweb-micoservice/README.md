@@ -29,7 +29,3 @@
 7. guava 33.4.0-jre
 8. Junit 4.12
 
-
-ALTER TABLE `xlweb-mico`.`eb_store_order`
-ADD COLUMN `delivery_time` VARCHAR(100) NULL DEFAULT '' AFTER `out_trade_no`,
-ADD COLUMN `pickup_time` VARCHAR(100) NULL DEFAULT '' AFTER `delivery_time`;
