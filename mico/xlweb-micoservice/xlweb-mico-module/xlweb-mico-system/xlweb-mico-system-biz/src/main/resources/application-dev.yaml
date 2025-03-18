@@ -95,6 +95,7 @@ spring:
 --- #################### 定时任务相关配置 ####################
 xxl:
   job:
+    enabled: false  # 没有定时任务 关闭加快启动速度
     admin:
       addresses: http://127.0.0.1:8080/xxl-job-admin # 调度中心部署跟地址
 
