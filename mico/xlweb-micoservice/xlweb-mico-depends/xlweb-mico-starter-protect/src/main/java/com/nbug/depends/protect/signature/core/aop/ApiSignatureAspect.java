@@ -46,7 +46,7 @@ public class ApiSignatureAspect {
         log.error("[beforePointCut][方法{} 参数({}) 签名失败]", joinPoint.getSignature().toString(),
                 joinPoint.getArgs());
         throw new ServiceException(BAD_REQUEST.getCode(),
-                StrUtil.blankToDefault(signature.message(), BAD_REQUEST.getMsg()));
+                StrUtil.blankToDefault(signature.message(), BAD_REQUEST.getMessage()));
     }
 
     public boolean verifySignature(ApiSignature signature, HttpServletRequest request) {
