@@ -11,6 +11,7 @@ import com.nbug.module.infra.controller.admin.logger.vo.apierrorlog.ApiErrorLogP
 import com.nbug.module.infra.dal.ApiErrorLogDao;
 import com.nbug.module.infra.enums.logger.ApiErrorLogProcessStatusEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -37,6 +38,19 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
 
     @Override
     public void createApiErrorLog(ApiErrorLogCreateReqDTO createDTO) {
+        ApiErrorLog apiErrorLog = BeanUtils.toBean(createDTO, ApiErrorLog.class)
+                .setProcessStatus(ApiErrorLogProcessStatusEnum.INIT.getStatus());
+        apiErrorLog.setRequestParams(StrUtil.maxLength(apiErrorLog.getRequestParams(), REQUEST_PARAMS_MAX_LENGTH));
+        if (TenantContextHolder.getTenantId() != null) {
+            apiErrorLogDao.insert(apiErrorLog);
+        } else {
+            // 极端情况下，上下文中没有租户时，此时忽略租户上下文，避免插入失败！
+            TenantUtils.executeIgnore(() -> apiErrorLogDao.insert(apiErrorLog));
+        }
+    }
+    @Async
+    @Override
+    public void createApiErrorLogAsync(ApiErrorLogCreateReqDTO createDTO) {
         ApiErrorLog apiErrorLog = BeanUtils.toBean(createDTO, ApiErrorLog.class)
                 .setProcessStatus(ApiErrorLogProcessStatusEnum.INIT.getStatus());
         apiErrorLog.setRequestParams(StrUtil.maxLength(apiErrorLog.getRequestParams(), REQUEST_PARAMS_MAX_LENGTH));

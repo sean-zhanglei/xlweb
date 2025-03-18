@@ -34,7 +34,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("api/front/store/combination")
-@Tag(name = "拼团商品")
+@Tag(name = "应用后台 - 拼团商品")
 public class CombinationController {
 
     @Autowired

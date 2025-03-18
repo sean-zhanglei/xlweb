@@ -28,7 +28,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("api/front/user/coupon")
-@Tag(name = "营销 -- 优惠券")
+@Tag(name = "应用后台 - 营销 -- 优惠券")
 public class UserCouponController {
 
     @Autowired

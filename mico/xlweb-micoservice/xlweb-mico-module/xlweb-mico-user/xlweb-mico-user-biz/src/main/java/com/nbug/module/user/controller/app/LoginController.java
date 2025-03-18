@@ -31,7 +31,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController("FrontLoginController")
 @RequestMapping("api/front/user/login")
-@Tag(name = "用户 -- 登录注册")
+@Tag(name = "应用后台 - 用户 -- 登录注册")
 public class LoginController {
 
     @Autowired

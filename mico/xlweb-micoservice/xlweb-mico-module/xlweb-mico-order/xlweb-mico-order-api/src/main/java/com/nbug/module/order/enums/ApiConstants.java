@@ -15,7 +15,7 @@ public class ApiConstants {
      *
      * 注意，需要保证和 spring.application.name 保持一致
      */
-    public static final String NAME = "order-server";
+    public static final String NAME = "xlweb-mico-order-server";
 
     public static final String PREFIX = RpcConstants.RPC_API_PREFIX + "/order";
 

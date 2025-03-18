@@ -10,6 +10,7 @@ import com.nbug.module.infra.api.logger.dto.ApiAccessLogCreateReqDTO;
 import com.nbug.module.infra.controller.admin.logger.vo.apiaccesslog.ApiAccessLogPageReqVO;
 import com.nbug.module.infra.dal.ApiAccessLogDao;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -35,6 +36,20 @@ public class ApiAccessLogServiceImpl implements ApiAccessLogService {
 
     @Override
     public void createApiAccessLog(ApiAccessLogCreateReqDTO createDTO) {
+        ApiAccessLog apiAccessLog = BeanUtils.toBean(createDTO, ApiAccessLog.class);
+        apiAccessLog.setRequestParams(StrUtil.maxLength(apiAccessLog.getRequestParams(), REQUEST_PARAMS_MAX_LENGTH));
+        apiAccessLog.setResultMsg(StrUtil.maxLength(apiAccessLog.getResultMsg(), RESULT_MSG_MAX_LENGTH));
+        if (TenantContextHolder.getTenantId() != null) {
+            apiAccessLogDao.insert(apiAccessLog);
+        } else {
+            // 极端情况下，上下文中没有租户时，此时忽略租户上下文，避免插入失败！
+            TenantUtils.executeIgnore(() -> apiAccessLogDao.insert(apiAccessLog));
+        }
+    }
+
+    @Async
+    @Override
+    public void createApiAccessLogAsync(ApiAccessLogCreateReqDTO createDTO) {
         ApiAccessLog apiAccessLog = BeanUtils.toBean(createDTO, ApiAccessLog.class);
         apiAccessLog.setRequestParams(StrUtil.maxLength(apiAccessLog.getRequestParams(), REQUEST_PARAMS_MAX_LENGTH));
         apiAccessLog.setResultMsg(StrUtil.maxLength(apiAccessLog.getResultMsg(), RESULT_MSG_MAX_LENGTH));

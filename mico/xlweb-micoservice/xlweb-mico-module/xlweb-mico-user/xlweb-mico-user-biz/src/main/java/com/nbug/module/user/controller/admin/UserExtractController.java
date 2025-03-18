@@ -29,7 +29,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("api/admin/user/finance/apply")
-@Tag(name = "财务 -- 提现申请")
+@Tag(name = "管理后台 - 财务 -- 提现申请")
 public class UserExtractController {
 
     @Autowired

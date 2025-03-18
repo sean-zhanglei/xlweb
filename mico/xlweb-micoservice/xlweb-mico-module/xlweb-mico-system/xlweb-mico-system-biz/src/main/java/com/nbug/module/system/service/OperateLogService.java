@@ -17,6 +17,14 @@ public interface OperateLogService {
      */
     void createOperateLog(OperateLog createReqDTO);
 
+
+    /**
+     * 记录操作日志异步
+     *
+     * @param createReqDTO 创建请求
+     */
+    void createOperateLogAsync(OperateLog createReqDTO);
+
     /**
      * 获得操作日志分页列表
      *
@@ -24,5 +32,4 @@ public interface OperateLogService {
      * @return 操作日志分页列表
      */
     PageResult<OperateLog> getOperateLogPage(OperateLog pageReqVO);
-
 }

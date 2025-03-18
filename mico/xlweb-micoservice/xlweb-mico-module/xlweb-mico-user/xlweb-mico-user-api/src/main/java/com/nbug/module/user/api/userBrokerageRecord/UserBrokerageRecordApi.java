@@ -22,7 +22,7 @@ public interface UserBrokerageRecordApi {
 
     String PREFIX = ApiConstants.PREFIX + "/brokerage";
 
-    @GetMapping(PREFIX + "/getByLinkIdAndLinkType")
+    @GetMapping(PREFIX + "/findListByLinkIdAndLinkType")
     @Operation(summary = "根据linkId和linkType查询用户佣金记录")
     @Parameters({
             @Parameter(name = "linkId", description = "关联id", required = true),

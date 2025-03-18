@@ -36,7 +36,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/store/combination")
-@Tag(name = "商品——拼团——商品") //配合swagger使用
+@Tag(name = "管理后台 - 商品——拼团——商品") //配合swagger使用
 public class StoreCombinationController {
 
     @Autowired

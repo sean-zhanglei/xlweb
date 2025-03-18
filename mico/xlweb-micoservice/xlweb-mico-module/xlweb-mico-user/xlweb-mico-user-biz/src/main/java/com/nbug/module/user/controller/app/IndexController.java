@@ -29,7 +29,7 @@ import java.util.Map;
 @Slf4j
 @RestController("IndexController")
 @RequestMapping("api/front/user/index")
-@Tag(name = "首页")
+@Tag(name = "应用后台 - 首页")
 public class IndexController {
 
     @Autowired

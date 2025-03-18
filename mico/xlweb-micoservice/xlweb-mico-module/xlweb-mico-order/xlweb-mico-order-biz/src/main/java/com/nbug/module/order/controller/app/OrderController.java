@@ -44,7 +44,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController("StoreOrderFrontController")
 @RequestMapping("api/front/order")
-@Tag(name = "订单")
+@Tag(name = "应用后台 - 订单")
 public class OrderController {
 
     @Autowired

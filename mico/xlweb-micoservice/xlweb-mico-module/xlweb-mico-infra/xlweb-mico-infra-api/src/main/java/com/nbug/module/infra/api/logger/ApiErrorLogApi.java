@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,9 +27,9 @@ public interface ApiErrorLogApi {
      *
      * @param createDTO 异常日志 DTO
      */
-    @Async
-    default void createApiErrorLogAsync(ApiErrorLogCreateReqDTO createDTO) {
-        createApiErrorLog(createDTO).checkError();
-    }
+    @PostMapping(PREFIX + "/createApiErrorLogAsync")
+    @Operation(summary = "创建 API 异常日志异步")
+    @Parameter(name = "createDTO", description = "创建 API 异常日志")
+    public CommonResult<Boolean> createApiErrorLogAsync(@Validated @RequestBody ApiErrorLogCreateReqDTO createDTO);
 
 }

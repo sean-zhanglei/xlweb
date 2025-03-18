@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/store/order/status")
-@Tag(name = "订单 -- 操作记录") //配合swagger使用
+@Tag(name = "管理后台 - 订单 -- 操作记录") //配合swagger使用
 
 public class StoreOrderStatusController {
 

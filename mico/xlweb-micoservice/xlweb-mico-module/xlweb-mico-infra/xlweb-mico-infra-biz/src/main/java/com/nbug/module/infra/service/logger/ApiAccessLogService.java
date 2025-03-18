@@ -21,6 +21,13 @@ public interface ApiAccessLogService {
     void createApiAccessLog(ApiAccessLogCreateReqDTO createReqDTO);
 
     /**
+     * 创建 API 访问日志异步
+     *
+     * @param createReqDTO API 访问日志
+     */
+    void createApiAccessLogAsync(ApiAccessLogCreateReqDTO createReqDTO);
+
+    /**
      * 获得 API 访问日志分页
      *
      * @param pageReqVO 分页查询

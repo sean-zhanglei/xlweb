@@ -35,7 +35,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("api/front/store/bargain")
-@Tag(name = "砍价商品")
+@Tag(name = "应用后台 - 砍价商品")
 public class BargainController {
 
     @Autowired

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/user/level")
-@Tag(name = "会员 -- 等级")
+@Tag(name = "管理后台 - 会员 -- 等级")
 public class UserLevelController {
 
     @Autowired

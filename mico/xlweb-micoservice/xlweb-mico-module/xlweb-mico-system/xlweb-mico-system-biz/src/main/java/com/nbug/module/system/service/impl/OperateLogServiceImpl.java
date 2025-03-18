@@ -5,6 +5,7 @@ import com.nbug.mico.common.pojo.PageResult;
 import com.nbug.module.system.dal.OperateLogDao;
 import com.nbug.module.system.service.OperateLogService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,6 +26,12 @@ public class OperateLogServiceImpl implements OperateLogService {
 
     @Override
     public void createOperateLog(OperateLog createReqDTO) {
+        operateLogDao.insert(createReqDTO);
+    }
+
+    @Async
+    @Override
+    public void createOperateLogAsync(OperateLog createReqDTO) {
         operateLogDao.insert(createReqDTO);
     }
 

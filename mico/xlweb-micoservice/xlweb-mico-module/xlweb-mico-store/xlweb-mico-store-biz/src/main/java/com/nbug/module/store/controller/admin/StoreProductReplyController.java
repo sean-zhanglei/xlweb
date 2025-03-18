@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/store/product/reply")
-@Tag(name = "商品 -- 评论") //配合swagger使用
+@Tag(name = "管理后台 - 商品 -- 评论") //配合swagger使用
 public class StoreProductReplyController {
 
     @Autowired

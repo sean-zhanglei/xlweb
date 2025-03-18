@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("api/admin/store/coupon")
-@Tag(name = "营销 -- 优惠券")
+@Tag(name = "管理后台 - 营销 -- 优惠券")
 public class StoreCouponController {
 
     @Autowired

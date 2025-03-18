@@ -21,6 +21,13 @@ public interface ApiErrorLogService {
     void createApiErrorLog(ApiErrorLogCreateReqDTO createReqDTO);
 
     /**
+     * 创建 API 错误日志异步
+     *
+     * @param createReqDTO API 错误日志
+     */
+    void createApiErrorLogAsync(ApiErrorLogCreateReqDTO createReqDTO);
+
+    /**
      * 获得 API 错误日志分页
      *
      * @param pageReqVO 分页查询

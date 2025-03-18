@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RestController("CouponFrontController")
 @RequestMapping("api/front/store/coupons")
-@Tag(name = "优惠券")
+@Tag(name = "应用后台 - 优惠券")
 public class CouponController {
 
     @Autowired

@@ -35,7 +35,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
 @Slf4j
 @RestController
 @RequestMapping("api/front/store/cart")
-@Tag(name = "商品 -- 购物车") //配合swagger使用
+@Tag(name = "应用后台 - 商品 -- 购物车") //配合swagger使用
 public class CartController {
 
     @Autowired
