@@ -24,7 +24,7 @@ public class OrderAutoCompleteTask {
     @Autowired
     private OrderTaskService orderTaskService;
 
-    @XxlJob("orderAutoCancelJob")
+    @XxlJob("orderAutoCompleteJob")
     @TenantIgnore
     // @TenantJob // 多租户
     // @Scheduled(fixedDelay = 1000 * 60L * 60) //每小时同步一次数据
