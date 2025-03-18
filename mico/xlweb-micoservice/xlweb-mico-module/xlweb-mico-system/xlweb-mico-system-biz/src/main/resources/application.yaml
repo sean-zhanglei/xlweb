@@ -175,9 +175,9 @@ xlweb:
   tenant: # 多租户相关配置项
     enable: true
     ignore-urls:
-      - api/admin/infra/validate/code/get # 获取验证码，和租户无关
-      - api/admin/system/login/getLoginPic # 获取登录页LOGO，和租户无关
-      - api/admin/infra/jsconfig/getxlwebchatconfig  # 客服统计，和租户无关
+      - /api/admin/infra/validate/code/get # 获取验证码，和租户无关
+      - /api/admin/system/login/getLoginPic # 获取登录页LOGO，和租户无关
+      - /api/admin/infra/jsconfig/getxlwebchatconfig  # 客服统计，和租户无关
     ignore-tables:
       - infra_config
 
