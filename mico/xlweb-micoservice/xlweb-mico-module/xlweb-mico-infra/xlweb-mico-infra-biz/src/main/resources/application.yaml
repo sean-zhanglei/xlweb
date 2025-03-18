@@ -190,6 +190,16 @@ xlweb:
       - /api/admin/infra/validate/code/get # 获取验证码，和租户无关
       - /api/admin/system/login/getLoginPic # 获取登录页LOGO，和租户无关
       - /api/admin/infra/jsconfig/getxlwebchatconfig  # 客服统计，和租户无关
+      - /api/admin/system/login/account #PC 账号密码登录
+      - /api/front/api/front/user/login/account # H5 账号密码登录
+      - /api/front/api/front/user/login/mobile  # H5 手机号登录
+      - /api/front/api/front/user/login/sendCode # H5 发送验证码
+      - /api/front/api/front/user/login/logout # H5 退出
+      - /api/front/infra/wechat/authorize/login # 微信登录公共号授权登录
+      - /api/front/infra/wechat/authorize/program/login # 微信登录小程序授权登录
+      - /api/front/infra/wechat/config # 获取微信公众号js配置
+      - /api/front/infra/wechat/getLogo # 小程序获取授权logo
+      - /api/front/infra/wechat/register/binding/phone # 微信注册绑定手机号
     ignore-tables:
       - infra_config
 
