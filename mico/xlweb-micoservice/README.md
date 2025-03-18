@@ -29,3 +29,7 @@
 7. guava 33.4.0-jre
 8. Junit 4.12
 
+# 启动顺序
+1. nacos、xxl-job
+2. gateway
+3. infra-service、system-server、user-service、order-service、store-service
