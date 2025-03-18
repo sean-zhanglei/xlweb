@@ -141,6 +141,26 @@ xlweb:
     exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
       - ${spring.boot.admin.context-path}/** # 不处理 Spring Boot Admin 的请求
       - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
+  security:
+    permit-all_urls:
+      - /api/front/** #front 全部接口放开
+
+      - /api/admin/infra/jsconfig/getxlwebchatconfig # XLWEB-chat客服统计
+      - /api/admin/infra/upload/image # 图片上传
+      - /api/admin/infra/upload/file # 文件上传
+      - /api/admin/infra/qrcode/mergeList # 合并图片返回文件
+
+      - /api/admin/infra/wechat/config # 获取微信公众号js配置
+      - /api/admin/infra/payment/callback/wechat #微信支付回调
+      - /api/admin/infra/payment/callback/wechat/refund #微信退款回调
+      - /api/admin/infra/wechat/message/webHook # webHook_2、回调消息 微信
+      - /api/admin/infra/wechat/gitlab # gitlab钩子 企业微信
+      - /api/admin/infra/wechat/push # 回调消息 企业微信
+      - /api/admin/infra/wechat/mini/callback/index # webHook_3、回调消息 小程序
+      - /api/admin/infra/wechat/mini/callback/test # 小程序回调-自己模拟
+      - /api/admin/infra/validate/code/get # 获取验证码
+      - /api/admin/infra/api-error-log/page # 获得 API 错误日志分页
+      - /api/admin/infra/api-access-log/page # 获得API 访问日志分页
   websocket:
     enable: true # websocket的开关
     path: /infra/ws # 路径

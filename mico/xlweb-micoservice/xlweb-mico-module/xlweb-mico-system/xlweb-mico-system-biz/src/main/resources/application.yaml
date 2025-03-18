@@ -141,6 +141,14 @@ xlweb:
     exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
       - ${spring.boot.admin.context-path}/** # 不处理 Spring Boot Admin 的请求
       - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
+  security:
+    permit-all_urls:
+      - /api/admin/system/login/getLoginPic # 获取登录页图片
+      - /api/admin/system/login/account # PC 账号登录
+      - /api/admin/system/login/logout # PC登出
+      - /api/admin/system/codegen/code # codegen
+      - /api/front/** #front 全部接口放开
+
   websocket:
     enable: true # websocket的开关
     path: /system/ws # 路径
