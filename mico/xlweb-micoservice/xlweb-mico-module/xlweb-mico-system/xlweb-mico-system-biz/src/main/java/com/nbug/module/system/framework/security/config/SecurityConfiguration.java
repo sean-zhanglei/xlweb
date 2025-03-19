@@ -1,7 +1,7 @@
 package com.nbug.module.system.framework.security.config;
 
-import com.nbug.module.order.enums.ApiConstants;
 import com.nbug.depends.security.security.config.AuthorizeRequestsCustomizer;
+import com.nbug.module.system.enums.ApiConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
