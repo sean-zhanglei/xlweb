@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/store/product/rule")
+@RequestMapping("store/product/rule")
 @Tag(name = "管理后台 - 商品 -- 规则值(规格)") //配合swagger使用
 public class StoreProductRuleController {
 

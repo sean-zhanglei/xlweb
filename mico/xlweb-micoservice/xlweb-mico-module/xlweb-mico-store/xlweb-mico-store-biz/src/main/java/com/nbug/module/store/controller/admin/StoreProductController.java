@@ -39,7 +39,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/store/product")
+@RequestMapping("store/product")
 @Tag(name = "管理后台 - 商品") //配合swagger使用
 public class StoreProductController {
 

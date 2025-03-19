@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/store/coupon/user")
+@RequestMapping("store/coupon/user")
 @Tag(name = "管理后台 - 营销 -- 优惠券 -- 领取记录")
 public class StoreCouponUserController {
 

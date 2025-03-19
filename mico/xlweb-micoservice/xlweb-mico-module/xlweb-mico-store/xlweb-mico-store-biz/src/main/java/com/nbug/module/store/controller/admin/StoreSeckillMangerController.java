@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/store/seckill/manger")
+@RequestMapping("store/seckill/manger")
 @Tag(name = "管理后台 - 商品 -- 秒杀 -- 配置") //配合swagger使用
 public class StoreSeckillMangerController {
 

@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/front/store/seckill")
+@RequestMapping("store/seckill")
 @Tag(name = "应用后台 - 秒杀商品")
 public class SecKillController {
 
