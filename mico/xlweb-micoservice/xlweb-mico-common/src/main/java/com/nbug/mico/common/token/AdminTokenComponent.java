@@ -1,4 +1,4 @@
-package com.nbug.admin.filter;
+package com.nbug.mico.common.token;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
  */
 @Component
-public class TokenComponent {
+public class AdminTokenComponent {
 
     @Resource
     private RedisUtil redisUtil;

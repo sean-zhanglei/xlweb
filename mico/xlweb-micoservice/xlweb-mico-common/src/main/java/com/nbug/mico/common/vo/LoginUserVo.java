@@ -54,6 +54,16 @@ public class LoginUserVo implements UserDetails {
     private String os;
 
     /**
+     * 用户类型
+     */
+    private Integer userType;
+
+    /**
+     * 租户ID
+     */
+    private Long tenantId;
+
+    /**
      * 权限列表
      */
     private List<SystemPermissions> permissions;
@@ -183,6 +193,22 @@ public class LoginUserVo implements UserDetails {
 
     public void setOs(String os) {
         this.os = os;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public List<SystemPermissions> getPermissions() {

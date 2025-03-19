@@ -1,8 +1,8 @@
 package com.nbug.depends.security.security.core.rpc;
 
-import com.nbug.mico.common.json.JsonUtils;
-import com.nbug.depends.security.security.core.LoginUser;
 import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
+import com.nbug.mico.common.json.JsonUtils;
+import com.nbug.mico.common.vo.LoginUserVo;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.SneakyThrows;
@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * LoginUser 的 RequestInterceptor 实现类：Feign 请求时，将 {@link LoginUser} 设置到 header 中，继续透传给被调用的服务
+ * LoginUser 的 RequestInterceptor 实现类：Feign 请求时，将 {@link LoginUserVo} 设置到 header 中，继续透传给被调用的服务
  *
  * @author NBUG
  */
@@ -22,7 +22,7 @@ public class LoginUserRequestInterceptor implements RequestInterceptor {
     @Override
     @SneakyThrows
     public void apply(RequestTemplate requestTemplate) {
-        LoginUser user = SecurityFrameworkUtils.getLoginUser();
+        LoginUserVo user = SecurityFrameworkUtils.getLoginUser();
         if (user == null) {
             return;
         }

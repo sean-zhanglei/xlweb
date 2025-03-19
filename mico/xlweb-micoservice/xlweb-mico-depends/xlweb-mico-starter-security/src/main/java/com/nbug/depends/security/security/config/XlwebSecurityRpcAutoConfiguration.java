@@ -2,8 +2,6 @@ package com.nbug.depends.security.security.config;
 
 import com.nbug.depends.security.security.core.rpc.LoginUserRequestInterceptor;
 import com.nbug.module.infra.api.attachment.AttachmentApi;
-import com.nbug.module.system.api.oauth2.OAuth2TokenApi;
-import com.nbug.module.system.api.permission.PermissionApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +12,8 @@ import org.springframework.context.annotation.Bean;
  * @author NBUG
  */
 @AutoConfiguration
-@EnableFeignClients(clients = {OAuth2TokenApi.class, // 主要是引入相关的 API 服务
-        PermissionApi.class, AttachmentApi.class})
+@EnableFeignClients(clients = {// 主要是引入相关的 API 服务
+        AttachmentApi.class})
 public class XlwebSecurityRpcAutoConfiguration {
 
     @Bean

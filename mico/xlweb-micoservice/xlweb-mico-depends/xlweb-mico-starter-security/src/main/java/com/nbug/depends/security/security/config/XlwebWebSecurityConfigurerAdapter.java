@@ -3,16 +3,15 @@ package com.nbug.depends.security.security.config;
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.nbug.depends.security.security.core.filter.TokenAuthenticationFilter;
+import com.nbug.depends.security.security.core.filter.JwtAdminAuthenticationTokenFilter;
+import com.nbug.depends.security.security.core.filter.JwtFrontAuthenticationTokenFilter;
 import com.nbug.depends.web.web.config.WebProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -67,7 +66,13 @@ public class XlwebWebSecurityConfigurerAdapter {
      * Token 认证过滤器 Bean
      */
     @Resource
-    private TokenAuthenticationFilter authenticationTokenFilter;
+    private JwtAdminAuthenticationTokenFilter jwtAdminAuthenticationTokenFilter;
+
+    /**
+     * Token 认证过滤器 Bean
+     */
+    @Resource
+    private JwtFrontAuthenticationTokenFilter jwtFrontAuthenticationTokenFilter;
 
     /**
      * 自定义的权限映射 Bean 们
@@ -79,15 +84,6 @@ public class XlwebWebSecurityConfigurerAdapter {
 
     @Resource
     private ApplicationContext applicationContext;
-
-    /**
-     * 由于 Spring Security 创建 AuthenticationManager 对象时，没声明 @Bean 注解，导致无法被注入
-     * 通过覆写父类的该方法，添加 @Bean 注解，解决该问题
-     */
-    @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
 
     /**
      * 配置 URL 的安全配置
@@ -146,7 +142,8 @@ public class XlwebWebSecurityConfigurerAdapter {
                 .authorizeHttpRequests(c -> c.anyRequest().authenticated());
 
         // 添加 Token Filter
-        httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtAdminAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtFrontAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService {
     private RedisUtil redisUtil;
 
     @Autowired
-    private FrontTokenComponent tokenComponent;
+    private FrontTokenComponent frontTokenComponent;
 
     /**
      * 账号密码登录
@@ -66,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
         }
 
         LoginResponse loginResponse = new LoginResponse();
-        String token = tokenComponent.createToken(user);
+        String token = frontTokenComponent.createToken(user);
         loginResponse.setToken(token);
 
         //绑定推广关系
@@ -117,7 +117,7 @@ public class LoginServiceImpl implements LoginService {
 
         //生成token
         LoginResponse loginResponse = new LoginResponse();
-        String token = tokenComponent.createToken(user);
+        String token = frontTokenComponent.createToken(user);
         loginResponse.setToken(token);
         loginResponse.setUid(user.getUid());
         loginResponse.setNikeName(user.getNickname());
@@ -181,6 +181,6 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public void loginOut(HttpServletRequest request) {
-        tokenComponent.logout(request);
+        frontTokenComponent.logout(request);
     }
 }

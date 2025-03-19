@@ -48,6 +48,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
         </dependency>

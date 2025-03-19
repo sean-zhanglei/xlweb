@@ -152,20 +152,21 @@ public class FrontTokenComponent {
     //路由在此处，则返回true，无论用户是否登录都可以访问
     public boolean checkRouter(String uri) {
         String[] routerList = {
-                "api/front/product/detail",
-                "api/front/coupons",
-                "api/front/index",
-                "api/front/bargain/list",
-                "api/front/combination/list",
-                "api/front/index/product",
-                "api/front/combination/index",
-                "api/front/bargain/index",
-                "api/front/index/color/config",
-                "api/front/product/list",
-                "api/front/product/sku/detail",
+                "api/front/store/product/detail",
+                "api/front/store/coupons",
+                "api/front/store/index",
+                "api/front/store/bargain/list",
+                "api/front/store/combination/list",
+                "api/front/store/index/product",
+                "api/front/store/combination/index",
+                "api/front/store/bargain/index",
+                "api/front/store/product/list",
+                "api/front/store/product/sku/detail",
+                "api/front/store/product/leaderboard",
+                "api/front/user/index/color/config",
+
                 "api/front/index/get/version",
-                "api/front/image/domain",
-                "api/front/product/leaderboard"
+                "api/front/image/domain"
         };
 
         return ArrayUtils.contains(routerList, uri);

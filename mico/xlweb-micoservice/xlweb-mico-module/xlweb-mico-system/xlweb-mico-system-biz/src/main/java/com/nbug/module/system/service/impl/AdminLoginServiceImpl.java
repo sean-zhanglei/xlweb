@@ -2,6 +2,7 @@ package com.nbug.module.system.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.nbug.mico.common.token.AdminTokenComponent;
 import com.nbug.mico.common.constants.SysConfigConstants;
 import com.nbug.mico.common.constants.SysGroupDataConstants;
 import com.nbug.mico.common.exception.XlwebException;
@@ -46,7 +47,7 @@ import java.util.stream.Stream;
 public class AdminLoginServiceImpl implements AdminLoginService {
 
     @Resource
-    private com.nbug.admin.filter.TokenComponent tokenComponent;
+    private AdminTokenComponent adminTokenComponent;
 
     @Resource
     private AuthenticationManager authenticationManager;
@@ -88,7 +89,7 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         LoginUserVo loginUser = (LoginUserVo) authentication.getPrincipal();
         SystemAdmin systemAdmin = loginUser.getUser();
 
-        String token = tokenComponent.createToken(loginUser);
+        String token = adminTokenComponent.createToken(loginUser);
         SystemLoginResponse systemAdminResponse = new SystemLoginResponse();
         systemAdminResponse.setToken(token);
         BeanUtils.copyProperties(systemAdmin, systemAdminResponse);
@@ -108,7 +109,7 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         LoginUserVo loginUserVo = SecurityUtil.getLoginUserVo();
         if (ObjectUtil.isNotNull(loginUserVo)) {
             // 删除用户缓存记录
-            tokenComponent.delLoginUser(loginUserVo.getToken());
+            adminTokenComponent.delLoginUser(loginUserVo.getToken());
         }
         return true;
     }

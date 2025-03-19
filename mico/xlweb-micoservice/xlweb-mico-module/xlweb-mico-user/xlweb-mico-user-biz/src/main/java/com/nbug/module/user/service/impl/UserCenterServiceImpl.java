@@ -173,7 +173,7 @@ public class UserCenterServiceImpl extends ServiceImpl<UserDao, User> implements
     private UserExperienceRecordService experienceRecordService;
 
     @Autowired
-    private FrontTokenComponent tokenComponent;
+    private FrontTokenComponent frontTokenComponent;
 
 
     /**
@@ -506,7 +506,7 @@ public class UserCenterServiceImpl extends ServiceImpl<UserDao, User> implements
                 logger.error(StrUtil.format("公众号登录绑定分销关系失败，uid={},spreadUid={}", user.getUid(), spreadUid));
             }
             try {
-                String token = tokenComponent.createToken(user);
+                String token = frontTokenComponent.createToken(user);
                 loginResponse.setToken(token);
             } catch (Exception e) {
                 logger.error(StrUtil.format("公众号登录生成token失败，uid={}", user.getUid()));
@@ -580,7 +580,7 @@ public class UserCenterServiceImpl extends ServiceImpl<UserDao, User> implements
             }
 
             try {
-                String token = tokenComponent.createToken(user);
+                String token = frontTokenComponent.createToken(user);
                 loginResponse.setToken(token);
             } catch (Exception e) {
                 logger.error(StrUtil.format("小程序登录生成token失败，uid={}", user.getUid()));
@@ -894,7 +894,7 @@ public class UserCenterServiceImpl extends ServiceImpl<UserDao, User> implements
         }
         LoginResponse loginResponse = new LoginResponse();
         try {
-            String token = tokenComponent.createToken(finalUser);
+            String token = frontTokenComponent.createToken(finalUser);
             loginResponse.setToken(token);
         } catch (Exception e) {
             logger.error(StrUtil.format("绑定手机号，自动登录生成token失败，uid={}", finalUser.getUid()));

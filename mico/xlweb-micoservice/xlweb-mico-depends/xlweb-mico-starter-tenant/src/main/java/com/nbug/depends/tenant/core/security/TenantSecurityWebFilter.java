@@ -1,10 +1,6 @@
 package com.nbug.depends.tenant.core.security;
 
 import cn.hutool.core.collection.CollUtil;
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
-import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.mico.common.utils.ServletUtils;
-import com.nbug.depends.security.security.core.LoginUser;
 import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
 import com.nbug.depends.tenant.config.TenantProperties;
 import com.nbug.depends.tenant.core.context.TenantContextHolder;
@@ -12,6 +8,10 @@ import com.nbug.depends.tenant.core.service.TenantFrameworkService;
 import com.nbug.depends.web.web.config.WebProperties;
 import com.nbug.depends.web.web.core.filter.ApiRequestFilter;
 import com.nbug.depends.web.web.core.handler.GlobalExceptionHandler;
+import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
+import com.nbug.mico.common.pojo.CommonResult;
+import com.nbug.mico.common.utils.ServletUtils;
+import com.nbug.mico.common.vo.LoginUserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -56,7 +56,7 @@ public class TenantSecurityWebFilter extends ApiRequestFilter {
             throws ServletException, IOException {
         Long tenantId = TenantContextHolder.getTenantId();
         // 1. 登陆的用户，校验是否有权限访问该租户，避免越权问题。
-        LoginUser user = SecurityFrameworkUtils.getLoginUser();
+        LoginUserVo user = SecurityFrameworkUtils.getLoginUser();
         if (user != null) {
             // 如果获取不到租户编号，则尝试使用登陆用户的租户编号
             if (tenantId == null) {
@@ -65,7 +65,7 @@ public class TenantSecurityWebFilter extends ApiRequestFilter {
             // 如果传递了租户编号，则进行比对租户编号，避免越权问题
             } else if (!Objects.equals(user.getTenantId(), TenantContextHolder.getTenantId())) {
                 log.error("[doFilterInternal][租户({}) User({}/{}) 越权访问租户({}) URL({}/{})]",
-                        user.getTenantId(), user.getId(), user.getUserType(),
+                        user.getTenantId(), user.getUser().getId(), user.getUserType(),
                         TenantContextHolder.getTenantId(), request.getRequestURI(), request.getMethod());
                 ServletUtils.writeJSON(response, CommonResult.error(GlobalErrorCodeConstants.FORBIDDEN.getCode(),
                         "您无权访问该租户的数据"));

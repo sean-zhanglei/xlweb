@@ -2,12 +2,12 @@ package com.nbug.depends.security.operatelog.core.service;
 
 import com.mzt.logapi.beans.LogRecord;
 import com.mzt.logapi.service.ILogRecordService;
+import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
 import com.nbug.mico.common.model.logger.OperateLog;
 import com.nbug.mico.common.utils.ServletUtils;
 import com.nbug.mico.common.utils.monitor.TracerUtils;
+import com.nbug.mico.common.vo.LoginUserVo;
 import com.nbug.module.system.api.logger.OperateLogApi;
-import com.nbug.depends.security.security.core.LoginUser;
-import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -49,11 +49,11 @@ public class LogRecordServiceImpl implements ILogRecordService {
 
     private static void fillUserFields(OperateLog reqDTO) {
         // 使用 SecurityFrameworkUtils。因为要考虑，rpc、mq、job，它其实不是 web；
-        LoginUser loginUser = SecurityFrameworkUtils.getLoginUser();
+        LoginUserVo loginUser = SecurityFrameworkUtils.getLoginUser();
         if (loginUser == null) {
             return;
         }
-        reqDTO.setUserId(loginUser.getId());
+        reqDTO.setUserId(Long.valueOf(loginUser.getUser().getId()));
         reqDTO.setUserType(loginUser.getUserType());
     }
 

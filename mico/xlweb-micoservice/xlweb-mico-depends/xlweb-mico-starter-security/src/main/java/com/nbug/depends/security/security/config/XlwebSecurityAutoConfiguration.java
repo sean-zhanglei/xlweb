@@ -1,14 +1,8 @@
 package com.nbug.depends.security.security.config;
 
 import com.nbug.depends.security.security.core.context.TransmittableThreadLocalSecurityContextHolderStrategy;
-import com.nbug.depends.security.security.core.filter.TokenAuthenticationFilter;
 import com.nbug.depends.security.security.core.handler.AccessDeniedHandlerImpl;
 import com.nbug.depends.security.security.core.handler.AuthenticationEntryPointImpl;
-import com.nbug.depends.security.security.core.service.SecurityFrameworkService;
-import com.nbug.depends.security.security.core.service.SecurityFrameworkServiceImpl;
-import com.nbug.depends.web.web.core.handler.GlobalExceptionHandler;
-import com.nbug.module.system.api.oauth2.OAuth2TokenApi;
-import com.nbug.module.system.api.permission.PermissionApi;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -65,19 +59,6 @@ public class XlwebSecurityAutoConfiguration {
         return new BCryptPasswordEncoder(securityProperties.getPasswordEncoderLength());
     }
 
-    /**
-     * Token 认证过滤器 Bean
-     */
-    @Bean
-    public TokenAuthenticationFilter authenticationTokenFilter(GlobalExceptionHandler globalExceptionHandler,
-                                                               OAuth2TokenApi oauth2TokenApi) {
-        return new TokenAuthenticationFilter(securityProperties, globalExceptionHandler, oauth2TokenApi);
-    }
-
-    @Bean("ss") // 使用 Spring Security 的缩写，方便使用
-    public SecurityFrameworkService securityFrameworkService(PermissionApi permissionApi) {
-        return new SecurityFrameworkServiceImpl(permissionApi);
-    }
 
     /**
      * 声明调用 {@link SecurityContextHolder#setStrategyName(String)} 方法，
