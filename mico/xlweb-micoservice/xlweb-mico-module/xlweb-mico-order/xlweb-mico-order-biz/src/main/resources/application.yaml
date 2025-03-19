@@ -168,7 +168,7 @@ xlweb:
 #    front-type: 20 # 前端模版的类型，参见 CodegenFrontTypeEnum 枚举类
 #    unit-test-enable: false # 是否生成单元测试
   tenant: # 多租户相关配置项
-    enable: true
+    enable: false
     ignore-urls:
       - /api/admin/infra/validate/code/get # 获取验证码，和租户无关
       - /api/admin/system/login/getLoginPic # 获取登录页LOGO，和租户无关
