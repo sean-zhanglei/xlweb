@@ -2,6 +2,7 @@ package com.nbug.depends.security.security.config;
 
 import com.nbug.depends.security.security.core.rpc.LoginUserRequestInterceptor;
 import com.nbug.module.infra.api.attachment.AttachmentApi;
+import com.nbug.module.user.api.userDetail.UserDetailApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Bean;
  */
 @AutoConfiguration
 @EnableFeignClients(clients = {// 主要是引入相关的 API 服务
-        AttachmentApi.class})
+        AttachmentApi.class, UserDetailApi.class})
 public class XlwebSecurityRpcAutoConfiguration {
 
     @Bean

@@ -8,6 +8,7 @@ import com.nbug.mico.common.vo.LoginUserVo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
@@ -21,6 +22,8 @@ import java.io.IOException;
 
  * token过滤器 验证token有效性
  */
+
+@Component
 public class JwtAdminAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Resource
