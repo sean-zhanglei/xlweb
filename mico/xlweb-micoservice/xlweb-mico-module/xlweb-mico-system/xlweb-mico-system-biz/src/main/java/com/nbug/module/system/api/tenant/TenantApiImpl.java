@@ -1,11 +1,9 @@
 package com.nbug.module.system.api.tenant;
 
 import com.nbug.mico.common.pojo.CommonResult;
-import com.nbug.module.system.service.tenant.TenantService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +14,8 @@ import static com.nbug.mico.common.pojo.CommonResult.success;
 @Validated
 public class TenantApiImpl implements TenantApi {
 
-    @Resource
-    private TenantService tenantService;
+//    @Resource
+//    private TenantService tenantService;
 
     @Override
     public CommonResult<List<Long>> getTenantIdList() {
