@@ -1,4 +1,4 @@
-package com.nbug.module.user.service.impl;
+package com.nbug.module.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -6,8 +6,8 @@ import com.nbug.mico.common.model.system.SystemAdmin;
 import com.nbug.mico.common.model.system.SystemMenu;
 import com.nbug.mico.common.model.system.SystemPermissions;
 import com.nbug.mico.common.vo.LoginUserVo;
-import com.nbug.module.system.api.admin.AdminApi;
-import com.nbug.module.system.api.systemMenu.SystemMenuApi;
+import com.nbug.module.system.service.SystemAdminService;
+import com.nbug.module.system.service.SystemMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private static final Logger log = LoggerFactory.getLogger(UserDetailServiceImpl.class);
 
     @Autowired
-    private AdminApi adminApi;
+    private SystemAdminService systemAdminService;
 
     @Autowired
-    private SystemMenuApi systemMenuApi;
+    private SystemMenuService systemMenuService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SystemAdmin user = adminApi.selectUserByUserName(username).getCheckedData();
+        SystemAdmin user = systemAdminService.selectUserByUserName(username);
         if (ObjectUtil.isNull(user)) {
             log.info("登录用户：{} 不存在.", username);
             throw new UsernameNotFoundException("登录用户：" + username + " 不存在");
@@ -53,9 +53,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         List<SystemMenu> menuList;
         if (roles.contains(1)) {// 超级管理员
             // 获取全部权限
-            menuList = systemMenuApi.getAllPermissions().getCheckedData();
+            menuList = systemMenuService.getAllPermissions();
         } else {
-            menuList = systemMenuApi.findPermissionByUserId(user.getId()).getCheckedData();
+            menuList = systemMenuService.findPermissionByUserId(user.getId());
         }
         menuList = menuList.stream().filter(e -> StrUtil.isNotEmpty(e.getPerms())).collect(Collectors.toList());
         List<SystemPermissions> permissionsList = menuList.stream().map(e -> {

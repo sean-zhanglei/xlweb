@@ -156,7 +156,7 @@ public interface StoreOrderApi {
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
     public CommonResult<CommonPage<StoreOrderDetailResponse>> getAdminList(@Validated @RequestParam StoreOrderSearchRequest request,
-                                                                           @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                                           @Validated  @RequestParam PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getInfoByEntity")
     @Operation(summary = "获取订单信息")
@@ -209,7 +209,7 @@ public interface StoreOrderApi {
     public CommonResult<List<StoreOrder>> findPaidListByUid(@RequestParam Integer userId,
                                                             @Validated @RequestParam PageParamRequest pageParamRequest);
 
-    @GetMapping(PREFIX + "/getWriteOffList")
+    @PostMapping(PREFIX + "/getWriteOffList")
     @Operation(summary = "获取核销订单列表")
     @Parameters({
             @Parameter(name = "request", description = "查询条件", required = true),

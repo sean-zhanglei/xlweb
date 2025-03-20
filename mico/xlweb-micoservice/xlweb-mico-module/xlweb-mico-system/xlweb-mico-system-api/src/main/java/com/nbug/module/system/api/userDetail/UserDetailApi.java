@@ -1,8 +1,8 @@
-package com.nbug.module.user.api.userDetail;
+package com.nbug.module.system.api.userDetail;
 
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.vo.LoginUserVo;
-import com.nbug.module.user.enums.ApiConstants;
+import com.nbug.module.system.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
-@Tag(name = "RPC 服务 - 用户详情")
+@Tag(name = "RPC 服务 - 后台用户详情")
 public interface UserDetailApi {
 
     String PREFIX = ApiConstants.PREFIX + "/userDetail";

@@ -40,11 +40,6 @@
             <artifactId>xlweb-mico-system-api</artifactId>
             <version>${revision}</version>
         </dependency>
-        <dependency>
-            <groupId>com.nbug</groupId>
-            <artifactId>xlweb-mico-user-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
         <!-- spring boot 配置所需依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

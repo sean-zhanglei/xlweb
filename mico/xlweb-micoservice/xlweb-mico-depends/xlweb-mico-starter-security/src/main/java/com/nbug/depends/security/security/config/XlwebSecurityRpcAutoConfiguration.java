@@ -2,7 +2,7 @@ package com.nbug.depends.security.security.config;
 
 import com.nbug.depends.security.security.core.rpc.LoginUserRequestInterceptor;
 import com.nbug.module.infra.api.attachment.AttachmentApi;
-import com.nbug.module.user.api.userDetail.UserDetailApi;
+import com.nbug.module.system.api.userDetail.UserDetailApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;

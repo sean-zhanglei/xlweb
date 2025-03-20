@@ -1,4 +1,4 @@
-package com.nbug.module.user.api.userDetail;
+package com.nbug.module.system.api.userDetail;
 
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.vo.LoginUserVo;

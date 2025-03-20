@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.utils.XlwebUtil;
 import com.nbug.mico.common.vo.LoginUserVo;
-import com.nbug.module.user.api.userDetail.UserDetailApi;
+import com.nbug.module.system.api.userDetail.UserDetailApi;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
