@@ -1,7 +1,7 @@
 package com.nbug.module.user.api.userDetail;
 
 import com.nbug.mico.common.pojo.CommonResult;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.nbug.mico.common.vo.LoginUserVo;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +23,8 @@ public class UserDetailApiImpl implements UserDetailApi {
      * @return UserAddress
      */
     @Override
-    public CommonResult<UserDetails> loadUserByUsername(String username) {
-        return success(userDetailsService.loadUserByUsername(username));
+    public CommonResult<LoginUserVo> loadUserByUsername(String username) {
+        return success((LoginUserVo)userDetailsService.loadUserByUsername(username));
     }
 
 }
