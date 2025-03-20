@@ -129,6 +129,14 @@ xxl:
 --- #################### NBUG相关配置 ####################
 
 xlweb:
+  version: XLWEB-JAVA-KY-v1.3.4 # 当前代码版本
+  wechat-api-url:  #请求微信接口中专服务器
+  wechat-js-api-debug: false #微信js api系列是否开启调试模式
+  wechat-js-api-beta: true #微信js api是否是beta版本
+  asyncConfig: true #是否同步config表数据到redis
+  asyncWeChatProgramTempList: false #是否同步小程序公共模板库
+  imagePath: E://sean//nbug//xlweb//mico//xlwebimage// # 服务器图片路径配置 斜杠结尾
+  feignLoggerLevel: FULL  # openFeign日志级别
   info:
     version: 1.0.0
     base-package: com.nbug.module.system

@@ -27,6 +27,8 @@ public class XlwebConfig {
     // 本地图片路径配置
     private String imagePath;
 
+    private String feignLoggerLevel; // 可以设置为 FULL, BASIC, HEADERS, NONE
+
     public String getVersion() {
         return version;
     }
@@ -89,5 +91,13 @@ public class XlwebConfig {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getFeignLoggerLevel() {
+        return feignLoggerLevel;
+    }
+
+    public void setFeignLoggerLevel(String feignLoggerLevel) {
+        this.feignLoggerLevel = feignLoggerLevel;
     }
 }
