@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController("UserRechargeController")
-@RequestMapping("api/front/user/recharge")
+@RequestMapping("/user/recharge")
 @Tag(name = "应用后台 - 用户 -- 充值")
 public class UserRechargeController {
     @Autowired

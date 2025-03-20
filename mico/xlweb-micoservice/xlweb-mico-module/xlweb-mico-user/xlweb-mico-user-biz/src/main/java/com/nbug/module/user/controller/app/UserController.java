@@ -54,7 +54,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController("FrontUserController")
-@RequestMapping("api/front/user")
+@RequestMapping("/user")
 @Tag(name = "应用后台 - 用户 -- 用户中心")
 public class UserController {
 

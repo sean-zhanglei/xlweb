@@ -42,7 +42,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/user")
+@RequestMapping("user")
 @Tag(name = "管理后台 - 会员管理")
 @Validated
 public class UserController {

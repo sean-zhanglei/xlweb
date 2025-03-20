@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController("IndexController")
-@RequestMapping("api/front/user/index")
+@RequestMapping("/user/index")
 @Tag(name = "应用后台 - 首页")
 public class IndexController {
 

@@ -27,7 +27,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/front/user/collect")
+@RequestMapping("/user/collect")
 @Tag(name = "应用后台 - 用户 -- 点赞/收藏")
 public class UserCollectController {
 

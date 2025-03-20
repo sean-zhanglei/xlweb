@@ -27,7 +27,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/user/group")
+@RequestMapping("user/group")
 @Tag(name = "管理后台 - 会员 -- 分组")
 public class UserGroupController {
 

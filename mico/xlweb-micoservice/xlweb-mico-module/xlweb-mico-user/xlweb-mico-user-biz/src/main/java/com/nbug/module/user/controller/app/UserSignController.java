@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/front/user/sign")
+@RequestMapping("/user/sign")
 @Tag(name = "应用后台 - 用户 -- 签到")
 public class UserSignController {
 

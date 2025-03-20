@@ -27,7 +27,7 @@ import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTE
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/user/tag")
+@RequestMapping("user/tag")
 @Tag(name = "管理后台 - 会员 -- 标签") //配合swagger使用
 public class UserTagController {
 

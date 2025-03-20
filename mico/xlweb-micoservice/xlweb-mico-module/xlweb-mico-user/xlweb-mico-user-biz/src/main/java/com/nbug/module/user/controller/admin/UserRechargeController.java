@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/user/recharge")
+@RequestMapping("user/recharge")
 @Tag(name = "管理后台 - 财务 -- 充值")
 public class UserRechargeController {
 

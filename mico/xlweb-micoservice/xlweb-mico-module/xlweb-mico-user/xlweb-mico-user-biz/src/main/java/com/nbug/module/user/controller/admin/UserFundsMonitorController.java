@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/admin/user/finance/founds/monitor")
+@RequestMapping("user/finance/founds/monitor")
 @Tag(name = "管理后台 - 财务 -- 资金监控")
 public class UserFundsMonitorController {
 
