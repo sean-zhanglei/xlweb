@@ -2,6 +2,7 @@ package com.nbug.depends.web.web.core.filter;
 
 
 import com.nbug.mico.common.utils.RequestUtil;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -19,13 +20,13 @@ import java.nio.charset.StandardCharsets;
 
  * 返回值输出过滤器
  */
-//@Component
+@Component
 public class ResponseFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        com.nbug.admin.filter.ResponseWrapper wrapperResponse = new com.nbug.admin.filter.ResponseWrapper((HttpServletResponse) response);//转换成代理类
+        ResponseWrapper wrapperResponse = new ResponseWrapper((HttpServletResponse) response);//转换成代理类
         // 这里只拦截返回，直接让请求过去，如果在请求前有处理，可以在这里处理
         filterChain.doFilter(request, wrapperResponse);
         byte[] content = wrapperResponse.getContent();//获取返回值
@@ -35,7 +36,7 @@ public class ResponseFilter implements Filter {
 
             try {
                 HttpServletRequest req = (HttpServletRequest) request;
-                str = new com.nbug.admin.filter.ResponseRouter().filter(str, RequestUtil.getUri(req));
+                str = new ResponseRouter().filter(str, RequestUtil.getUri(req));
             } catch (Exception e) {
                 e.printStackTrace();
             }
