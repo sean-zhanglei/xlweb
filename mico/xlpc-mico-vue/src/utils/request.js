@@ -46,8 +46,9 @@ service.interceptors.response.use(
       if (isPhone()) { //移动端
         return Promise.reject(res || 'Error')
       }
+      console.error(res.message);
       Message({
-        message: res.message || 'Error',
+        message: "操作失败" || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
