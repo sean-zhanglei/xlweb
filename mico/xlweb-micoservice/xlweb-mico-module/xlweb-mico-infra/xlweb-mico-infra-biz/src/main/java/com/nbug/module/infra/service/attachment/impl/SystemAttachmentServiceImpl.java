@@ -73,8 +73,12 @@ public class SystemAttachmentServiceImpl extends ServiceImpl<SystemAttachmentDao
      */
     @Override
     public String prefixImage(String path) {
-        // 如果那些域名不需要加，则跳过
-        return path.replace(Constants.UPLOAD_TYPE_IMAGE+"/", getCdnUrl() + "/"+ Constants.UPLOAD_TYPE_IMAGE+"/");
+        // 如果已经加过前缀，则跳过
+        if (path.contains("http") || path.contains("https")) {
+            return path;
+        } else {
+            return path.replace(Constants.UPLOAD_TYPE_IMAGE + "/", getCdnUrl() + "/" + Constants.UPLOAD_TYPE_IMAGE + "/");
+        }
     }
 
     /**
@@ -85,10 +89,20 @@ public class SystemAttachmentServiceImpl extends ServiceImpl<SystemAttachmentDao
     @Override
     public String prefixFile(String path) {
         if (path.contains("file/excel")) {
-            String cdnUrl = configApi.getValueByKey("local" + "UploadUrl").getCheckedData();
-            return path.replace("file/", cdnUrl + "/file/");
+            // 如果已经加过前缀，则跳过
+            if (path.contains("http") || path.contains("https")) {
+                return path;
+            } else {
+                String cdnUrl = configApi.getValueByKey("local" + "UploadUrl").getCheckedData();
+                return path.replace("file/", cdnUrl + "/file/");
+            }
         }
-        return path.replace("file/", getCdnUrl() + "/file/");
+        // 如果已经加过前缀，则跳过
+        if (path.contains("http") || path.contains("https")) {
+            return path;
+        } else {
+            return path.replace("file/", getCdnUrl() + "/file/");
+        }
     }
 
     /**

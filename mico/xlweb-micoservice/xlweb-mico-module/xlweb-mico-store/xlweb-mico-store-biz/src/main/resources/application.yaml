@@ -135,7 +135,7 @@ xlweb:
   wechat-js-api-beta: true #微信js api是否是beta版本
   asyncConfig: true #是否同步config表数据到redis
   asyncWeChatProgramTempList: false #是否同步小程序公共模板库
-  imagePath: E://sean//nbug//xlweb//mico//xlwebimage// # 服务器图片路径配置 斜杠结尾
+  imagePath: E://sean//nbug//xlweb//mico//xlweb-micoservice//xlweb-mico-module//xlweb-mico-infra//xlwebimage// # 服务器图片路径配置 斜杠结尾
   feignLoggerLevel: FULL  # openFeign日志级别
   info:
     version: 1.0.0

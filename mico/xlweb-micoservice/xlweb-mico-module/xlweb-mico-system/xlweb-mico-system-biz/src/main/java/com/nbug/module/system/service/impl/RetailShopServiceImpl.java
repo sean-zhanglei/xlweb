@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.nbug.mico.common.exception.ServiceException;
 import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.model.system.SystemConfig;
 import com.nbug.mico.common.model.user.User;
@@ -22,6 +23,7 @@ import com.nbug.module.system.service.SystemConfigService;
 import com.nbug.module.user.api.user.UserApi;
 import com.nbug.module.user.api.userBrokerageRecord.UserBrokerageRecordApi;
 import com.nbug.module.user.api.userExtract.UserExtractApi;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ import java.util.stream.Collectors;
 
  */
 @Service
+@Slf4j
 public class RetailShopServiceImpl extends ServiceImpl<SystemConfigDao, SystemConfig> implements RetailShopService {
 
     @Autowired
@@ -61,63 +64,68 @@ public class RetailShopServiceImpl extends ServiceImpl<SystemConfigDao, SystemCo
      */
     @Override
     public CommonPage<SpreadUserResponse> getSpreadPeopleList(String keywords, String dateLimit, PageParamRequest pageRequest) {
-        Page<User> pageUserPage = PageHelper.startPage(pageRequest.getPage(), pageRequest.getLimit());
-        // id,头像，昵称，姓名，电话，推广用户数，推广订单数，推广订单额，佣金总金额，已提现金额，提现次数，未提现金额，上级推广人
-        PageInfo<User> userPageInfo = userApi.getAdminSpreadPeopleList(keywords, dateLimit, pageRequest).getCheckedData();
+        try {
+            Page<User> pageUserPage = PageHelper.startPage(pageRequest.getPage(), pageRequest.getLimit());
+            // id,头像，昵称，姓名，电话，推广用户数，推广订单数，推广订单额，佣金总金额，已提现金额，提现次数，未提现金额，上级推广人
+            PageInfo<User> userPageInfo = userApi.getAdminSpreadPeopleList(keywords, dateLimit, pageRequest).getCheckedData();
 
-        if (CollUtil.isEmpty(userPageInfo.getList())) {
-            return CommonPage.restPage(new PageInfo<>());
+            if (CollUtil.isEmpty(userPageInfo.getList())) {
+                return CommonPage.restPage(new PageInfo<>());
+            }
+            List<User> userList = userPageInfo.getList();
+            List<SpreadUserResponse> responseList = CollUtil.newArrayList();
+            userList.forEach(user -> {
+                SpreadUserResponse userResponse = new SpreadUserResponse();
+                BeanUtils.copyProperties(user, userResponse);
+                // 上级推广员名称
+                userResponse.setSpreadNickname("无");
+                if (ObjectUtil.isNotNull(user.getSpreadUid()) && user.getSpreadUid() > 0) {
+                    User spreadUser = userApi.getById(user.getSpreadUid()).getCheckedData();
+                    userResponse.setSpreadNickname(Optional.ofNullable(spreadUser.getNickname()).orElse("--"));
+                }
+
+                List<UserBrokerageRecord> recordList = userBrokerageRecordApi.getSpreadListByUid(user.getUid()).getCheckedData();
+                if (CollUtil.isEmpty(recordList)) {
+                    // 推广订单数
+                    userResponse.setSpreadOrderNum(0);
+                    // 推广订单额
+                    userResponse.setSpreadOrderTotalPrice(BigDecimal.ZERO);
+                    // 佣金总金额
+                    userResponse.setTotalBrokeragePrice(BigDecimal.ZERO);
+                    // 已提现金额
+                    userResponse.setExtractCountPrice(BigDecimal.ZERO);
+                    // 提现次数
+                    userResponse.setExtractCountNum(0);
+                    // 冻结中佣金
+                    userResponse.setFreezeBrokeragePrice(BigDecimal.ZERO);
+                } else {
+                    // 推广订单数
+                    userResponse.setSpreadOrderNum(recordList.size());
+                    // 佣金总金额
+                    userResponse.setTotalBrokeragePrice(recordList.stream().map(UserBrokerageRecord::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+                    // 推广订单额
+                    List<String> orderNoList = recordList.stream().map(UserBrokerageRecord::getLinkId).collect(Collectors.toList());
+                    BigDecimal spreadOrderTotalPrice = storeOrderApi.getSpreadOrderTotalPriceByOrderList(orderNoList).getCheckedData();
+                    userResponse.setSpreadOrderTotalPrice(spreadOrderTotalPrice);
+
+                    UserExtractResponse extractResponse = userExtractApi.getUserExtractByUserId(user.getUid()).getCheckedData();
+                    // 已提现金额
+                    userResponse.setExtractCountPrice(extractResponse.getExtractCountPrice());
+                    // 提现次数
+                    userResponse.setExtractCountNum(extractResponse.getExtractCountNum());
+                    // 冻结中佣金
+                    userResponse.setFreezeBrokeragePrice(userBrokerageRecordApi.getFreezePrice(user.getUid()).getCheckedData());
+                }
+                responseList.add(userResponse);
+            });
+            PageInfo<SpreadUserResponse> responsePageInfo = CommonPage.copyPageInfo(pageUserPage, responseList);
+            responsePageInfo.setTotal(userPageInfo.getTotal());
+            responsePageInfo.setPages(userPageInfo.getPages());
+            return CommonPage.restPage(responsePageInfo);
+        } catch (Exception ex) {
+            log.error("获取分销员列表失败", ex);
+            throw new ServiceException(1004008001, "获取分销员列表失败");
         }
-        List<User> userList = userPageInfo.getList();
-        List<SpreadUserResponse> responseList = CollUtil.newArrayList();
-        userList.forEach(user -> {
-            SpreadUserResponse userResponse = new SpreadUserResponse();
-            BeanUtils.copyProperties(user, userResponse);
-            // 上级推广员名称
-            userResponse.setSpreadNickname("无");
-            if (ObjectUtil.isNotNull(user.getSpreadUid()) && user.getSpreadUid() > 0) {
-                User spreadUser = userApi.getById(user.getSpreadUid()).getCheckedData();
-                userResponse.setSpreadNickname(Optional.ofNullable(spreadUser.getNickname()).orElse("--"));
-            }
-
-            List<UserBrokerageRecord> recordList = userBrokerageRecordApi.getSpreadListByUid(user.getUid()).getCheckedData();
-            if (CollUtil.isEmpty(recordList)) {
-                // 推广订单数
-                userResponse.setSpreadOrderNum(0);
-                // 推广订单额
-                userResponse.setSpreadOrderTotalPrice(BigDecimal.ZERO);
-                // 佣金总金额
-                userResponse.setTotalBrokeragePrice(BigDecimal.ZERO);
-                // 已提现金额
-                userResponse.setExtractCountPrice(BigDecimal.ZERO);
-                // 提现次数
-                userResponse.setExtractCountNum(0);
-                // 冻结中佣金
-                userResponse.setFreezeBrokeragePrice(BigDecimal.ZERO);
-            } else {
-                // 推广订单数
-                userResponse.setSpreadOrderNum(recordList.size());
-                // 佣金总金额
-                userResponse.setTotalBrokeragePrice(recordList.stream().map(UserBrokerageRecord::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
-                // 推广订单额
-                List<String> orderNoList = recordList.stream().map(UserBrokerageRecord::getLinkId).collect(Collectors.toList());
-                BigDecimal spreadOrderTotalPrice = storeOrderApi.getSpreadOrderTotalPriceByOrderList(orderNoList).getCheckedData();
-                userResponse.setSpreadOrderTotalPrice(spreadOrderTotalPrice);
-
-                UserExtractResponse extractResponse = userExtractApi.getUserExtractByUserId(user.getUid()).getCheckedData();
-                // 已提现金额
-                userResponse.setExtractCountPrice(extractResponse.getExtractCountPrice());
-                // 提现次数
-                userResponse.setExtractCountNum(extractResponse.getExtractCountNum());
-                // 冻结中佣金
-                userResponse.setFreezeBrokeragePrice(userBrokerageRecordApi.getFreezePrice(user.getUid()).getCheckedData());
-            }
-            responseList.add(userResponse);
-        });
-        PageInfo<SpreadUserResponse> responsePageInfo = CommonPage.copyPageInfo(pageUserPage, responseList);
-        responsePageInfo.setTotal(userPageInfo.getTotal());
-        responsePageInfo.setPages(userPageInfo.getPages());
-        return CommonPage.restPage(responsePageInfo);
     }
 
     /**
