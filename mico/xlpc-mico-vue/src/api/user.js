@@ -152,7 +152,7 @@ export function userDeleteApi(params) {
  */
 export function levelListApi() {
   return request({
-    url: `/user/level/list`,
+    url: `/system/user/level/list`,
     method: 'get'
   })
 }
@@ -163,7 +163,7 @@ export function levelListApi() {
  */
 export function levelSaveApi(data) {
   return request({
-    url: `/user/level/save`,
+    url: `/system/user/level/save`,
     method: 'post',
     data
   })
@@ -175,7 +175,7 @@ export function levelSaveApi(data) {
  */
  export function levelUpdateApi(params, data) {
   return request({
-    url: `/user/level/update/${params}`,
+    url: `/system/user/level/update/${params}`,
     method: 'post',
     // params,
     data
@@ -188,7 +188,7 @@ export function levelSaveApi(data) {
  */
 export function levelInfoApi(params) {
   return request({
-    url: `/user/level/info`,
+    url: `/system/user/level/info`,
     method: 'get',
     params
   })
@@ -200,7 +200,7 @@ export function levelInfoApi(params) {
  */
  export function levelDeleteApi(id) {
   return request({
-    url: `/user/level/delete/${id}`,
+    url: `/system/user/level/delete/${id}`,
     method: 'post'
   })
 }
@@ -211,7 +211,7 @@ export function levelInfoApi(params) {
  */
 export function levelUseApi(data) {
   return request({
-    url: `/user/level/use`,
+    url: `/system/user/level/use`,
     method: 'post',
     data
   })
