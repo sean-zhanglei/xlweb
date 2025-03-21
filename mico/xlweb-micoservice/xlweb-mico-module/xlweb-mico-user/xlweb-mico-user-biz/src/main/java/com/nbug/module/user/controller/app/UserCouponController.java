@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 优惠卷控制器
 
@@ -56,11 +54,8 @@ public class UserCouponController {
     @Operation(summary = "领券")
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public CommonResult<String> receive(@RequestBody @Validated UserCouponReceiveRequest request) {
-        if (storeCouponUserApi.receiveCoupon(request).getCheckedData()) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeCouponUserApi.receiveCoupon(request).getCheckedData();
+        return CommonResult.success("success");
     }
 
 }

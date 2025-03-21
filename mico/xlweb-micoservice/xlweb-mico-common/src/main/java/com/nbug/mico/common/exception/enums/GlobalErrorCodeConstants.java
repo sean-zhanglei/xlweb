@@ -29,6 +29,9 @@ public interface GlobalErrorCodeConstants {
     // ========== 服务端错误段 ==========
 
     ErrorCode INTERNAL_SERVER_ERROR = new ErrorCode(500, "系统异常");
+
+    // ========== XlwebException业务异常code默认0，其它ServiceException参考{@link ServiceErrorCodeRange} ==========
+    ErrorCode XLWEB_SERVER_ERROR = new ErrorCode(0, "操作失败");
     ErrorCode NOT_IMPLEMENTED = new ErrorCode(501, "功能未实现/未开启");
     ErrorCode ERROR_CONFIGURATION = new ErrorCode(502, "错误的配置项");
 

@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 系统菜单管理 前端控制器
@@ -55,10 +53,8 @@ public class SystemMenuController {
     @Operation(summary = "新增菜单")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public CommonResult<String> add(@RequestBody @Validated SystemMenuRequest systemMenuRequest) {
-        if (systemMenuService.add(systemMenuRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemMenuService.add(systemMenuRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -69,10 +65,8 @@ public class SystemMenuController {
     @Operation(summary = "删除菜单")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public CommonResult<String> delete(@PathVariable(value = "id") Integer id) {
-        if (systemMenuService.deleteById(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemMenuService.deleteById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -82,10 +76,8 @@ public class SystemMenuController {
     @Operation(summary = "修改菜单")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated SystemMenuRequest systemMenuRequest) {
-        if (systemMenuService.edit(systemMenuRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemMenuService.edit(systemMenuRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -105,10 +97,8 @@ public class SystemMenuController {
     @Operation(summary = "修改菜单显示状态")
     @RequestMapping(value = "/updateShowStatus/{id}", method = RequestMethod.POST)
     public CommonResult<Object> updateShowStatus(@PathVariable(value = "id") Integer id) {
-        if (systemMenuService.updateShowStatus(id)) {
-            return CommonResult.success("修改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"修改失败");
+        systemMenuService.updateShowStatus(id);
+        return CommonResult.success("修改成功");
     }
 
     /**

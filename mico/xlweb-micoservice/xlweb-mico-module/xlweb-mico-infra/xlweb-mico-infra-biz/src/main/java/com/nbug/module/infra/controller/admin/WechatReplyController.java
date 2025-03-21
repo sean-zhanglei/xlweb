@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 微信关键字回复表 前端控制器
@@ -59,11 +57,8 @@ public class WechatReplyController {
     public CommonResult<String> save(@RequestBody @Validated WechatReplyRequest wechatReplyRequest) {
         WechatReply wechatReply = new WechatReply();
         BeanUtils.copyProperties(wechatReplyRequest, wechatReply);
-        if (wechatReplyService.create(wechatReply)) {
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        wechatReplyService.create(wechatReply);
+        return CommonResult.success("success");
     }
 
     /**
@@ -74,10 +69,8 @@ public class WechatReplyController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (wechatReplyService.removeById(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        wechatReplyService.removeById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -88,10 +81,8 @@ public class WechatReplyController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated WechatReplyRequest wechatReplyRequest) {
-        if (wechatReplyService.updateReply(wechatReplyRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        wechatReplyService.updateReply(wechatReplyRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -103,10 +94,8 @@ public class WechatReplyController {
     @Operation(summary = "状态")
     @RequestMapping(value = "/status", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam(value = "id") Integer id, @RequestParam(value = "status") Boolean status) {
-        if (wechatReplyService.updateStatus(id, status)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        wechatReplyService.updateStatus(id, status);
+        return CommonResult.success("success");
     }
 
     /**

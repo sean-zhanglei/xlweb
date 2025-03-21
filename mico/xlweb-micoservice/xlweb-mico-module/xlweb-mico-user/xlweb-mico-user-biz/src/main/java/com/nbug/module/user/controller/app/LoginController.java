@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 用户登陆 前端控制器
  
@@ -80,11 +78,8 @@ public class LoginController {
             @Parameter(name="phone", description="手机号码", required = true)
     })
     public CommonResult<Object> sendCode(@RequestParam String phone){
-        if(smsApi.sendCommonCode(phone).getCheckedData()){
-            return CommonResult.success("发送成功");
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR,"发送失败");
-        }
+        smsApi.sendCommonCode(phone).getCheckedData();
+        return CommonResult.success("发送成功");
     }
 }
 

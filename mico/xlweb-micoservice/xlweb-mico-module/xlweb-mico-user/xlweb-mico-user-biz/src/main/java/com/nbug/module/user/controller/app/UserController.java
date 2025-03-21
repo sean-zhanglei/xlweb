@@ -46,8 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 用户 -- 用户中心
 
@@ -82,10 +80,8 @@ public class UserController {
     @Operation(summary = "修改个人资料")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public CommonResult<Object> personInfo(@RequestBody @Validated UserEditRequest request) {
-        if (userService.editUser(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.editUser(request);
+        return CommonResult.success("success");
     }
 
     /**

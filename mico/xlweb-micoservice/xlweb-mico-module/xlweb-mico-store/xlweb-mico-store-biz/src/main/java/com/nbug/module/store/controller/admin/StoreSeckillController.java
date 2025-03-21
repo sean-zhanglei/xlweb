@@ -57,11 +57,8 @@ public class StoreSeckillController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreSeckillAddRequest storeSeckillRequest) {
-        if (storeSeckillService.saveSeckill(storeSeckillRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillService.saveSeckill(storeSeckillRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -72,11 +69,8 @@ public class StoreSeckillController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (storeSeckillService.deleteById(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillService.deleteById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -87,22 +81,16 @@ public class StoreSeckillController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated StoreSeckillAddRequest storeSeckillRequest) {
-        if (storeSeckillService.updateSeckill(storeSeckillRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillService.updateSeckill(storeSeckillRequest);
+        return CommonResult.success("success");
     }
 
     @PreAuthorize("hasAuthority('admin:seckill:update:status')")
     @Operation(summary = "修改秒杀商品状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.POST)
     public CommonResult<String> updateStatus(@RequestParam @Validated Integer id, @RequestParam @Validated boolean status) {
-        if (storeSeckillService.updateSecKillStatus(id,status)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillService.updateSecKillStatus(id,status);
+        return CommonResult.success("success");
     }
 
     /**

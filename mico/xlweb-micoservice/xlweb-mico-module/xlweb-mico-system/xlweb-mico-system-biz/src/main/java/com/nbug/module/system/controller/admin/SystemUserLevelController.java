@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 设置用户等级表 前端控制器
@@ -52,10 +50,8 @@ public class SystemUserLevelController {
     @Operation(summary = "新增等级")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<Object> save(@RequestBody @Validated SystemUserLevelRequest request) {
-        if (systemUserLevelService.create(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemUserLevelService.create(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -66,10 +62,8 @@ public class SystemUserLevelController {
     @Operation(summary = "删除等级")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     public CommonResult<Object> delete(@PathVariable(value = "id") Integer id) {
-        if (systemUserLevelService.delete(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemUserLevelService.delete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -80,10 +74,8 @@ public class SystemUserLevelController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public CommonResult<Object> update(@PathVariable(value = "id") Integer id,
                                        @RequestBody @Validated SystemUserLevelRequest request) {
-        if (systemUserLevelService.update(id, request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemUserLevelService.update(id, request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -93,10 +85,8 @@ public class SystemUserLevelController {
     @Operation(summary = "使用/禁用")
     @RequestMapping(value = "/use", method = RequestMethod.POST)
     public CommonResult<Object> use(@RequestBody @Validated SystemUserLevelUpdateShowRequest request) {
-        if (systemUserLevelService.updateShow(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemUserLevelService.updateShow(request);
+        return CommonResult.success("success");
     }
 }
 

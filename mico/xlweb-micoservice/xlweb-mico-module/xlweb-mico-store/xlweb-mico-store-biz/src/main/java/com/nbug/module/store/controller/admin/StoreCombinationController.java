@@ -67,11 +67,8 @@ public class StoreCombinationController {
     @Operation(summary = "新增拼团商品")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreCombinationRequest request){
-        if(storeCombinationService.saveCombination(request)){
-            return CommonResult.success("新增拼团商品成功");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR,"新增拼团商品失败");
-        }
+        storeCombinationService.saveCombination(request);
+        return CommonResult.success("新增拼团商品成功");
     }
 
     /**
@@ -82,11 +79,8 @@ public class StoreCombinationController {
     @Operation(summary = "删除拼团商品")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id){
-        if(storeCombinationService.deleteById(id)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCombinationService.deleteById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -97,11 +91,8 @@ public class StoreCombinationController {
     @Operation(summary = "修改拼团商品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated StoreCombinationRequest storeCombinationRequest){
-        if(storeCombinationService.updateCombination(storeCombinationRequest)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCombinationService.updateCombination(storeCombinationRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -123,11 +114,8 @@ public class StoreCombinationController {
     @Operation(summary = "修改拼团商品状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.POST)
     public CommonResult<Object> updateStatus(@RequestParam(value = "id") Integer id, @RequestParam @Validated boolean isShow){
-        if(storeCombinationService.updateCombinationShow(id, isShow)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCombinationService.updateCombinationShow(id, isShow);
+        return CommonResult.success("success");
     }
 
     /**

@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 通知设置 前端控制器
 
@@ -54,10 +52,8 @@ public class SystemNotificationController {
     @Operation(summary = "公众号模板开关")
     @RequestMapping(value = "/wechat/switch/{id}", method = RequestMethod.POST)
     public CommonResult<Object> wechatSwitch(@PathVariable Integer id) {
-        if (systemNotificationService.wechatSwitch(id)) {
-            return CommonResult.success("更改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"更改失败");
+        systemNotificationService.wechatSwitch(id);
+        return CommonResult.success("更改成功");
     }
 
     /**
@@ -67,10 +63,8 @@ public class SystemNotificationController {
     @Operation(summary = "小程序订阅模板开关")
     @RequestMapping(value = "/routine/switch/{id}", method = RequestMethod.POST)
     public CommonResult<Object> routineSwitch(@PathVariable Integer id) {
-        if (systemNotificationService.routineSwitch(id)) {
-            return CommonResult.success("更改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"更改失败");
+        systemNotificationService.routineSwitch(id);
+        return CommonResult.success("更改成功");
     }
 
     /**
@@ -80,10 +74,8 @@ public class SystemNotificationController {
     @Operation(summary = "发送短信开关")
     @RequestMapping(value = "/sms/switch/{id}", method = RequestMethod.POST)
     public CommonResult<Object> smsSwitch(@PathVariable Integer id) {
-        if (systemNotificationService.smsSwitch(id)) {
-            return CommonResult.success("更改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"更改失败");
+        systemNotificationService.smsSwitch(id);
+        return CommonResult.success("更改成功");
     }
 
     /**
@@ -103,10 +95,8 @@ public class SystemNotificationController {
     @Operation(summary = "修改通知")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@Validated @RequestBody NotificationUpdateRequest request) {
-        if (systemNotificationService.modify(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemNotificationService.modify(request);
+        return CommonResult.success("success");
     }
 }
 

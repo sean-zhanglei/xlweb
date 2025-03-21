@@ -58,11 +58,8 @@ public class StoreCouponController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreCouponRequest request) {
-        if (storeCouponService.create(request)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCouponService.create(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -73,11 +70,8 @@ public class StoreCouponController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update/status", method = RequestMethod.POST)
     public CommonResult<String> updateStatus(@RequestParam Integer id, @RequestParam Boolean status) {
-        if (storeCouponService.updateStatus(id, status)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCouponService.updateStatus(id, status);
+        return CommonResult.success("success");
     }
 
     /**
@@ -112,11 +106,8 @@ public class StoreCouponController {
     @Operation(summary = "删除优惠券")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public CommonResult<String> delete(@RequestParam Integer id) {
-        if (storeCouponService.delete(id)) {
-            return CommonResult.success("删除成功");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR,"删除失败");
-        }
+        storeCouponService.delete(id);
+        return CommonResult.success("删除成功");
     }
 }
 

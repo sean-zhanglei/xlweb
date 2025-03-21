@@ -34,8 +34,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 用户表 前端控制器
 
@@ -73,10 +71,8 @@ public class UserController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated UserUpdateRequest userRequest) {
         userRequest.setUid(id);
-        if (userService.updateUser(userRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.updateUser(userRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -88,10 +84,8 @@ public class UserController {
     @Operation(summary = "修改用户手机号")
     @RequestMapping(value = "/update/phone", method = RequestMethod.GET)
     public CommonResult<String> updatePhone(@RequestParam(name = "id") Integer id, @RequestParam(name = "phone") String phone) {
-        if (userService.updateUserPhone(id, phone)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.updateUserPhone(id, phone);
+        return CommonResult.success("success");
     }
 
     /**
@@ -142,10 +136,8 @@ public class UserController {
     @Operation(summary = "积分余额")
     @RequestMapping(value = "/operate/founds", method = RequestMethod.GET)
     public CommonResult<Object> founds(@Validated UserOperateIntegralMoneyRequest request) {
-        if (userService.updateIntegralMoney(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.updateIntegralMoney(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -157,10 +149,8 @@ public class UserController {
     @Operation(summary = "分组")
     @RequestMapping(value = "/group", method = RequestMethod.POST)
     public CommonResult<String> group(@RequestParam String id, @RequestParam String groupId) {
-        if (userService.group(id, groupId)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.group(id, groupId);
+        return CommonResult.success("success");
     }
 
     /**
@@ -172,10 +162,8 @@ public class UserController {
     @Operation(summary = "标签")
     @RequestMapping(value = "/tag", method = RequestMethod.POST)
     public CommonResult<String> tag(@RequestParam String id, @RequestParam String tagId) {
-        if (userService.tag(id, tagId)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userService.tag(id, tagId);
+        return CommonResult.success("success");
     }
 
     /**
@@ -185,10 +173,8 @@ public class UserController {
     @Operation(summary = "修改上级推广人")
     @RequestMapping(value = "/update/spread", method = RequestMethod.POST)
     public CommonResult<String> editSpread(@Validated @RequestBody UserUpdateSpreadRequest request) {
-        if (userService.editSpread(request)) {
-            return CommonResult.success("修改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"修改失败");
+        userService.editSpread(request);
+        return CommonResult.success("修改成功");
     }
 
     /**
@@ -198,10 +184,9 @@ public class UserController {
     @Operation(summary = "更新用户会员等级")
     @RequestMapping(value = "/update/level", method = RequestMethod.POST)
     public CommonResult<Object> updateUserLevel(@Validated @RequestBody UpdateUserLevelRequest request) {
-        if (userService.updateUserLevel(request)) {
-            return CommonResult.success("更新成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"更新失败");
+
+        userService.updateUserLevel(request);
+        return CommonResult.success("更新成功");
     }
 }
 

@@ -1,6 +1,5 @@
 package com.nbug.module.store.controller.admin;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.model.product.StoreProductRule;
 import com.nbug.mico.common.page.CommonPage;
 import com.nbug.mico.common.pojo.CommonResult;
@@ -58,11 +57,8 @@ public class StoreProductRuleController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreProductRuleRequest storeProductRuleRequest) {
-        if (storeProductRuleService.save(storeProductRuleRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductRuleService.save(storeProductRuleRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -73,11 +69,8 @@ public class StoreProductRuleController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     public CommonResult<String> delete(@PathVariable String ids) {
-        if (storeProductRuleService.removeByIds(XlwebUtil.stringToArray(ids))) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductRuleService.removeByIds(XlwebUtil.stringToArray(ids));
+        return CommonResult.success("success");
     }
 
     /**
@@ -88,11 +81,8 @@ public class StoreProductRuleController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated StoreProductRuleRequest storeProductRuleRequest) {
-        if (storeProductRuleService.updateRule(storeProductRuleRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductRuleService.updateRule(storeProductRuleRequest);
+        return CommonResult.success("success");
     }
 
     /**

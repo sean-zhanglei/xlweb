@@ -1,6 +1,5 @@
 package com.nbug.module.infra.api.wechat;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.token.WeChatOauthToken;
 import com.nbug.mico.common.vo.CreateOrderRequestVo;
@@ -29,12 +28,8 @@ public class WechatNewApiImpl implements WechatNewApi {
      */
     @Override
     public CommonResult<CreateOrderResponseVo> payUnifiedorder(CreateOrderRequestVo unifiedorderVo) {
-        try {
-            CreateOrderResponseVo createOrderResponseVo = wechatNewService.payUnifiedorder(unifiedorderVo);
-            return CommonResult.success(createOrderResponseVo);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        CreateOrderResponseVo createOrderResponseVo = wechatNewService.payUnifiedorder(unifiedorderVo);
+        return CommonResult.success(createOrderResponseVo);
     }
 
 
@@ -46,12 +41,8 @@ public class WechatNewApiImpl implements WechatNewApi {
      */
     @Override
     public CommonResult<WxRefundResponseVo> payRefund(WxRefundVo wxRefundVo, String path) {
-        try {
-            WxRefundResponseVo wxRefundResponseVo = wechatNewService.payRefund(wxRefundVo, path);
-            return CommonResult.success(wxRefundResponseVo);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        WxRefundResponseVo wxRefundResponseVo = wechatNewService.payRefund(wxRefundVo, path);
+        return CommonResult.success(wxRefundResponseVo);
     }
 
     /**
@@ -60,12 +51,8 @@ public class WechatNewApiImpl implements WechatNewApi {
      */
     @Override
     public CommonResult<WeChatMiniAuthorizeVo> miniAuthCode(String code) {
-        try {
-            WeChatMiniAuthorizeVo weChatMiniAuthorizeVo = wechatNewService.miniAuthCode(code);
-            return CommonResult.success(weChatMiniAuthorizeVo);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        WeChatMiniAuthorizeVo weChatMiniAuthorizeVo = wechatNewService.miniAuthCode(code);
+        return CommonResult.success(weChatMiniAuthorizeVo);
     }
 
     /**
@@ -75,12 +62,8 @@ public class WechatNewApiImpl implements WechatNewApi {
      */
     @Override
     public CommonResult<WeChatOauthToken> getOauth2AccessToken(String code) {
-        try {
-            WeChatOauthToken weChatOauthToken = wechatNewService.getOauth2AccessToken(code);
-            return CommonResult.success(weChatOauthToken);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        WeChatOauthToken weChatOauthToken = wechatNewService.getOauth2AccessToken(code);
+        return CommonResult.success(weChatOauthToken);
     }
 
     /**
@@ -92,11 +75,7 @@ public class WechatNewApiImpl implements WechatNewApi {
      */
     @Override
     public CommonResult<WeChatAuthorizeLoginUserInfoVo> getSnsUserInfo(String accessToken, String openid) {
-        try {
-            WeChatAuthorizeLoginUserInfoVo weChatAuthorizeLoginUserInfoVo = wechatNewService.getSnsUserInfo(accessToken, openid);
-            return CommonResult.success(weChatAuthorizeLoginUserInfoVo);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        WeChatAuthorizeLoginUserInfoVo weChatAuthorizeLoginUserInfoVo = wechatNewService.getSnsUserInfo(accessToken, openid);
+        return CommonResult.success(weChatAuthorizeLoginUserInfoVo);
     }
 }

@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 配置表 前端控制器
@@ -56,10 +54,8 @@ public class SystemConfigController {
     @Operation(summary = "整体保存表单数据")
     @RequestMapping(value = "/save/form", method = RequestMethod.POST)
     public CommonResult<String> saveFrom(@RequestBody @Validated SystemFormCheckRequest systemFormCheckRequest) {
-        if (systemConfigService.saveForm(systemFormCheckRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemConfigService.saveForm(systemFormCheckRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -113,10 +109,8 @@ public class SystemConfigController {
     @Operation(summary = "更新配置信息")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> getByKey(@RequestBody @Validated List<SystemConfigAdminRequest> requestList) {
-        if (systemConfigService.updateByList(requestList)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemConfigService.updateByList(requestList);
+        return CommonResult.success("success");
     }
 }
 

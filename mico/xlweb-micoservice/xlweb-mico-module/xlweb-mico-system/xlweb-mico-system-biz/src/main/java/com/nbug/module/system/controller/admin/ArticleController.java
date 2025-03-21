@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 文章管理表 前端控制器
@@ -59,11 +57,8 @@ public class ArticleController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated ArticleRequest articleRequest) {
-        if (articleService.create(articleRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        articleService.create(articleRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -75,11 +70,8 @@ public class ArticleController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @Parameter(name="id", description="文章ID")
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (articleService.deleteById(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        articleService.deleteById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -92,11 +84,8 @@ public class ArticleController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Parameter(name="id", description="文章ID")
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated ArticleRequest articleRequest) {
-        if (articleService.updateArticle(id, articleRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        articleService.updateArticle(id, articleRequest);
+        return CommonResult.success("success");
     }
 
     /**

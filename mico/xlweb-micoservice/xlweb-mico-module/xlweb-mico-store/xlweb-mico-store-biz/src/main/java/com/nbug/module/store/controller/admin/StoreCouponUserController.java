@@ -53,11 +53,8 @@ public class StoreCouponUserController {
     @Operation(summary = "领券")
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     public CommonResult<String> receive(@Validated StoreCouponUserRequest storeCouponUserRequest) {
-        if(storeCouponUserService.receive(storeCouponUserRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeCouponUserService.receive(storeCouponUserRequest);
+        return CommonResult.success("success");
     }
 }
 

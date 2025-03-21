@@ -95,11 +95,8 @@ public class StoreOrderController {
     @Operation(summary = "订单删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "orderNo") String orderNo) {
-        if (storeOrderService.delete(orderNo)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeOrderService.delete(orderNo);
+        return CommonResult.success("success");
     }
 
     /**
@@ -109,11 +106,8 @@ public class StoreOrderController {
     @Operation(summary = "备注")
     @RequestMapping(value = "/mark", method = RequestMethod.POST)
     public CommonResult<String> mark(@RequestParam String orderNo, @RequestParam String mark) {
-        if (storeOrderService.mark(orderNo, mark)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeOrderService.mark(orderNo, mark);
+        return CommonResult.success("success");
     }
 
     /**
@@ -123,11 +117,8 @@ public class StoreOrderController {
     @Operation(summary = "修改订单(改价)")
     @RequestMapping(value = "/update/price", method = RequestMethod.POST)
     public CommonResult<String> updatePrice(@RequestBody @Validated StoreOrderUpdatePriceRequest request) {
-        if (storeOrderService.updatePrice(request)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeOrderService.updatePrice(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -147,10 +138,8 @@ public class StoreOrderController {
     @Operation(summary = "发送货")
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public CommonResult<Boolean> send(@RequestBody @Validated StoreOrderSendRequest request) {
-        if (storeOrderService.send(request)) {
-            return CommonResult.success(true);
-        }
-        return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+        storeOrderService.send(request);
+        return CommonResult.success(true);
     }
 
     /**
@@ -170,10 +159,8 @@ public class StoreOrderController {
     @Operation(summary = "拒绝退款")
     @RequestMapping(value = "/refund/refuse", method = RequestMethod.GET)
     public CommonResult<Object> refundRefuse(@RequestParam String orderNo, @RequestParam String reason) {
-        if (storeOrderService.refundRefuse(orderNo, reason)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+        storeOrderService.refundRefuse(orderNo, reason);
+        return CommonResult.success("success");
     }
 
     /**

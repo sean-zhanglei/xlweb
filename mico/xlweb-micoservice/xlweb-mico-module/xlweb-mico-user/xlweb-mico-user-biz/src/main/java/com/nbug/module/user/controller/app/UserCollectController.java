@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 商品点赞和收藏表 前端控制器
@@ -50,11 +48,8 @@ public class UserCollectController {
     @Operation(summary = "添加收藏产品")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated UserCollectRequest request) {
-        if (storeProductRelationApi.add(request).getCheckedData()) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeProductRelationApi.add(request).getCheckedData();
+        return CommonResult.success("success");
     }
 
     /**
@@ -64,11 +59,8 @@ public class UserCollectController {
     @Operation(summary = "批量收藏")
     @RequestMapping(value = "/all", method = RequestMethod.POST)
     public CommonResult<String> all(@RequestBody @Validated UserCollectAllRequest request) {
-        if (storeProductRelationApi.all(request).getCheckedData()) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeProductRelationApi.all(request).getCheckedData();
+        return CommonResult.success("success");
     }
 
     /**
@@ -77,11 +69,8 @@ public class UserCollectController {
     @Operation(summary = "取消收藏产品")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public CommonResult<String> delete(@RequestBody String requestJson) {
-        if (storeProductRelationApi.delete(requestJson).getCheckedData()) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeProductRelationApi.delete(requestJson).getCheckedData();
+        return CommonResult.success("success");
     }
 
     /**
@@ -90,11 +79,8 @@ public class UserCollectController {
     @Operation(summary = "取消收藏产品(通过商品)")
     @RequestMapping(value = "/cancel/{proId}", method = RequestMethod.POST)
     public CommonResult<String> cancel(@PathVariable Integer proId) {
-        if (storeProductRelationApi.deleteByProIdAndUid(proId).getCheckedData()) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeProductRelationApi.deleteByProIdAndUid(proId).getCheckedData();
+        return CommonResult.success("success");
     }
 }
 

@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
 
 
 /**
@@ -64,13 +61,9 @@ public class CartController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<HashMap<String,String>> save(@RequestBody @Validated CartRequest storeCartRequest) {
         String cartId = storeCartService.saveCate(storeCartRequest);
-        if (StringUtils.isNotBlank(cartId)) {
-            HashMap<String,String> result = new HashMap<>();
-            result.put("cartId", cartId);
-            return CommonResult.success(result);
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        HashMap<String,String> result = new HashMap<>();
+        result.put("cartId", cartId);
+        return CommonResult.success(result);
     }
 
     /**
@@ -80,11 +73,8 @@ public class CartController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public CommonResult<String> delete(@RequestParam(value = "ids") List<Long> ids) {
-        if (storeCartService.deleteCartByIds(ids)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeCartService.deleteCartByIds(ids);
+        return CommonResult.success("success");
     }
 
     /**
@@ -95,11 +85,8 @@ public class CartController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/num", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestParam Integer number) {
-        if (storeCartService.updateCartNum(id, number)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        storeCartService.updateCartNum(id, number);
+        return CommonResult.success("success");
     }
 
     /**

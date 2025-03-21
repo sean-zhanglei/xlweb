@@ -1,6 +1,5 @@
 package com.nbug.module.infra.api.sms;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.module.infra.service.sms.TemplateMessageService;
 import org.springframework.validation.annotation.Validated;
@@ -24,13 +23,8 @@ public class TemplateMessageApiImpl implements TemplateMessageApi {
      */
     @Override
     public CommonResult<String> pushTemplateMessage(Integer templateId, HashMap<String, String> temMap, String openId) {
-        try {
-            templateMessageService.pushTemplateMessage(templateId, temMap, openId);
-            return CommonResult.success("success");
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
-
+        templateMessageService.pushTemplateMessage(templateId, temMap, openId);
+        return CommonResult.success("success");
     }
 
     /**
@@ -41,12 +35,8 @@ public class TemplateMessageApiImpl implements TemplateMessageApi {
      */
     @Override
     public CommonResult<String> pushMiniTemplateMessage(Integer templateId, HashMap<String, String> temMap, String openId) {
-        try {
-            templateMessageService.pushMiniTemplateMessage(templateId, temMap, openId);
-            return CommonResult.success("success");
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        templateMessageService.pushMiniTemplateMessage(templateId, temMap, openId);
+        return CommonResult.success("success");
     }
 
 }

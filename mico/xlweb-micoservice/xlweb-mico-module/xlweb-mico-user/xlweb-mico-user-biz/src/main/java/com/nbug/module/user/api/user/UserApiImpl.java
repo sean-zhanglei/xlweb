@@ -1,7 +1,6 @@
 package com.nbug.module.user.api.user;
 
 import com.github.pagehelper.PageInfo;
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.model.user.User;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.request.PageParamRequest;
@@ -152,12 +151,8 @@ public class UserApiImpl implements UserApi {
      */
     @Override
     public CommonResult<Boolean> clearGroupByGroupId(String groupId) {
-        try {
-            userService.clearGroupByGroupId(groupId);
-            return success(true);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        userService.clearGroupByGroupId(groupId);
+        return success(true);
     }
 
     /**

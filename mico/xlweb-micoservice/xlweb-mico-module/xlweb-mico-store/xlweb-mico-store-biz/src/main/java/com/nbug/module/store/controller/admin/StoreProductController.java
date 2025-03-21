@@ -70,11 +70,8 @@ public class StoreProductController {
     @Operation(summary = "新增商品")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreProductAddRequest request) {
-        if (storeProductService.save(request)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductService.save(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -85,16 +82,13 @@ public class StoreProductController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestBody @PathVariable Integer id, @RequestParam(value = "type", required = false, defaultValue = "recycle")String type) {
-        if (storeProductService.deleteProduct(id, type)) {
-            if ("recycle".equals(type)) {
-                storeCartService.productStatusNotEnable(id);
-            } else {
-                storeCartService.productDelete(id);
-            }
-            return CommonResult.success("success");
+        storeProductService.deleteProduct(id, type);
+        if ("recycle".equals(type)) {
+            storeCartService.productStatusNotEnable(id);
         } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+            storeCartService.productDelete(id);
         }
+        return CommonResult.success("success");
     }
 
     /**
@@ -105,11 +99,8 @@ public class StoreProductController {
     @Operation(summary = "恢复商品")
     @RequestMapping(value = "/restore/{id}", method = RequestMethod.GET)
     public CommonResult<String> restore(@RequestBody @PathVariable Integer id) {
-        if (storeProductService.reStoreProduct(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductService.reStoreProduct(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -120,11 +111,8 @@ public class StoreProductController {
     @Operation(summary = "商品修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated StoreProductAddRequest storeProductRequest) {
-        if (storeProductService.update(storeProductRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductService.update(storeProductRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -156,11 +144,8 @@ public class StoreProductController {
     @Operation(summary = "上架")
     @RequestMapping(value = "/putOnShell/{id}", method = RequestMethod.GET)
     public CommonResult<String> putOn(@PathVariable Integer id) {
-        if (storeProductService.putOnShelf(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductService.putOnShelf(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -170,11 +155,8 @@ public class StoreProductController {
     @Operation(summary = "下架")
     @RequestMapping(value = "/offShell/{id}", method = RequestMethod.GET)
     public CommonResult<String> offShell(@PathVariable Integer id) {
-        if (storeProductService.offShelf(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductService.offShelf(id);
+        return CommonResult.success("success");
     }
 
     @PreAuthorize("hasAuthority('admin:product:import:product')")

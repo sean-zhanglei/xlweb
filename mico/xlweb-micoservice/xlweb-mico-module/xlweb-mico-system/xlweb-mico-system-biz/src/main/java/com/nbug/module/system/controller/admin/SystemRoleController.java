@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 身份管理表 前端控制器
@@ -58,10 +56,8 @@ public class SystemRoleController {
     @Operation(summary = "新增身份")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated SystemRoleRequest systemRoleRequest) {
-        if (systemRoleService.add(systemRoleRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemRoleService.add(systemRoleRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -72,10 +68,8 @@ public class SystemRoleController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (systemRoleService.delete(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemRoleService.delete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -86,10 +80,8 @@ public class SystemRoleController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated SystemRoleRequest systemRoleRequest) {
-        if (systemRoleService.edit(systemRoleRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemRoleService.edit(systemRoleRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -110,10 +102,8 @@ public class SystemRoleController {
     @Operation(summary = "修改身份状态")
     @RequestMapping(value = "/updateStatus", method = RequestMethod.GET)
     public CommonResult<Object> updateStatus(@Validated @RequestParam(value = "id") Integer id, @Validated @RequestParam(value = "status") Boolean status) {
-        if (systemRoleService.updateStatus(id, status)) {
-            return CommonResult.success("修改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"修改失败");
+        systemRoleService.updateStatus(id, status);
+        return CommonResult.success("修改成功");
     }
 }
 

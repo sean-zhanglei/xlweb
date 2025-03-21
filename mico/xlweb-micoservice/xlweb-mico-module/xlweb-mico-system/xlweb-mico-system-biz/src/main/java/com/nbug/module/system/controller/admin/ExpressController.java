@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 快递公司表 前端控制器
@@ -63,10 +61,8 @@ public class ExpressController {
     @Operation(summary = "编辑")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated ExpressUpdateRequest expressRequest) {
-        if (expressService.updateExpress(expressRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        expressService.updateExpress(expressRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -76,10 +72,8 @@ public class ExpressController {
     @Operation(summary = "修改显示状态")
     @RequestMapping(value = "/update/show", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated ExpressUpdateShowRequest expressRequest) {
-        if (expressService.updateExpressShow(expressRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        expressService.updateExpressShow(expressRequest);
+        return CommonResult.success("success");
     }
 
 

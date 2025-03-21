@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 用户分组表 前端控制器
@@ -54,10 +52,8 @@ public class UserGroupController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated UserGroupRequest userGroupRequest) {
-        if (userGroupService.create(userGroupRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userGroupService.create(userGroupRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -68,10 +64,8 @@ public class UserGroupController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (userGroupService.removeById(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userGroupService.removeById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -83,10 +77,8 @@ public class UserGroupController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated UserGroupRequest userGroupRequest) {
-        if (userGroupService.edit(id, userGroupRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        userGroupService.edit(id, userGroupRequest);
+        return CommonResult.success("success");
     }
 
     /**

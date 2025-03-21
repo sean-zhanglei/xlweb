@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-import static com.nbug.mico.common.pojo.CommonResult.error;
 import static com.nbug.mico.common.pojo.CommonResult.success;
 
 @RestController // 提供 RESTful API 接口，给 Feign 调用
@@ -33,12 +31,7 @@ public class ApiAccessLogApiImpl implements ApiAccessLogApi {
      */
     @Override
     public CommonResult<Boolean> createApiAccessLogAsync(ApiAccessLogCreateReqDTO createDTO) {
-        try {
-            apiAccessLogService.createApiAccessLogAsync(createDTO);
-            return success(true);
-        } catch (Exception e) {
-            return error(INTERNAL_SERVER_ERROR);
-        }
-
+        apiAccessLogService.createApiAccessLogAsync(createDTO);
+        return success(true);
     }
 }

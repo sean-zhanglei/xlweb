@@ -1,6 +1,5 @@
 package com.nbug.module.store.controller.admin;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.page.CommonPage;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.request.PageParamRequest;
@@ -58,11 +57,8 @@ public class StoreSeckillMangerController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreSeckillMangerRequest storeSeckillMangerRequest) {
-        if (storeSeckillMangerService.saveManger(storeSeckillMangerRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillMangerService.saveManger(storeSeckillMangerRequest);
+        return CommonResult.success("success");
     }
 
 
@@ -74,11 +70,8 @@ public class StoreSeckillMangerController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (storeSeckillMangerService.deleteLogicById(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeSeckillMangerService.deleteLogicById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -90,7 +83,8 @@ public class StoreSeckillMangerController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated StoreSeckillMangerRequest storeSeckillMangerRequest) {
-        return storeSeckillMangerService.update(id, storeSeckillMangerRequest) ? CommonResult.success("success") : CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+        storeSeckillMangerService.update(id, storeSeckillMangerRequest);
+        return CommonResult.success("success");
     }
 
     /**

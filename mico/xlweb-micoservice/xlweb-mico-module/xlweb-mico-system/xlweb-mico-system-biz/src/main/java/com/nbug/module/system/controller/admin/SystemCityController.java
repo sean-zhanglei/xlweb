@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 城市表 前端控制器
@@ -55,10 +53,8 @@ public class SystemCityController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @Validated SystemCityRequest request) {
-        if (systemCityService.update(id, request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemCityService.update(id, request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -70,10 +66,8 @@ public class SystemCityController {
     @Operation(summary = "修改状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.POST)
     public CommonResult<String> updateStatus(@RequestParam Integer id, @RequestParam Boolean status) {
-        if (systemCityService.updateStatus(id, status)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemCityService.updateStatus(id, status);
+        return CommonResult.success("success");
     }
 
     /**

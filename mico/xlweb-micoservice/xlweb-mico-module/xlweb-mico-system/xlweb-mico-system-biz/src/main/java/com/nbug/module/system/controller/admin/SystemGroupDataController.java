@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 组合数据详情表 前端控制器
@@ -56,10 +54,8 @@ public class SystemGroupDataController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated SystemGroupDataRequest systemGroupDataRequest) {
-        if (systemGroupDataService.create(systemGroupDataRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemGroupDataService.create(systemGroupDataRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -70,10 +66,8 @@ public class SystemGroupDataController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (systemGroupDataService.removeById(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemGroupDataService.removeById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -85,10 +79,8 @@ public class SystemGroupDataController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated SystemGroupDataRequest request) {
-        if (systemGroupDataService.update(id, request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemGroupDataService.update(id, request);
+        return CommonResult.success("success");
     }
 
     /**

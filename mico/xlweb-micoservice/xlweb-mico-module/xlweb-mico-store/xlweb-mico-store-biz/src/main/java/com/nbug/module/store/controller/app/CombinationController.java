@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 拼团商品
 
@@ -104,11 +102,8 @@ public class CombinationController {
     @Operation(summary = "取消拼团")
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public CommonResult<Object> remove(@RequestBody @Validated StorePinkRequest storePinkRequest) {
-        if (storeCombinationService.removePink(storePinkRequest)) {
-            return CommonResult.success("取消成功");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR, "取消失败");
-        }
+        storeCombinationService.removePink(storePinkRequest);
+        return CommonResult.success("取消成功");
     }
 
 }

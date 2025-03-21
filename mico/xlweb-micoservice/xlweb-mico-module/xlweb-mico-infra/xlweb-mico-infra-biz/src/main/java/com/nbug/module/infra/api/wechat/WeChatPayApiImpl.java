@@ -1,6 +1,5 @@
 package com.nbug.module.infra.api.wechat;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.model.finance.UserRecharge;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.module.infra.service.wechat.WeChatPayService;
@@ -25,12 +24,8 @@ public class WeChatPayApiImpl implements WeChatPayApi{
      */
     @Override
     public CommonResult<Map<String, String>> unifiedRecharge( UserRecharge userRecharge, String clientIp) {
-        try {
-            Map<String, String> map = weChatPayService.unifiedRecharge(userRecharge, clientIp);
-            return CommonResult.success(map);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        Map<String, String> map = weChatPayService.unifiedRecharge(userRecharge, clientIp);
+        return CommonResult.success(map);
     }
 
     /**
@@ -40,11 +35,7 @@ public class WeChatPayApiImpl implements WeChatPayApi{
      */
     @Override
     public CommonResult<Boolean> queryPayResult(String orderNo) {
-        try {
-            Boolean result = weChatPayService.queryPayResult(orderNo);
-            return CommonResult.success(result);
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        Boolean result = weChatPayService.queryPayResult(orderNo);
+        return CommonResult.success(result);
     }
 }

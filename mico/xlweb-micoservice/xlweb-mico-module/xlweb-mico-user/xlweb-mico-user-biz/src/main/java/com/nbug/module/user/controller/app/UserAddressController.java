@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 用户地址 前端控制器
@@ -60,11 +58,8 @@ public class UserAddressController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     public CommonResult<String> delete(@RequestBody UserAddressDelRequest request) {
-        if (userAddressService.delete(request.getId())) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        userAddressService.delete(request.getId());
+        return CommonResult.success("success");
     }
 
     /**
@@ -93,11 +88,8 @@ public class UserAddressController {
     @Operation(summary = "设置默认地址")
     @RequestMapping(value = "/default/set", method = RequestMethod.POST)
     public CommonResult<Object> def(@RequestBody UserAddressDelRequest request) {
-        if (userAddressService.def(request.getId())) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        userAddressService.def(request.getId());
+        return CommonResult.success("success");
     }
 }
 

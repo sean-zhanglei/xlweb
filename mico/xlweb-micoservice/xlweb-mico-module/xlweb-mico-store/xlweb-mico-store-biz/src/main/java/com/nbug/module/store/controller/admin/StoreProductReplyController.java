@@ -59,11 +59,8 @@ public class StoreProductReplyController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreProductReplyAddRequest request) {
-        if (storeProductReplyService.virtualCreate(request)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductReplyService.virtualCreate(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -74,11 +71,8 @@ public class StoreProductReplyController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public CommonResult<String> delete(@PathVariable Integer id) {
-        if (storeProductReplyService.delete(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeProductReplyService.delete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -101,10 +95,8 @@ public class StoreProductReplyController {
    @Operation(summary = "回复")
    @RequestMapping(value = "/comment", method = RequestMethod.POST)
    public CommonResult<String> comment(@RequestBody StoreProductReplyCommentRequest request) {
-       if (storeProductReplyService.comment(request)) {
-           return CommonResult.success("success");
-       }
-       return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
+       storeProductReplyService.comment(request);
+       return CommonResult.success("success");
    }
 }
 

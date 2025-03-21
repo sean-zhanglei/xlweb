@@ -70,11 +70,8 @@ public class StoreBargainController {
     @Operation(summary = "新增砍价商品")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated StoreBargainRequest storeBargainRequest){
-        if(storeBargainService.saveBargain(storeBargainRequest)){
-            return CommonResult.success("添加砍价商品成功");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR,"添加砍价商品失败");
-        }
+        storeBargainService.saveBargain(storeBargainRequest);
+        return CommonResult.success("添加砍价商品成功");
     }
 
     /**
@@ -85,11 +82,8 @@ public class StoreBargainController {
     @Operation(summary = "删除砍价商品")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id){
-        if(storeBargainService.deleteById(id)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeBargainService.deleteById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -100,11 +94,8 @@ public class StoreBargainController {
     @Operation(summary = "修改砍价商品")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody @Validated StoreBargainRequest storeBargainRequest){
-        if (storeBargainService.updateBargain(storeBargainRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeBargainService.updateBargain(storeBargainRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -130,11 +121,8 @@ public class StoreBargainController {
     @Operation(summary = "修改砍价商品状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.POST)
     public CommonResult<String> updateStatus(@RequestParam @Validated Integer id, @RequestParam @Validated boolean status){
-        if(storeBargainService.updateBargainStatus(id,status)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        storeBargainService.updateBargainStatus(id,status);
+        return CommonResult.success("success");
     }
 
     /**

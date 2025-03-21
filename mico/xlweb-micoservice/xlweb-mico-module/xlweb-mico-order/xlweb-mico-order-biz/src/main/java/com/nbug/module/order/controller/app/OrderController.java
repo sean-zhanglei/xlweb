@@ -35,8 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * H5端订单操作
  
@@ -131,11 +129,8 @@ public class OrderController {
     @Operation(summary = "删除订单")
     @RequestMapping(value = "/del", method = RequestMethod.POST)
     public CommonResult<Boolean> delete(@RequestParam Integer id) {
-        if( orderService.delete(id)) {
-            return CommonResult.success(true);
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        orderService.delete(id);
+        return CommonResult.success(true);
     }
 
     /**
@@ -145,11 +140,8 @@ public class OrderController {
     @Operation(summary = "评价订单")
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public CommonResult<Boolean> comment(@RequestBody @Validated StoreProductReplyAddRequest request) {
-        if(orderService.reply(request)) {
-            return CommonResult.success(true);
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        orderService.reply(request);
+        return CommonResult.success(true);
     }
 
     /**
@@ -159,11 +151,8 @@ public class OrderController {
     @Operation(summary = "订单收货")
     @RequestMapping(value = "/take", method = RequestMethod.POST)
     public CommonResult<Boolean> take(@RequestParam(value = "id") Integer id) {
-        if(orderService.take(id)) {
-            return CommonResult.success(true);
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        orderService.take(id);
+        return CommonResult.success(true);
     }
 
     /**
@@ -173,11 +162,8 @@ public class OrderController {
     @Operation(summary = "订单取消")
     @RequestMapping(value = "/cancel", method = RequestMethod.POST)
     public CommonResult<Boolean> cancel(@RequestParam(value = "id") Integer id) {
-        if(orderService.cancel(id)) {
-            return CommonResult.success(true);
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        orderService.cancel(id);
+        return CommonResult.success(true);
     }
 
     /**
@@ -197,11 +183,8 @@ public class OrderController {
     @Operation(summary = "订单退款申请")
     @RequestMapping(value = "/refund", method = RequestMethod.POST)
     public CommonResult<Boolean> refundApply(@RequestBody @Validated OrderRefundApplyRequest request) {
-        if(orderService.refundApply(request)) {
-            return CommonResult.success(true);
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        orderService.refundApply(request);
+        return CommonResult.success(true);
     }
 
     /**

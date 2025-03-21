@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 微信模板 前端控制器
@@ -36,10 +34,8 @@ public class SystemTemplateMessageController {
     @Operation(summary = "公众号模板消息同步")
     @RequestMapping(value = "/whcbqhn/sync", method = RequestMethod.POST)
     public CommonResult<String> whcbqhnSync() {
-        if (templateMessageService.whcbqhnSync()) {
-            return CommonResult.success("公众号模板消息同步成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"公众号模板消息同步失败");
+        templateMessageService.whcbqhnSync();
+        return CommonResult.success("公众号模板消息同步成功");
     }
 
     /**
@@ -49,10 +45,8 @@ public class SystemTemplateMessageController {
     @Operation(summary = "小程序订阅消息同步")
     @RequestMapping(value = "/routine/sync", method = RequestMethod.POST)
     public CommonResult<String> routineSync() {
-        if (templateMessageService.routineSync()) {
-            return CommonResult.success("小程序订阅消息同步成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"小程序订阅消息同步失败");
+        templateMessageService.routineSync();
+        return CommonResult.success("小程序订阅消息同步成功");
     }
 }
 

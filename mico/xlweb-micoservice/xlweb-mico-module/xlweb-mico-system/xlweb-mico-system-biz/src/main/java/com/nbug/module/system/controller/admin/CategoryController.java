@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 分类表 前端控制器
@@ -70,11 +68,8 @@ public class CategoryController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@Validated CategoryRequest categoryRequest) {
-        if (categoryService.create(categoryRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        categoryService.create(categoryRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -88,11 +83,8 @@ public class CategoryController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @Parameter(name="id", description="分类ID")
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (categoryService.delete(id) > 0) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        categoryService.delete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -109,11 +101,8 @@ public class CategoryController {
     public CommonResult<String> update(@RequestParam Integer id, @ModelAttribute CategoryRequest categoryRequest) {
         if (null == id || id <= 0) throw new XlwebException("id 参数不合法");
         categoryRequest.setExtra(attachmentApi.clearPrefix(categoryRequest.getExtra()).getCheckedData());
-        if (categoryService.update(categoryRequest, id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        categoryService.update(categoryRequest, id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -176,11 +165,8 @@ public class CategoryController {
     @RequestMapping(value = "/updateStatus/{id}", method = RequestMethod.GET)
     @Parameter(name = "id", description="分类id")
     public CommonResult<Object> getByIds(@Validated @PathVariable(name = "id") Integer id) {
-        if (categoryService.updateStatus(id)) {
-            return CommonResult.success("修改成功");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR,"修改失败");
-        }
+        categoryService.updateStatus(id);
+        return CommonResult.success("修改成功");
     }
 }
 

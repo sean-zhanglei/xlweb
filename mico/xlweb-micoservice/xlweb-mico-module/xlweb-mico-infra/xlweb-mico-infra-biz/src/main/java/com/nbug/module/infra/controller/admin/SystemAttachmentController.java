@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 附件管理表 前端控制器
 
@@ -63,10 +61,8 @@ public class SystemAttachmentController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated SystemAttachmentRequest systemAttachmentRequest) {
-        if (systemAttachmentService.add(systemAttachmentRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemAttachmentService.add(systemAttachmentRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -77,10 +73,8 @@ public class SystemAttachmentController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete/{ids}", method = RequestMethod.GET)
     public CommonResult<String> delete(@PathVariable String ids) {
-        if (systemAttachmentService.removeByIds(XlwebUtil.stringToArray(ids))) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemAttachmentService.removeByIds(XlwebUtil.stringToArray(ids));
+        return CommonResult.success("success");
     }
 
     /**
@@ -94,10 +88,8 @@ public class SystemAttachmentController {
     public CommonResult<String> update(@RequestParam Integer id,
                                        @RequestBody @Validated SystemAttachmentRequest systemAttachmentRequest) {
         systemAttachmentRequest.setAttId(id);
-        if (systemAttachmentService.edit(systemAttachmentRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemAttachmentService.edit(systemAttachmentRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -108,10 +100,8 @@ public class SystemAttachmentController {
     @Operation(summary = "更改图片目录")
     @RequestMapping(value = "/move", method = RequestMethod.POST)
     public CommonResult<String> updateAttrId(@RequestBody @Validated SystemAttachmentMoveRequest move) {
-        if (systemAttachmentService.updateAttrId(move)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemAttachmentService.updateAttrId(move);
+        return CommonResult.success("success");
     }
 
     /**

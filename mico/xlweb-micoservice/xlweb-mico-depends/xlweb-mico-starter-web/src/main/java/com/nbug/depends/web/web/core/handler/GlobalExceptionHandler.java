@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.nbug.mico.common.exception.ServiceException;
+import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.exception.utils.ServiceExceptionUtil;
 import com.nbug.mico.common.json.JsonUtils;
 import com.nbug.mico.common.pojo.CommonResult;
@@ -254,6 +255,29 @@ public class GlobalExceptionHandler {
             }
         }
         return CommonResult.error(ex.getCode(), ex.getMessage());
+    }
+
+    /**
+     * 处理业务异常 XlwebException
+     */
+    @ExceptionHandler(value = XlwebException.class)
+    public CommonResult<?> serviceXlwebExceptionHandler(XlwebException ex) {
+        // 不包含的时候，才进行打印，避免 ex 堆栈过多
+        if (!IGNORE_ERROR_MESSAGES.contains(ex.getMessage())) {
+            // 即使打印，也只打印第一层 StackTraceElement，并且使用 warn 在控制台输出，更容易看到
+            try {
+                StackTraceElement[] stackTraces = ex.getStackTrace();
+                for (StackTraceElement stackTrace : stackTraces) {
+                    if (ObjUtil.notEqual(stackTrace.getClassName(), ServiceExceptionUtil.class.getName())) {
+                        log.warn("[serviceExceptionHandler]\n\t{}", stackTrace);
+                        break;
+                    }
+                }
+            } catch (Exception ignored) {
+                // 忽略日志，避免影响主流程
+            }
+        }
+        return CommonResult.error(XLWEB_SERVER_ERROR.getCode(), ex.getMessage());
     }
 
     /**

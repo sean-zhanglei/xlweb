@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 微信缓存表 前端控制器
 
@@ -45,10 +43,8 @@ public class WeChatController {
     @Operation(summary = "保存自定义菜单")
     @RequestMapping(value = "/public/create", method = RequestMethod.POST)
     public CommonResult<String> create(@RequestBody String data) {
-        if (wechatPublicService.createMenus(data)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        wechatPublicService.createMenus(data);
+        return CommonResult.success("success");
     }
 
     /**
@@ -58,10 +54,8 @@ public class WeChatController {
     @Operation(summary = "删除自定义菜单")
     @RequestMapping(value = "/public/delete", method = RequestMethod.GET)
     public CommonResult<String> delete() {
-        if (wechatPublicService.deleteMenus()) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        wechatPublicService.deleteMenus();
+        return CommonResult.success("success");
     }
 }
 

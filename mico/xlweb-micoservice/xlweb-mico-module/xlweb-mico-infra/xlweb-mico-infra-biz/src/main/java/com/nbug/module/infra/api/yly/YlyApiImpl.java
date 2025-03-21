@@ -1,6 +1,5 @@
 package com.nbug.module.infra.api.yly;
 
-import com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.module.infra.service.Yly.YlyPrintService;
 import org.springframework.validation.annotation.Validated;
@@ -22,12 +21,8 @@ public class YlyApiImpl implements  YlyApiApi{
      */
     @Override
     public CommonResult<String> YlyPrint(String ordId, boolean isAuto) {
-        try {
-            ylyPrintService.YlyPrint(ordId, isAuto);
-            return CommonResult.success("success");
-        } catch (Exception e) {
-            return CommonResult.error(GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR);
-        }
+        ylyPrintService.YlyPrint(ordId, isAuto);
+        return CommonResult.success("success");
     }
 
 }

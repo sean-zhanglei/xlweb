@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 门店店员表 前端控制器
@@ -59,10 +57,8 @@ public class SystemStoreStaffController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @ModelAttribute SystemStoreStaffRequest systemStoreStaffRequest) {
-        if (systemStoreStaffService.saveUnique(systemStoreStaffRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreStaffService.saveUnique(systemStoreStaffRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -73,10 +69,8 @@ public class SystemStoreStaffController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (systemStoreStaffService.removeById(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreStaffService.removeById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -88,10 +82,8 @@ public class SystemStoreStaffController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @ModelAttribute SystemStoreStaffRequest systemStoreStaffRequest) {
-        if (systemStoreStaffService.edit(id, systemStoreStaffRequest)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreStaffService.edit(id, systemStoreStaffRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -103,10 +95,8 @@ public class SystemStoreStaffController {
     @Operation(summary = "修改状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.GET)
     public CommonResult<String> updateStatus(@RequestParam Integer id, @RequestParam Integer status) {
-        if (systemStoreStaffService.updateStatus(id, status)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreStaffService.updateStatus(id, status);
+        return CommonResult.success("success");
     }
 
     /**

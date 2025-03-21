@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 门店自提 前端控制器
@@ -69,10 +67,8 @@ public class SystemStoreController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated SystemStoreRequest request) {
-        if (systemStoreService.create(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.create(request);
+        return CommonResult.success("success");
     }
 
 
@@ -84,10 +80,8 @@ public class SystemStoreController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (systemStoreService.delete(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.delete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -99,10 +93,8 @@ public class SystemStoreController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated SystemStoreRequest request) {
-        if (systemStoreService.update(id, request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.update(id, request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -114,10 +106,8 @@ public class SystemStoreController {
     @Operation(summary = "修改门店显示状态")
     @RequestMapping(value = "/update/status", method = RequestMethod.GET)
     public CommonResult<String> updateStatus(@RequestParam Integer id, @RequestParam Boolean status) {
-        if (systemStoreService.updateStatus(id, status)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.updateStatus(id, status);
+        return CommonResult.success("success");
     }
 
     /**
@@ -138,10 +128,8 @@ public class SystemStoreController {
     @Operation(summary = "彻底删除")
     @RequestMapping(value = "/completely/delete", method = RequestMethod.GET)
     public CommonResult<Object> completeLyDelete(@RequestParam(value = "id") Integer id) {
-        if (systemStoreService.completeLyDelete(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.completeLyDelete(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -151,10 +139,8 @@ public class SystemStoreController {
     @Operation(summary = "提货点恢复")
     @RequestMapping(value = "/recovery", method = RequestMethod.GET)
     public CommonResult<Object> recovery(@RequestParam(value = "id") Integer id) {
-        if (systemStoreService.recovery(id)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        systemStoreService.recovery(id);
+        return CommonResult.success("success");
     }
 }
 

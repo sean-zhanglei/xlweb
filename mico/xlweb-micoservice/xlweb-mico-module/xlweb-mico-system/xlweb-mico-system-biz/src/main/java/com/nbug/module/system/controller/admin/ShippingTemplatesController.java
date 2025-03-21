@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 /**
  * 物流-模板控制器
 
@@ -56,10 +54,8 @@ public class ShippingTemplatesController {
     @Operation(summary = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody @Validated ShippingTemplatesRequest request){
-        if (shippingTemplatesService.create(request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"新增运费模板失败");
+        shippingTemplatesService.create(request);
+        return CommonResult.success("success");
     }
 
     /**
@@ -71,11 +67,8 @@ public class ShippingTemplatesController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @Parameter(name="id", description="模板ID", required = true)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id){
-        if(shippingTemplatesService.remove(id)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        shippingTemplatesService.remove(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -87,10 +80,8 @@ public class ShippingTemplatesController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated ShippingTemplatesRequest request){
-        if (shippingTemplatesService.update(id, request)) {
-            return CommonResult.success("success");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR);
+        shippingTemplatesService.update(id, request);
+        return CommonResult.success("success");
     }
 
     /**

@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 用户提现表 前端控制器
@@ -57,11 +55,8 @@ public class UserExtractController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestParam Integer id, @Validated UserExtractRequest userExtractRequest){
-        if (userExtractService.updateExtract(id, userExtractRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        userExtractService.updateExtract(id, userExtractRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -89,11 +84,8 @@ public class UserExtractController {
     public CommonResult<String> updateStatus(@RequestParam(value = "id") Integer id,
                                              @RequestParam(value = "status",defaultValue = "审核状态 -1 未通过 0 审核中 1 已提现") Integer status,
                                              @RequestParam(value = "backMessage",defaultValue = "驳回原因", required = false) String backMessage){
-        if(userExtractService.updateStatus(id, status, backMessage)){
-            return CommonResult.success("success");
-        }else{
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        userExtractService.updateStatus(id, status, backMessage);
+        return CommonResult.success("success");
     }
 }
 

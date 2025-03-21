@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.nbug.mico.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-
 
 /**
  * 后台管理员表 前端控制器
@@ -62,10 +60,8 @@ public class SystemAdminController {
     @Operation(summary = "新增后台管理员")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public CommonResult<String> save(@RequestBody SystemAdminAddRequest systemAdminAddRequest) {
-        if (systemAdminService.saveAdmin(systemAdminAddRequest)) {
-            return CommonResult.success("添加管理员成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"添加管理员失败");
+        systemAdminService.saveAdmin(systemAdminAddRequest);
+        return CommonResult.success("添加管理员成功");
     }
 
     /**
@@ -76,11 +72,8 @@ public class SystemAdminController {
     @Operation(summary = "删除")
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public CommonResult<String> delete(@RequestParam(value = "id") Integer id) {
-        if (systemAdminService.removeById(id)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        systemAdminService.removeById(id);
+        return CommonResult.success("success");
     }
 
     /**
@@ -91,11 +84,8 @@ public class SystemAdminController {
     @Operation(summary = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public CommonResult<String> update(@RequestBody SystemAdminUpdateRequest systemAdminRequest) {
-        if (systemAdminService.updateAdmin(systemAdminRequest)) {
-            return CommonResult.success("success");
-        } else {
-            return CommonResult.error(INTERNAL_SERVER_ERROR);
-        }
+        systemAdminService.updateAdmin(systemAdminRequest);
+        return CommonResult.success("success");
     }
 
     /**
@@ -118,10 +108,8 @@ public class SystemAdminController {
     @RequestMapping(value = "/updateStatus", method = RequestMethod.GET)
     public CommonResult<Object> updateStatus(@RequestParam(value = "id") @Valid Integer id,
                                              @RequestParam(value = "status") @Valid Boolean status) {
-        if (systemAdminService.updateStatus(id, status)) {
-            return CommonResult.success("修改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR, "修改失败");
+        systemAdminService.updateStatus(id, status);
+        return CommonResult.success("修改成功");
     }
 
     /**
@@ -131,10 +119,8 @@ public class SystemAdminController {
     @Operation(summary = "修改后台管理员是否接收状态")
     @RequestMapping(value = "/update/isSms", method = RequestMethod.GET)
     public CommonResult<Object> updateIsSms(@RequestParam(value = "id") @Valid Integer id) {
-        if (systemAdminService.updateIsSms(id)) {
-            return CommonResult.success("修改成功");
-        }
-        return CommonResult.error(INTERNAL_SERVER_ERROR,"修改失败");
+        systemAdminService.updateIsSms(id);
+        return CommonResult.success("修改成功");
     }
 }
 
