@@ -194,7 +194,7 @@ xlweb:
     ignore-tables:
       - infra_config
 
-debug: true
+debug: false
 logging:
   level:
     io.swagger.*: error
