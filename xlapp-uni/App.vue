@@ -9,8 +9,11 @@
 	import Routine from './libs/routine.js';
 	import Apps from './libs/apps.js';
 	import {
-		mapActions
-	} from 'vuex'
+		getCartCounts
+	} from '@/api/order.js';
+	import {
+		mapGetters
+	} from "vuex";
 
 	export default {
 		globalData: {
@@ -21,6 +24,15 @@
 			MyMenus: [],
 			windowHeight: 0,
 			id: 0
+		},
+		computed: mapGetters(['tabBarBadges']),
+		watch: {
+			tabBarBadges: {
+				handler: function(newVal) {
+					this.updateTabBarBadges(newVal);
+				},
+				deep: true
+			}
 		},
 		onLaunch: function(option) {
 			let that = this;
@@ -177,8 +189,15 @@
 			if(this.$store.getters.isLogin && !this.$Cache.get('USER_INFO'))await this.$store.dispatch('USERINFO');
 		},
 		methods: {
+			updateTabBarBadges(val) {
+				uni.setTabBarBadge({
+					index: 2,
+					text: '' + val
+				});
+			}
 		},
 		onShow: function() {
+			let that = this;
 			// #ifdef H5
 			uni.getSystemInfo({
 				success(e) {
@@ -190,6 +209,14 @@
 				}
 			})
 			// #endif
+			this.$nextTick(() => {
+			    // 刷新购物车数量
+			    getCartCounts(true, 'sum').then(res => {
+					let cartCount = res.data.count;
+					that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+			    });
+			});
+			
 		},
 		onHide: function() {
 			//console.log('App Hide')

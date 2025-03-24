@@ -19,7 +19,8 @@ const state = {
 	homeActive: false,
 	chatUrl: Cache.get('chatUrl') || '',
 	systemPlatform: Cache.get(PLATFORM)?Cache.get(PLATFORM):'',
-	productType: Cache.get('productType') || ''
+	productType: Cache.get('productType') || '',
+	tabBarBadges: ''
 };
 
 const mutations = {
@@ -74,6 +75,11 @@ const mutations = {
 	PRODUCT_TYPE(state, productType) {
 		state.productType = productType;
 		Cache.set('productType', productType);
+	},
+	// 更新购物车商品数
+	SET_TABBAR_BADGE(state, text) {
+		state.tabBarBadges = text;
+		// console.log('Setting tabBarBadges:', text);
 	}
 };
 

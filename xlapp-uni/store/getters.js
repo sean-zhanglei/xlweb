@@ -8,5 +8,6 @@ export default {
 	home: state => state.app.home,
 	chatUrl: state => state.app.chatUrl,
 	systemPlatform: state => state.app.systemPlatform,
-	productType: state => state.app.productType
+	productType: state => state.app.productType,
+	tabBarBadges: state => state.app.tabBarBadges
 };

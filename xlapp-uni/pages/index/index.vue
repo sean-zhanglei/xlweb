@@ -242,7 +242,7 @@
 		goShopDetail
 	} from '@/libs/order.js'
 	import {
-		mapGetters
+		mapGetters,
 	} from "vuex";
 	import tabNav from '@/components/tabNav.vue'
 	import countDown from '@/components/countDown';
@@ -254,6 +254,9 @@
 		getProductHot,
 		getGroomList
 	} from '@/api/store.js';
+	import {
+		getCartCounts
+	} from '@/api/order.js';
 	// import {
 	// 	setVisit
 	// } from '@/api/user.js'
@@ -459,7 +462,12 @@
 			let self = this
 			uni.setNavigationBarTitle({
 				title: self.site_name
-			})
+			});
+			// 刷新购物车数量
+			getCartCounts(true, 'sum').then(res => {
+				let cartCount = res.data.count;
+				self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+			});
 		},
 		methods: {
 			subscribeCallBack: function(e) {
@@ -862,7 +870,13 @@
 								that.attr.cartAttr = false;
 								that.$util.Tips({
 									title: "添加购物车成功",
-									success: () => {}
+									success: () => {
+										// 刷新购物车数量
+										getCartCounts(true, 'sum').then(res => {
+											let cartCount = res.data.count;
+											that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+										});
+									}
 								});
 							})
 							.catch(res => {

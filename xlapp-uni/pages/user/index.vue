@@ -130,6 +130,9 @@
 	import {orderData} from '@/api/order.js';
 	import {toLogin} from '@/libs/login.js';
 	import {getCity} from '@/api/api.js';
+	import {
+		getCartCounts
+	} from '@/api/order.js';
 	import {mapGetters} from "vuex";
 	// #ifdef H5
 	import Auth from '@/libs/wechat';
@@ -229,6 +232,11 @@
 				// this.setVisit();
 				this.getOrderData();
 				this.$store.dispatch('USERINFO');
+				// 刷新购物车数量
+				getCartCounts(true, 'sum').then(res => {
+					let cartCount = res.data.count;
+					that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				});
 			} else {
 				toLogin();
 			}

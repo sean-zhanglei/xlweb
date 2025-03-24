@@ -98,7 +98,7 @@
 	} from "vuex";
 	import {
 		goShopDetail
-	} from '@/libs/order.js'
+	} from '@/libs/order.js';
 	export default {
 		computed: mapGetters(['uid']),
 		components: {
