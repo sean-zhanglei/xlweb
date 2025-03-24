@@ -1118,7 +1118,7 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         // id、名称、图片、价格、销量、活动
         lqw.select(StoreProduct::getId, StoreProduct::getStoreName, StoreProduct::getImage, StoreProduct::getPrice,
                 StoreProduct::getActivity, StoreProduct::getSales, StoreProduct::getFicti, StoreProduct::getUnitName,
-                StoreProduct::getFlatPattern, StoreProduct::getStock);
+                StoreProduct::getFlatPattern, StoreProduct::getStock, StoreProduct::getOtPrice);
 
         lqw.eq(StoreProduct::getIsRecycle, false);
         lqw.eq(StoreProduct::getIsDel, false);

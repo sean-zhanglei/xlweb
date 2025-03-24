@@ -124,11 +124,16 @@ public class ProductServiceImpl implements ProductService {
         if (CollUtil.isEmpty(storeProductList)) {
             return CommonPage.restPage(new ArrayList<>());
         }
-        CommonPage<StoreProduct> storeProductCommonPage = CommonPage.restPage(storeProductList);
+        User user = userService.getInfo();
+        // CommonPage<StoreProduct> storeProductCommonPage = CommonPage.restPage(storeProductList);
 
         List<IndexProductResponse> productResponseArrayList = new ArrayList<>();
         for (StoreProduct storeProduct : storeProductList) {
             IndexProductResponse productResponse = new IndexProductResponse();
+            // 获取商品购物车数量
+            if (ObjectUtil.isNotNull(user)) {
+                productResponse.setCartNum(cartService.getProductNumByUidAndProductId(user.getUid(), storeProduct.getId()));
+            }
             List<Integer> activityList = XlwebUtil.stringToArrayInt(storeProduct.getActivity());
             // 活动类型默认：直接跳过
             if (activityList.get(0).equals(Constants.PRODUCT_TYPE_NORMAL)) {
@@ -171,7 +176,7 @@ public class ProductServiceImpl implements ProductService {
             productResponseArrayList.add(productResponse);
         }
         CommonPage<IndexProductResponse> productResponseCommonPage = CommonPage.restPage(productResponseArrayList);
-        BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
+        // BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
         return productResponseCommonPage;
     }
 
