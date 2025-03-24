@@ -80,14 +80,14 @@
                         placement="bottom-end"
                         placeholder="自定义时间"
                         class="selWidth"
-                        :picker-options="pickerOptions" 
+                        :picker-options="pickerOptions"
                         @change="onchangeTime"
                       />
                     </el-form-item>
                   </el-col>
                 </el-col>
                 <!-- <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
-                  
+
                 </el-col> -->
                 <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
                   <el-col v-bind="grid">
@@ -138,7 +138,7 @@
                   </el-col>
                 </el-col>
                 <!-- <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="18">
-                  
+
                 </el-col> -->
               </template>
               <el-col  :xs="24" :sm="24" :md="24" :lg="6" :xl="6" class="text-right userFrom">
@@ -209,7 +209,7 @@
           label="ID"
           min-width="80"
         />
-        <el-table-column 
+        <el-table-column
         label="头像" min-width="80">
           <template slot-scope="scope">
             <div class="demo-image__preview">
@@ -681,7 +681,7 @@
         //     el.child.forEach((cel, j) => {
         //       delete cel.child
         //     })
-        //   }) 
+        //   })
           this.addresData = res
         // })
       },

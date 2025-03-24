@@ -60,15 +60,15 @@ public class UserApiImpl implements UserApi {
 
     /**
      * 添加/扣减积分
-     * @param uid
+     * @param userId
      * @param price
      * @param nowMoney
      * @param type
      * @return
      */
     @Override
-    public CommonResult<Boolean> operationNowMoney(Integer uid, BigDecimal price, BigDecimal nowMoney, String type) {
-        return success(userService.operationNowMoney(uid, price, nowMoney, type));
+    public CommonResult<Boolean> operationNowMoney(Integer userId, BigDecimal price, BigDecimal nowMoney, String type) {
+        return success(userService.operationNowMoney(userId, price, nowMoney, type));
     }
 
     /**

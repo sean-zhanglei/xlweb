@@ -124,8 +124,8 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('admin:user:topdetail')")
     @Operation(summary = "会员详情页Top数据")
-    @RequestMapping(value = "topdetail", method = RequestMethod.GET)
-    public CommonResult<TopDetail> topDetail (@RequestParam @Valid Integer userId) {
+    @RequestMapping(value = "/topdetail", method = RequestMethod.GET)
+    public CommonResult<TopDetail> topDetail (@RequestParam(name = "userId")  @Valid Integer userId) {
         return CommonResult.success(userService.getTopDetail(userId));
     }
 

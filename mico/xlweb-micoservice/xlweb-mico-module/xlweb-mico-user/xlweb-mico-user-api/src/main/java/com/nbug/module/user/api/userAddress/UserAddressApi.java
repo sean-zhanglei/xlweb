@@ -19,8 +19,8 @@ public interface UserAddressApi {
 
     @GetMapping(PREFIX + "/getDefaultByUid")
     @Operation(summary = "获取默认地址")
-    @Parameter(name = "uid", description = "用户ID", required = true)
-    public CommonResult<UserAddress> getDefaultByUid(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户ID", required = true)
+    public CommonResult<UserAddress> getDefaultByUid(@RequestParam Integer userId);
 
     @GetMapping(PREFIX + "/getById")
     @Operation(summary = "获取地址ById")

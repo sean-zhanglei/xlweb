@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
@@ -41,7 +43,7 @@ public interface UserBillApi {
             @Parameter(name = "request", description = "退款订单", required = true),
             @Parameter(name = "user", description = "用户", required = true)
     })
-    public CommonResult<Boolean> saveRefundBill(@Validated @RequestParam StoreOrderRefundRequest request,
+    public CommonResult<Boolean> saveRefundBill(@RequestBody @Validated StoreOrderRefundRequest request,
                                                 @RequestParam User user);
 
     @GetMapping(PREFIX + "/listMaps")
@@ -69,7 +71,7 @@ public interface UserBillApi {
     })
     public CommonResult<MyRecord> getFlowRecord(@RequestParam String type,
                                                 @RequestParam String time,
-                                                @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getFlowList")
     @Operation(summary = "资金流水统计数据")
@@ -80,7 +82,7 @@ public interface UserBillApi {
     })
     public CommonResult<MyRecord> getFlowList(@RequestParam List<Integer> ids,
                                               @RequestParam String keywords,
-                                              @Validated @RequestParam PageParamRequest pageParamRequest);
+                                              @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getBalanceBasic")
     @Operation(summary = "余额统计数量")
@@ -102,13 +104,13 @@ public interface UserBillApi {
     @Parameter(name = "time", description = "时间", required = true)
     public CommonResult<MyRecord> getBalanceType(@RequestParam String time);
 
-    @GetMapping(PREFIX + "/getBalanceList")
+    @PostMapping(PREFIX + "/getBalanceList")
     @Operation(summary = "余额记录")
     @Parameters({
             @Parameter(name = "type", description = "流水类型", required = true),
             @Parameter(name = "keywords", description = "关键字"),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<MyRecord> getBalanceList(@Validated @RequestParam FundsMonitorSearchRequest request,
-                                                 @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<MyRecord> getBalanceList(@RequestBody @Validated FundsMonitorSearchRequest request,
+                                                 @SpringQueryMap PageParamRequest pageParamRequest);
 }

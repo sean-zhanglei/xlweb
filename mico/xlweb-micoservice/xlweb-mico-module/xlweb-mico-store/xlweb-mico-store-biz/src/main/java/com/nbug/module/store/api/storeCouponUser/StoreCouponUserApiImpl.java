@@ -36,12 +36,12 @@ public class StoreCouponUserApiImpl implements StoreCouponUserApi {
     /**
      * 支付成功赠送处理
      * @param couponId 优惠券编号
-     * @param uid  用户uid
+     * @param userId  用户uid
      * @return MyRecord
      */
     @Override
-    public CommonResult<MyRecord> paySuccessGiveAway(Integer couponId, Integer uid) {
-        return success(storeCouponUserService.paySuccessGiveAway(couponId, uid));
+    public CommonResult<MyRecord> paySuccessGiveAway(Integer couponId, Integer userId) {
+        return success(storeCouponUserService.paySuccessGiveAway(couponId, userId));
     }
 
     @Override
@@ -51,22 +51,22 @@ public class StoreCouponUserApiImpl implements StoreCouponUserApi {
 
     /**
      * 获取可用优惠券数量
-     * @param uid 用户uid
+     * @param userId 用户uid
      */
     @Override
-    public CommonResult<Integer> getUseCount(Integer uid) {
-        return success(storeCouponUserService.getUseCount(uid));
+    public CommonResult<Integer> getUseCount(Integer userId) {
+        return success(storeCouponUserService.getUseCount(userId));
     }
 
     /**
      * 根据uid获取列表
-     * @param uid uid
+     * * @param userId userId
      * @param pageParamRequest 分页参数
      * @return List<StoreCouponUser>
      */
     @Override
-    public CommonResult<List<StoreCouponUser>> findListByUid(Integer uid, PageParamRequest pageParamRequest) {
-        return success(storeCouponUserService.findListByUid(uid, pageParamRequest));
+    public CommonResult<List<StoreCouponUser>> findListByUid(Integer userId, PageParamRequest pageParamRequest) {
+        return success(storeCouponUserService.findListByUid(userId, pageParamRequest));
     }
 
     /**

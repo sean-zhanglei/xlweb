@@ -62,19 +62,19 @@ public class StoreOrderApiImpl implements StoreOrderApi {
 
     /**
      * H5订单列表
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @param status 评价等级|0=未支付,1=待发货,2=待收货,3=待评价,4=已完成,-3=售后/退款
      * @param pageParamRequest 分页参数
      * @return 订单结果列表
      */
     @Override
-    public CommonResult<List<StoreOrder>> getUserOrderList(Integer uid, Integer status, PageParamRequest pageParamRequest) {
-        return success(storeOrderService.getUserOrderList(uid, status, pageParamRequest));
+    public CommonResult<List<StoreOrder>> getUserOrderList(Integer userId, Integer status, PageParamRequest pageParamRequest) {
+        return success(storeOrderService.getUserOrderList(userId, status, pageParamRequest));
     }
 
     @Override
-    public CommonResult<Integer> getOrderCountByUid(Integer uid) {
-        return success(storeOrderService.getOrderCountByUid(uid));
+    public CommonResult<Integer> getOrderCountByUid(Integer userId) {
+        return success(storeOrderService.getOrderCountByUid(userId));
     }
 
     /**
@@ -110,13 +110,13 @@ public class StoreOrderApiImpl implements StoreOrderApi {
     /**
      * 获取用户当天的秒杀数量
      *
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @param seckillId 秒杀商品id
      * @return 用户当天的秒杀商品订单数量
      */
     @Override
-    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders( Integer uid, Integer seckillId) {
-        return success(storeOrderService.getUserCurrentDaySecKillOrders(uid, seckillId));
+    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders( Integer userId, Integer seckillId) {
+        return success(storeOrderService.getUserCurrentDaySecKillOrders(userId, seckillId));
     }
 
     /**
@@ -132,22 +132,22 @@ public class StoreOrderApiImpl implements StoreOrderApi {
 
     /**
      * 获取用户当前的砍价订单
-     * @param uid    用户uid
+     * @param userId    用户uid
      * @return  用户当前的砍价订单
      */
     @Override
-    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders( Integer uid, Integer bargainId) {
-        return success(storeOrderService.getUserCurrentBargainOrders(uid, bargainId));
+    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders( Integer userId, Integer bargainId) {
+        return success(storeOrderService.getUserCurrentBargainOrders(userId, bargainId));
     }
 
     /**
      * 获取用户当前的拼团订单
-     * @param uid    用户uid
+     * @param userId    用户uid
      * @return  用户当前的拼团订单
      */
     @Override
-    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(Integer uid, Integer combinationId) {
-        return success(storeOrderService.getUserCurrentCombinationOrders(uid, combinationId));
+    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(Integer userId, Integer combinationId) {
+        return success(storeOrderService.getUserCurrentCombinationOrders(userId, combinationId));
     }
 
     /**
@@ -196,12 +196,12 @@ public class StoreOrderApiImpl implements StoreOrderApi {
 
     /**
      * 获取佣金相关数据
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @param spreadId 推广人uid
      */
     @Override
-    public CommonResult<OrderBrokerageData> getBrokerageData(Integer uid, Integer spreadId) {
-        return success(storeOrderService.getBrokerageData(uid, spreadId));
+    public CommonResult<OrderBrokerageData> getBrokerageData(Integer userId, Integer spreadId) {
+        return success(storeOrderService.getBrokerageData(userId, spreadId));
     }
 
     /**
@@ -226,12 +226,12 @@ public class StoreOrderApiImpl implements StoreOrderApi {
 
     /**
      * 获取订单数量(时间)
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @return Integer
      */
     @Override
-    public CommonResult<Integer> getOrderCountByUidAndDate(Integer uid, String date) {
-        return success(storeOrderService.getOrderCountByUidAndDate(uid, date));
+    public CommonResult<Integer> getOrderCountByUidAndDate(Integer userId, String date) {
+        return success(storeOrderService.getOrderCountByUidAndDate(userId, date));
     }
 
     /**

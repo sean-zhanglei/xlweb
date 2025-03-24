@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -55,14 +57,14 @@ public interface StoreProductApi {
     @Parameter(name = "productId", description = "商品Id", required = true)
     public CommonResult<List<Integer>> getSecondaryCategoryByProductId(@RequestParam String productId);
 
-    @GetMapping(PREFIX + "/getAdminList")
+    @PostMapping(PREFIX + "/getAdminList")
     @Operation(summary = "获取商品列表")
     @Parameters({
             @Parameter(name = "request", description = "商品搜索请求", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<StoreProductResponse>> getAdminList(@Validated @RequestParam StoreProductSearchRequest request,
-                                                                     @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<StoreProductResponse>> getAdminList(@RequestBody @Validated StoreProductSearchRequest request,
+                                                                     @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getIndexProduct")
     @Operation(summary = "获取首页商品列表")
@@ -71,7 +73,7 @@ public interface StoreProductApi {
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
     public CommonResult<List<StoreProduct>> getIndexProduct(@RequestParam Integer type,
-                                                            @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                            @SpringQueryMap PageParamRequest pageParamRequest);
 
 
     @GetMapping(PREFIX + "/getActivityByProduct")

@@ -32,9 +32,9 @@ public interface StoreCartApi {
     @Operation(summary = "通过id和uid获取购物车信息")
     @Parameters({
             @Parameter(name = "id", description = "购物车id", required = true),
-            @Parameter(name = "uid", description = "用户id", required = true)
+            @Parameter(name = "userId", description = "用户id", required = true)
     })
     public CommonResult<StoreCart> getByIdAndUid(@RequestParam Long id,
-                                                 @RequestParam Integer uid);
+                                                 @RequestParam Integer userId);
 
 }

@@ -12,9 +12,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -56,12 +58,12 @@ public interface UserApi {
     @PostMapping(PREFIX + "/operationNowMoney")
     @Operation(summary = "添加/扣减积分")
     @Parameters({
-            @Parameter(name = "uid", description = "用户ID", required = true),
+            @Parameter(name = "userId", description = "用户ID", required = true),
             @Parameter(name = "price", description = "金额", required = true),
             @Parameter(name = "nowMoney", description = "现金", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> operationNowMoney(@RequestParam Integer uid,
+    public CommonResult<Boolean> operationNowMoney(@SpringQueryMap Integer userId,
                                                    @RequestParam BigDecimal price,
                                                    @RequestParam BigDecimal nowMoney,
                                                    @RequestParam String type);
@@ -126,7 +128,7 @@ public interface UserApi {
     })
     public CommonResult<PageInfo<User>> getAdminSpreadPeopleList(@RequestParam String keywords,
                                                                  @RequestParam String dateLimit,
-                                                                 @Validated @RequestParam PageParamRequest pageRequest);
+                                                                 @SpringQueryMap PageParamRequest pageRequest);
 
 
     @GetMapping(PREFIX + "/getCountByPayCount")
@@ -148,26 +150,26 @@ public interface UserApi {
     @Parameter(name = "date", description = "日期", required = true)
     public CommonResult<Integer> getRegisterNumByDate(@RequestParam String date);
 
-    @GetMapping(PREFIX + "/getUserListBySpreadLevel")
+    @PostMapping(PREFIX + "/getUserListBySpreadLevel")
     @Operation(summary = "根据条件获取推广人列表")
     @Parameters({
             @Parameter(name = "request", description = "请求参数", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<User>> getUserListBySpreadLevel(@Validated @RequestParam RetailShopStairUserRequest request,
-                                                                 @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<User>> getUserListBySpreadLevel(@RequestBody @Validated RetailShopStairUserRequest request,
+                                                                 @SpringQueryMap PageParamRequest pageParamRequest);
 
-    @GetMapping(PREFIX + "/getOrderListBySpreadLevel")
+    @PostMapping(PREFIX + "/getOrderListBySpreadLevel")
     @Operation(summary = "根据条件获取推广人订单")
     @Parameters({
             @Parameter(name = "request", description = "请求参数", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<SpreadOrderResponse>> getOrderListBySpreadLevel(@Validated @RequestParam RetailShopStairUserRequest request,
-                                                                                 @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<SpreadOrderResponse>> getOrderListBySpreadLevel(@RequestBody @Validated RetailShopStairUserRequest request,
+                                                                                 @SpringQueryMap PageParamRequest pageParamRequest);
 
     @PostMapping(PREFIX + "/clearSpread")
     @Operation(summary = "根据用户id清除用户当前推广人")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<Boolean> clearSpread(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<Boolean> clearSpread(@SpringQueryMap Integer userId);
 }

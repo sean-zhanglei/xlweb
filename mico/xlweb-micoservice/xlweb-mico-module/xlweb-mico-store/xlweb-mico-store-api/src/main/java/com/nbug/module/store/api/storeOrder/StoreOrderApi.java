@@ -16,9 +16,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -66,19 +68,19 @@ public interface StoreOrderApi {
     @GetMapping(PREFIX + "/getUserOrderList")
     @Operation(summary = "获取用户订单列表")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "status", description = "订单状态", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserOrderList(@RequestParam Integer uid,
+    public CommonResult<List<StoreOrder>> getUserOrderList(@SpringQueryMap Integer userId,
                                                            @RequestParam Integer status,
-                                                           @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                           @SpringQueryMap PageParamRequest pageParamRequest);
 
 
     @GetMapping(PREFIX + "/getOrderCountByUid")
     @Operation(summary = "获取用户订单数量")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<Integer> getOrderCountByUid(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<Integer> getOrderCountByUid(@RequestParam Integer userId);
 
     @GetMapping(PREFIX + "/getTopDataUtil")
     @Operation(summary = "获取订单统计数据")
@@ -91,8 +93,8 @@ public interface StoreOrderApi {
 
     @GetMapping(PREFIX + "/getSumPayPriceByUid")
     @Operation(summary = "获取用户订单数量")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<BigDecimal> getSumPayPriceByUid(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<BigDecimal> getSumPayPriceByUid(@RequestParam Integer userId);
 
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建订单")
@@ -102,10 +104,10 @@ public interface StoreOrderApi {
     @GetMapping(PREFIX + "/getUserCurrentDaySecKillOrders")
     @Operation(summary = "获取用户当前秒杀订单")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "seckillId", description = "秒杀id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders(@RequestParam Integer uid,
+    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders(@SpringQueryMap Integer userId,
                                                                          @RequestParam Integer seckillId);
 
     @GetMapping(PREFIX + "/getByBargainOrder")
@@ -120,26 +122,26 @@ public interface StoreOrderApi {
     @GetMapping(PREFIX + "/getUserCurrentBargainOrders")
     @Operation(summary = "获取用户当前砍价订单")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "bargainId", description = "砍价id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders(@RequestParam Integer uid,
+    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders(@SpringQueryMap Integer userId,
                                                                       @RequestParam Integer bargainId);
 
     @GetMapping(PREFIX + "/getUserCurrentCombinationOrders")
     @Operation(summary = "获取用户当前拼团订单")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "combinationId", description = "拼团id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(@RequestParam Integer uid,
+    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(@SpringQueryMap Integer userId,
                                                                           @RequestParam Integer combinationId);
 
 
     @GetMapping(PREFIX + "/findIdAndUidListByReceipt")
     @Operation(summary = "获取所有收货订单id集合")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "combinationId", description = "拼团id", required = true)
     })
     public CommonResult<List<StoreOrder>> findIdAndUidListByReceipt();
@@ -149,14 +151,14 @@ public interface StoreOrderApi {
     @Parameter(name = "orderNo", description = "订单号", required = true)
     public CommonResult<Boolean> updatePaid(@RequestParam String orderNo);
 
-    @GetMapping(PREFIX + "/getAdminList")
+    @PostMapping(PREFIX + "/getAdminList")
     @Operation(summary = "获取订单列表")
     @Parameters({
             @Parameter(name = "request", description = "查询条件", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<CommonPage<StoreOrderDetailResponse>> getAdminList(@Validated @RequestParam StoreOrderSearchRequest request,
-                                                                           @Validated  @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<CommonPage<StoreOrderDetailResponse>> getAdminList(@RequestBody @Validated StoreOrderSearchRequest request,
+                                                                           @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getInfoByEntity")
     @Operation(summary = "获取订单信息")
@@ -171,10 +173,10 @@ public interface StoreOrderApi {
     @GetMapping(PREFIX + "/getBrokerageData")
     @Operation(summary = "获取佣金相关数据")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "spreadId", description = "推广人id", required = true)
     })
-    public CommonResult<OrderBrokerageData> getBrokerageData(@RequestParam Integer uid,
+    public CommonResult<OrderBrokerageData> getBrokerageData(@SpringQueryMap Integer userId,
                                                              @RequestParam Integer spreadId);
 
     @GetMapping(PREFIX + "/getMapInOrderNo")
@@ -194,10 +196,10 @@ public interface StoreOrderApi {
     @GetMapping(PREFIX + "/getOrderCountByUidAndDate")
     @Operation(summary = "获取订单数量(时间)")
     @Parameters({
-            @Parameter(name = "uid", description = "用户id", required = true),
+            @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "date", description = "时间", required = true)
     })
-    public CommonResult<Integer> getOrderCountByUidAndDate(@RequestParam Integer uid,
+    public CommonResult<Integer> getOrderCountByUidAndDate(@SpringQueryMap Integer userId,
                                                            @RequestParam String date);
 
     @GetMapping(PREFIX + "/findPaidListByUid")
@@ -207,7 +209,7 @@ public interface StoreOrderApi {
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
     public CommonResult<List<StoreOrder>> findPaidListByUid(@RequestParam Integer userId,
-                                                            @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                            @SpringQueryMap PageParamRequest pageParamRequest);
 
     @PostMapping(PREFIX + "/getWriteOffList")
     @Operation(summary = "获取核销订单列表")
@@ -215,8 +217,8 @@ public interface StoreOrderApi {
             @Parameter(name = "request", description = "查询条件", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<SystemWriteOffOrderResponse> getWriteOffList(@Validated @RequestParam SystemWriteOffOrderSearchRequest request,
-                                                                     @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<SystemWriteOffOrderResponse> getWriteOffList(@RequestBody @Validated SystemWriteOffOrderSearchRequest request,
+                                                                     @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getOrderGroupByDate")
     @Operation(summary = "按开始结束时间分组订单")

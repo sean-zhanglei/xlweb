@@ -28,10 +28,10 @@ public interface UserIntegralRecordApi {
     @Operation(summary = "根据订单编号、uid获取记录列表")
     @Parameters({
             @Parameter(name = "orderNo", description = "订单号", required = true),
-            @Parameter(name = "uid", description = "用户id", required = true)
+            @Parameter(name = "userId", description = "用户id", required = true)
     })
     public CommonResult<List<UserIntegralRecord>> findListByOrderIdAndUid(@RequestParam String orderNo,
-                                                                          @RequestParam Integer uid);
+                                                                          @RequestParam Integer userId);
 
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "保存用户积分记录")

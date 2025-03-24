@@ -23,12 +23,12 @@ public class StoreProductRelationApiImpl implements StoreProductRelationApi {
 
     /**
      * 获取用户的收藏数量
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @return 收藏数量
      */
     @Override
-    public CommonResult<Integer> getCollectCountByUid(Integer uid) {
-        return success(storeProductRelationService.getCollectCountByUid(uid));
+    public CommonResult<Integer> getCollectCountByUid(Integer userId) {
+        return success(storeProductRelationService.getCollectCountByUid(userId));
     }
 
     /**

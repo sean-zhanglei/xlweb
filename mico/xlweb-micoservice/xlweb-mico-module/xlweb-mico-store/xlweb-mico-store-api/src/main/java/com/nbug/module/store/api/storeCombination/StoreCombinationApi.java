@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -50,7 +52,7 @@ public interface StoreCombinationApi {
             @Parameter(name = "request", description = "查询参数", required = true),
             @Parameter(name = "pageParamReques", description = "分页参数", required = true)
     })
-    public CommonResult<PageInfo<StoreCombinationResponse>> getList(@Validated @RequestParam StoreCombinationSearchRequest request,
-                                                                    @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<PageInfo<StoreCombinationResponse>> getList(@RequestBody @Validated StoreCombinationSearchRequest request,
+                                                                    @SpringQueryMap PageParamRequest pageParamRequest);
 
 }

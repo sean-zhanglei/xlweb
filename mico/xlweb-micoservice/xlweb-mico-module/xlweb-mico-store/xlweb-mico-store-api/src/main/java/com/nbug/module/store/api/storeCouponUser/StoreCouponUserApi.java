@@ -13,9 +13,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -41,10 +43,10 @@ public interface StoreCouponUserApi {
     @Operation(summary = "支付成功赠送优惠券")
     @Parameters({
             @Parameter(name = "couponId", description = "优惠券ID", required = true, example = "1024"),
-            @Parameter(name = "uid", description = "用户ID", required = true, example = "1024")
+            @Parameter(name = "userId", description = "用户ID", required = true, example = "1024")
     })
     public CommonResult<MyRecord> paySuccessGiveAway(@RequestParam Integer couponId,
-                                                     @RequestParam Integer uid);
+                                                     @RequestParam Integer userId);
 
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存优惠券")
@@ -53,17 +55,17 @@ public interface StoreCouponUserApi {
 
     @GetMapping(PREFIX + "/getUseCount")
     @Operation(summary = "获取可用优惠券数量")
-    @Parameter(name = "uid", description = "用户ID", required = true, example = "1024")
-    public CommonResult<Integer> getUseCount(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户ID", required = true, example = "1024")
+    public CommonResult<Integer> getUseCount(@RequestParam Integer userId);
 
     @GetMapping(PREFIX + "/findListByUid")
     @Operation(summary = "获取用户优惠券列表")
     @Parameters({
-            @Parameter(name = "uid", description = "用户ID", required = true, example = "1024"),
+            @Parameter(name = "userId", description = "用户ID", required = true, example = "1024"),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<List<StoreCouponUser>> findListByUid(@RequestParam Integer uid,
-                                                             @Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<List<StoreCouponUser>> findListByUid(@SpringQueryMap Integer userId,
+                                                             @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getMyCouponList")
     @Operation(summary = "获取我的优惠券")
@@ -72,11 +74,11 @@ public interface StoreCouponUserApi {
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true),
     })
     public CommonResult<CommonPage<StoreCouponUserResponse>> getMyCouponList(@RequestParam String type,
-                                                                             @Validated @RequestParam PageParamRequest pageParamRequest);
+                                                                             @SpringQueryMap PageParamRequest pageParamRequest);
 
 
     @PostMapping(PREFIX + "/receiveCoupon")
     @Operation(summary = "领取优惠券")
     @Parameter(name = "request", description = "用户领取优惠券请求对象", required = true)
-    public CommonResult<Boolean> receiveCoupon(@Validated UserCouponReceiveRequest request);
+    public CommonResult<Boolean> receiveCoupon(@RequestBody @Validated UserCouponReceiveRequest request);
 }

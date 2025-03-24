@@ -53,11 +53,11 @@ public interface UserBrokerageRecordApi {
 
     @GetMapping(PREFIX + "/getSpreadListByUid")
     @Operation(summary = "根据uid查询用户佣金记录")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(@RequestParam Integer userId);
 
     @GetMapping(PREFIX + "/getFreezePrice")
     @Operation(summary = "获取冻结期佣金")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<BigDecimal> getFreezePrice(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<BigDecimal> getFreezePrice(@RequestParam Integer userId);
 }

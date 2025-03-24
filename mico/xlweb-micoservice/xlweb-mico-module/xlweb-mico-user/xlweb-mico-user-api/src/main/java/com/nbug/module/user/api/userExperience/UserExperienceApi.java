@@ -23,10 +23,10 @@ public interface UserExperienceApi {
     @Operation(summary = "通过订单编号获取经验记录")
     @Parameters({
             @Parameter(name = "orderNo", description = "订单号", required = true),
-            @Parameter(name = "uid", description = "用户id", required = true)
+            @Parameter(name = "userId", description = "用户id", required = true)
     })
     public CommonResult<UserExperienceRecord> getByOrderNoAndUid(@RequestParam String orderNo,
-                                                                 @RequestParam Integer uid);
+                                                                 @RequestParam Integer userId);
 
     @PostMapping(PREFIX + "/save")
     @Operation(summary = "保存用户经验记录")

@@ -31,12 +31,12 @@ public class StoreCartApiImpl implements StoreCartApi {
     /**
      * 通过id和uid获取购物车信息
      * @param id 购物车id
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @return StoreCart
      */
     @Override
-    public CommonResult<StoreCart> getByIdAndUid(Long id, Integer uid) {
-        return success(storeCartService.getByIdAndUid(id, uid));
+    public CommonResult<StoreCart> getByIdAndUid(Long id, Integer userId) {
+        return success(storeCartService.getByIdAndUid(id, userId));
     }
 
 }

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,13 +28,13 @@ public interface StoreProductRelationApi {
 
     @GetMapping(PREFIX + "/getCollectCountByUid")
     @Operation(summary = "获取用户收藏数量")
-    @Parameter(name = "uid", description = "用户id", required = true)
-    public CommonResult<Integer> getCollectCountByUid(@RequestParam Integer uid);
+    @Parameter(name = "userId", description = "用户id", required = true)
+    public CommonResult<Integer> getCollectCountByUid(@RequestParam Integer userId);
 
     @GetMapping(PREFIX + "/getUserList")
     @Operation(summary = "获取用户收藏列表")
     @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
-    public CommonResult<List<UserRelationResponse>> getUserList(@Validated @RequestParam PageParamRequest pageParamRequest);
+    public CommonResult<List<UserRelationResponse>> getUserList(@SpringQueryMap PageParamRequest pageParamRequest);
 
     @PostMapping(PREFIX + "/add")
     @Operation(summary = "添加收藏产品")

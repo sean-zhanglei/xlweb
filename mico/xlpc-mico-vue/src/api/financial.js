@@ -57,7 +57,7 @@ export function applyStatusApi(params, data) {
  */
 export function topUpLogListApi(params) {
   return request({
-    url: '/user/topUpLog/list',
+    url: '/user/recharge/list',
     method: 'get',
     params
   })
@@ -69,7 +69,7 @@ export function topUpLogListApi(params) {
  */
 export function balanceApi() {
   return request({
-    url: '/user/topUpLog/balance',
+    url: '/user/recharge/balance',
     method: 'post'
   })
 }
@@ -80,7 +80,7 @@ export function balanceApi() {
  */
 export function topUpLogDeleteApi(params) {
   return request({
-    url: '/user/topUpLog/delete',
+    url: '/user/recharge/delete',
     method: 'get',
     params
   })
@@ -92,7 +92,7 @@ export function topUpLogDeleteApi(params) {
  */
 export function refundApi(data) {
   return request({
-    url: '/user/topUpLog/refund',
+    url: '/user/recharge/refund',
     method: 'post',
     data
   })

@@ -49,5 +49,5 @@ public interface UserCenterApi {
             @Parameter(name = "request", description = "微信绑定手机号请求对象", required = true)
     })
     public CommonResult<LoginResponse> weChatAuthorizeProgramLogin(@RequestParam String code,
-                                                                   @Validated @RequestParam RegisterThirdUserRequest request);
+                                                                   @RequestBody @Validated RegisterThirdUserRequest request);
 }

@@ -23,8 +23,8 @@ public class UserAddressApiImpl implements UserAddressApi {
      * @return UserAddress
      */
     @Override
-    public CommonResult<UserAddress> getDefaultByUid(Integer uid) {
-        return success(userAddressService.getDefaultByUid(uid));
+    public CommonResult<UserAddress> getDefaultByUid(Integer userId) {
+        return success(userAddressService.getDefaultByUid(userId));
     }
 
     @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.nbug.module.store.dal.UserFundsMonitorDao">
+<mapper namespace="com.nbug.module.user.dal.UserFundsMonitorDao">
     <select id="getFundsMonitor" resultType="com.nbug.mico.common.vo.UserFundsMonitor" parameterType="map">
          SELECT u.uid, u.nickname, u.now_money, u.brokerage_price AS brokerage,u.create_time,u.spread_uid,
          IF(( Sum(b.price) ) IS NULL, 0.00, Sum(b.price)) AS total_brokerage,

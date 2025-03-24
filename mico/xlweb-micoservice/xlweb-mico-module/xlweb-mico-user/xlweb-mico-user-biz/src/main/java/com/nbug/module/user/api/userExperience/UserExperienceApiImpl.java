@@ -21,12 +21,12 @@ public class UserExperienceApiImpl implements UserExperienceApi {
     /**
      * 通过订单编号获取记录
      * @param orderNo 订单编号
-     * @param uid uid
+     * * @param userId userId
      * @return UserExperienceRecord
      */
     @Override
-    public CommonResult<UserExperienceRecord> getByOrderNoAndUid(String orderNo, Integer uid) {
-        return success(userExperienceRecordService.getByOrderNoAndUid(orderNo, uid));
+    public CommonResult<UserExperienceRecord> getByOrderNoAndUid(String orderNo, Integer userId) {
+        return success(userExperienceRecordService.getByOrderNoAndUid(orderNo, userId));
     }
 
     @Override

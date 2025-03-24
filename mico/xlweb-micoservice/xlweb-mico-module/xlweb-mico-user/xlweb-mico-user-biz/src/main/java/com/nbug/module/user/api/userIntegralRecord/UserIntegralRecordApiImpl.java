@@ -22,12 +22,12 @@ public class UserIntegralRecordApiImpl implements UserIntegralRecordApi {
     /**
      * 根据订单编号、uid获取记录列表
      * @param orderNo 订单编号
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @return 记录列表
      */
     @Override
-    public CommonResult<List<UserIntegralRecord>> findListByOrderIdAndUid(String orderNo, Integer uid) {
-        return success(userIntegralRecordService.findListByOrderIdAndUid(orderNo, uid));
+    public CommonResult<List<UserIntegralRecord>> findListByOrderIdAndUid(String orderNo, Integer userId) {
+        return success(userIntegralRecordService.findListByOrderIdAndUid(orderNo, userId));
     }
 
     @Override

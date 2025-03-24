@@ -53,21 +53,21 @@ public class UserBrokerageRecordApiImpl implements UserBrokerageRecordApi {
 
     /**
      * 根据Uid和时间参数获取分佣记录列表
-     * @param uid 用户uid
+     * @param userId 用户uid
      * @return List
      */
     @Override
-    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(Integer uid) {
-        return success(userBrokerageRecordService.getSpreadListByUid(uid));
+    public CommonResult<List<UserBrokerageRecord>> getSpreadListByUid(Integer userId) {
+        return success(userBrokerageRecordService.getSpreadListByUid(userId));
     }
 
     /**
      * 获取冻结期佣金
-     * @param uid uid
+     * * @param userId userId
      * @return BigDecimal
      */
     @Override
-    public CommonResult<BigDecimal> getFreezePrice(Integer uid) {
-        return success(userBrokerageRecordService.getFreezePrice(uid));
+    public CommonResult<BigDecimal> getFreezePrice(Integer userId) {
+        return success(userBrokerageRecordService.getFreezePrice(userId));
     }
 }
