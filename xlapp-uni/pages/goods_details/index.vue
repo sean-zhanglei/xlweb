@@ -1063,8 +1063,8 @@
 			 * 加入购物车
 			 */
 			goCat: function(num) {
-				let that = this,
-					productSelect = that.productValue[this.attrValue];
+				let that = this;
+				let productSelect = that.productValue[this.attrValue];
 				//打开属性
 				if (that.attrValue) {
 					//默认选中了属性，但是没有打开过属性弹窗还是自动打开让用户查看默认选中的属性
@@ -1079,7 +1079,7 @@
 				//如果有属性,没有选择,提示用户选择
 				if (
 					that.attr.productAttr.length &&
-					productSelect.stock === 0 &&
+					that.attr.productSelect.stock === 0 &&
 					that.isOpen === true
 				)
 					return that.$util.Tips({

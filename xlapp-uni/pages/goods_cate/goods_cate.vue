@@ -404,7 +404,7 @@
 					//如果有属性,没有选择,提示用户选择
 					if (
 						this.attr.productAttr.length &&
-						productSelect.stock === 0 &&
+						this.attr.productSelect.stock === 0 &&
 						this.isOpen === true
 					)
 					return this.$util.Tips({
