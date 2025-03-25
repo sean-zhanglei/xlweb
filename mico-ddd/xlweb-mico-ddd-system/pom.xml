@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>xlweb-mico-ddd</artifactId>
+        <groupId>com.nbug.mico</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.nbug.mico</groupId>
+    <artifactId>xlweb-mico-ddd-system-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
+    <name>xlweb-mico-ddd-system-parent</name>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.deploy.skip>true</maven.deploy.skip>
+
+    </properties>
+
+    <modules>
+        <module>xlweb-mico-ddd-system-client</module>
+        <module>xlweb-mico-ddd-system-adapter</module>
+        <module>xlweb-mico-ddd-system-app</module>
+        <module>xlweb-mico-ddd-system-domain</module>
+        <module>xlweb-mico-ddd-system-infrastructure</module>
+        <module>systemServer</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--Project modules-->
+            <dependency>
+                <groupId>com.nbug.mico</groupId>
+                <artifactId>xlweb-mico-ddd-system-adapter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nbug.mico</groupId>
+                <artifactId>xlweb-mico-ddd-system-client</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nbug.mico</groupId>
+                <artifactId>xlweb-mico-ddd-system-app</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nbug.mico</groupId>
+                <artifactId>xlweb-mico-ddd-system-domain</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nbug.mico</groupId>
+                <artifactId>xlweb-mico-ddd-system-infrastructure</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <!--Project modules End-->
+        </dependencies>
+    </dependencyManagement>
+</project>
