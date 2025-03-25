@@ -712,7 +712,15 @@
 					that.$util.Tips({
 						title: "产品库存不足，请选择其它"
 					});
-					that.setCartNum(item.id, item.cartNum);
+					// 还原库存
+					that.setCartNum(item.id, item.cartNum, function(data) {
+						getCartCounts(true, 'sum').then(res => {
+							that.cartCount = res.data.count;
+							// 刷新购物车数量
+							that.$store.commit("SET_TABBAR_BADGE", '' + that.cartCount);
+						});
+					});
+					
 					return;
 				} else {
 					item.numAdd = true;
