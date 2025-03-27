@@ -21,13 +21,15 @@ public class ResponseRouter {
 //            return data;
 //        }
 
-        //根据需要处理返回值
-        if (data.contains(Constants.UPLOAD_TYPE_IMAGE+"/") && !data.contains("data:image/png;base64")) {
+        // 根据需要处理返回值
+        // 图片添加http/https + host + port
+        if (data.contains(Constants.UPLOAD_TYPE_IMAGE+"/") && !data.contains("/" + Constants.UPLOAD_TYPE_IMAGE+"/") && !data.contains("data:image/png;base64")) {
             data = SpringUtil.getBean(AttachmentApi.class).prefixImage(data).getCheckedData();
         }
 
-//        if (data.contains("file/")) { 附件也走xlwebimage 目录下
-//            data = SpringUtil.getBean(SystemAttachmentService.class).prefixFile(data);
+        // 附件也走xlwebimage 目录下
+//        if (data.contains("file/") && !data.contains("/file/")) {
+//            data = SpringUtil.getBean(AttachmentApi.class).prefixFile(data);
 //        }
 
         return data;

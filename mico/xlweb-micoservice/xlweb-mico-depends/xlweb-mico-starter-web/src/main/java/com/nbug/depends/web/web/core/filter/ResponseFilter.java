@@ -2,6 +2,7 @@ package com.nbug.depends.web.web.core.filter;
 
 
 import com.nbug.mico.common.utils.RequestUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.Filter;
@@ -21,6 +22,7 @@ import java.nio.charset.StandardCharsets;
  * 返回值输出过滤器
  */
 @Component
+@Slf4j
 public class ResponseFilter implements Filter {
 
     @Override
@@ -38,7 +40,7 @@ public class ResponseFilter implements Filter {
                 HttpServletRequest req = (HttpServletRequest) request;
                 str = new ResponseRouter().filter(str, RequestUtil.getUri(req));
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("ResponseRouter Filter error", e);
             }
             //把返回值输出到客户端
             ServletOutputStream outputStream = response.getOutputStream();
