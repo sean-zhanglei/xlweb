@@ -16,6 +16,7 @@
 9. xxl-job 定时任务 2.4.0
 10. redission 分布式缓存/队列 3.41.0
 11. MQ 消息队列 kafka 2.8.11 rabbit 2.4.17  rocketmq 2.3.1
+12. Skywalking 8.9.0
 
 
 # Java项目框架

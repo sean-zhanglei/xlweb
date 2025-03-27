@@ -1,5 +1,7 @@
 package com.nbug.mico.common.utils.monitor;
 
+import org.apache.skywalking.apm.toolkit.trace.TraceContext;
+
 /**
  * 链路追踪工具类
  *
@@ -22,7 +24,7 @@ public class TracerUtils {
      * @return 链路追踪编号
      */
     public static String getTraceId() {
-        return "";
+        return TraceContext.traceId();
     }
 
 }
