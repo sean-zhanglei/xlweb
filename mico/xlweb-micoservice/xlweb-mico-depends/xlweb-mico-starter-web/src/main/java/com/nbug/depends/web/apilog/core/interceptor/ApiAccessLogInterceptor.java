@@ -94,7 +94,7 @@ public class ApiAccessLogInterceptor implements HandlerInterceptor {
                 return;
             }
             // 打印结果
-            System.out.printf("\tController 方法路径：%s(%s.java:%d)\n", clazz.getName(), clazz.getSimpleName(), lineNumber.get());
+            log.debug("Controller 方法路径：{}({}.java:{})", clazz.getName(), clazz.getSimpleName(), lineNumber.get());
         } catch (Exception ignore) {
             // 忽略异常。原因：仅仅打印，非重要逻辑
         }

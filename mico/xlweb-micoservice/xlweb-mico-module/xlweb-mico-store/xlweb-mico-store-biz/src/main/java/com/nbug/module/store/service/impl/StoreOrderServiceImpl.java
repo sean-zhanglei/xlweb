@@ -2978,7 +2978,7 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             Map<String, BigDecimal> preYueIncomeMap = preYueIncome.stream()
                     .collect(Collectors.toMap(
                             item -> (String) item.get("days"),
-                            item -> (BigDecimal)item.get("number"))
+                            item -> BigDecimal.valueOf((Double)item.get("number")))
                     );
 
             // 在查询当前数据
@@ -2987,7 +2987,7 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             Map<String, BigDecimal> curYueIncomeMap = curYueIncome.stream()
                     .collect(Collectors.toMap(
                             item -> (String) item.get("days"),
-                            item -> (BigDecimal)item.get("number"))
+                            item -> BigDecimal.valueOf((Double) item.get("number")))
                     );
             // 解析数据
             BigDecimal curYueIncomeCount = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
