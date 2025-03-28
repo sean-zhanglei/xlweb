@@ -3,7 +3,6 @@ package com.nbug.module.system.controller.admin;
 import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.request.FundsMonitorSearchRequest;
 import com.nbug.mico.common.request.PageParamRequest;
-import com.nbug.mico.common.vo.MyRecord;
 import com.nbug.module.store.api.storeOrder.StoreOrderApi;
 import com.nbug.module.user.api.userBill.UserBillApi;
 import com.nbug.module.user.api.userIntegralRecord.UserIntegralRecordApi;
@@ -178,8 +177,7 @@ public class StatisticsController {
     @Operation(summary = "订单统计折线图")
     @RequestMapping(value = "/order/get_trend", method = RequestMethod.GET)
     public CommonResult<Map<String, Object>> getOrderTrend(@RequestParam @Validated String time) {
-        CommonResult<MyRecord> myRecordCommonResult = storeOrderApi.getOrderTrend(time);
-        return CommonResult.success(myRecordCommonResult.getCheckedData().getColumns());
+        return CommonResult.success(storeOrderApi.getOrderTrend(time).getCheckedData().getColumns());
     }
 
     @Operation(summary = "订单来源分析")
