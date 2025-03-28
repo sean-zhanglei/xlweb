@@ -2,6 +2,8 @@ package com.nbug.mico.common.vo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -12,7 +14,12 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * 公共对象
@@ -24,6 +31,7 @@ public class MyRecord implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(MyRecord.class);
 
+    @JsonProperty("columns")
     private Map<String, Object> columns;
 
     void setColumnsMap(Map<String, Object> columns) {
@@ -55,6 +63,7 @@ public class MyRecord implements Serializable {
      *
      * @param record the MyRecord object
      */
+    @JsonIgnore
     public MyRecord setColums(MyRecord record) {
         this.getColumns().putAll(record.getColumns());
         return this;
@@ -65,6 +74,7 @@ public class MyRecord implements Serializable {
      *
      * @param jsonObject the MyRecord object
      */
+    @JsonIgnore
     public MyRecord setColums(JSONObject jsonObject) {
         Map<String, Object> columns = this.getColumns();
         jsonObject.forEach(columns::put);
@@ -77,6 +87,7 @@ public class MyRecord implements Serializable {
      * @param <T>
      * @return
      */
+    @JsonIgnore
     public <T> MyRecord setColums(T t) {
         Map<String, Object> columns = this.getColumns();
 
