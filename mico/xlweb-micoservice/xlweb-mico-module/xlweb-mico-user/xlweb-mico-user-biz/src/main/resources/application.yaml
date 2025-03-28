@@ -200,7 +200,7 @@ debug: false
 logging:
   level:
     io.swagger.*: error
-    com.nbug.*: error
+    com.nbug.*: debug
     org.springframework.boot.autoconfigure: ERROR
   config: classpath:logback-spring.xml
   file:
