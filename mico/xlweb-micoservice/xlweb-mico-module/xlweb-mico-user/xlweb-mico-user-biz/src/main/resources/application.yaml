@@ -200,8 +200,9 @@ debug: false
 logging:
   level:
     io.swagger.*: error
-    com.nbug.*: debug
+    com.nbug.*: error
     org.springframework.boot.autoconfigure: ERROR
+    com.baomidou.mybatisplus: error
   config: classpath:logback-spring.xml
   file:
     name: logs/${spring.application.name}.log # 日志文件名，全路径
