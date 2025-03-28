@@ -18,6 +18,6 @@ spring:
 --- #################### XLWEB-MICO相关配置 ####################
 
 xlweb:
-  feignLoggerLevel: FULL  # openFeign日志级别
+  feignLoggerLevel: NONE  # openFeign日志级别
   info:
     version: 1.0.0
