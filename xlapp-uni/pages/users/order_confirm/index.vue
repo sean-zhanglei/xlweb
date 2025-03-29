@@ -1020,7 +1020,7 @@
 					useIntegral: that.useIntegral,
 					preOrderNo: that.preOrderNo,
 					mark: that.mark,
-					storeId: that.system_store.id || 0,
+					storeId: (that.system_store ? that.system_store.id : 0)|| 0,
 					shippingType: that.$util.$h.Add(that.shippingType, 1),
 					payChannel: that.payChannel||'weixinh5',
 					deliveryTime: that.selectedOptionDelivery,
