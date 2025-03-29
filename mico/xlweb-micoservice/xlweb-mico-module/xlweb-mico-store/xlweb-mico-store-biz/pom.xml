@@ -54,6 +54,11 @@
             <artifactId>xlweb-mico-starter-rpc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-protect</artifactId>
+        </dependency>
+
         <!-- Web 相关 -->
         <dependency>
             <groupId>com.nbug</groupId>

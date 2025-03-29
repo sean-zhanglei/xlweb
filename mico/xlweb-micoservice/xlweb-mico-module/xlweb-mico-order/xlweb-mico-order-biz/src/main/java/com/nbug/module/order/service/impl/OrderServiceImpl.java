@@ -6,6 +6,8 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.nbug.depends.protect.idempotent.core.annotation.Idempotent;
+import com.nbug.depends.protect.idempotent.core.keyresolver.impl.UserIdempotentKeyResolver;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.constants.NotifyConstants;
 import com.nbug.mico.common.constants.PayConstants;
@@ -841,6 +843,7 @@ public class OrderServiceImpl implements OrderService {
      * @return PreOrderResponse
      */
     @Override
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class)
     public MyRecord preOrder(PreOrderRequest request) {
         if (CollUtil.isEmpty(request.getOrderDetails())) {
             throw new XlwebException("预下单订单详情列表不能为空");
@@ -948,6 +951,7 @@ public class OrderServiceImpl implements OrderService {
      * @return MyRecord 订单编号
      */
     @Override
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class)
     public MyRecord createOrder(CreateOrderRequest request) {
         User user = userApi.getInfoException().getCheckedData();
         // 通过缓存获取预下单对象
