@@ -16,7 +16,7 @@
 <script>
 	import { getCombinationPink, getCombinationPoster } from '../../../api/activity.js';
 	import uQRCode from '@/js_sdk/Sansnn-uQRCode/uqrcode.js';
-	import { imageBase64 } from "@/api/public";
+	import { imageBase64 } from "@/api/infra";
 	export default {
 		data() {
 			return {

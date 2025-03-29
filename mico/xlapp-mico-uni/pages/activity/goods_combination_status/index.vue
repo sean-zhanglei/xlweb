@@ -124,7 +124,7 @@
 	import uQRCode from '@/js_sdk/Sansnn-uQRCode/uqrcode.js';
 	import {
 		imageBase64
-	} from "@/api/public";
+	} from "@/api/infra";
 	import {
 		toLogin
 	} from '@/libs/login.js';

@@ -2,14 +2,8 @@ import request from "@/utils/request.js";
 import wechat from "@/libs/wechat.js";
 
 /**
- * 获取登录授权login
- * 
-*/
-export function getLogo()
-{
-  return request.get('infra/wechat/getLogo', {}, { noAuth : true});
-}
-
+ * wechat
+ */
 
 /**
  * 获取微信公众号js配置
@@ -74,13 +68,6 @@ export function getLiveList(page,limit) {
   return request.get('wechat/live', { page, limit}, { noAuth: true });
 }
 
-/**
- * 获取小程序二维码
- */
-export function getQrcode(data) {
-  return request.post('infra/qrcode/get',data,{ noAuth: true });
-}
-
 
 /**
  * 获取订阅消息id
@@ -88,4 +75,70 @@ export function getQrcode(data) {
 export function getTemlIds(data)
 {
   return request.get('wechat/program/my/temp/list', data , { noAuth:true});
+}
+
+/**
+ * ios
+ */
+
+/**
+ * 苹果登录
+ * @param {Object} data
+ */
+export function appleLogin(data) {
+	return request.post("ios/login", data, { noAuth : true });
+}
+
+
+/**
+ * 苹果绑定手机号
+ * @param {Object} data
+ */
+export function iosBinding(data) {
+	return request.post("ios/binding/phone", data, { noAuth : true });
+}
+
+/**
+ * infra
+ */
+
+/**
+ * 获取图片base64
+ * @retins {*}
+ * */
+export function imageBase64(image) {
+  return request.post("infra/qrcode/base64",image,{ noAuth: true },1);
+}
+
+/**
+ * 首页 获取客服地址
+ * @returns {*}
+ */
+export function kefuConfig() {
+  return request.get("infra/config", {}, { noAuth: true });
+}
+
+/**
+ * 获取小程序二维码
+ */
+export function getQrcode(data) {
+  return request.post('infra/qrcode/get',data,{ noAuth: true });
+}
+
+/**
+ * 获取登录授权login
+ * 
+*/
+export function getLogo()
+{
+  return request.get('infra/wechat/getLogo', {}, { noAuth : true});
+}
+
+
+/**
+ * 将字符串 转base64
+ * @param object data
+ */
+export function qrcodeApi(data) {
+	return request.post('infra/qrcode/str2base64', data, {}, 1);
 }

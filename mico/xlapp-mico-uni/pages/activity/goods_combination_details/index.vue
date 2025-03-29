@@ -246,7 +246,8 @@
 	} from '@/utils/base64src.js'
 	import authorize from '@/components/Authorize';
 	import {
-		getQrcode
+		getQrcode,
+		imageBase64
 	} from '@/api/infra.js'
 	// #endif
 	import productConSwiper from '@/components/productConSwiper'
@@ -264,9 +265,6 @@
 		getReplyConfig,
 		getReplyProduct
 	} from '@/api/store.js';
-	import {
-		imageBase64
-	} from "@/api/public";
 	import parser from "@/components/jyf-parser/jyf-parser";
 	import home from '@/components/home/index.vue'
 	import productWindow from '@/components/productWindow/index.vue'

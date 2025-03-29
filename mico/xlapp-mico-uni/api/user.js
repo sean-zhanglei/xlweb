@@ -486,7 +486,7 @@ export function spreadPeoCount() {
  * 
  */
 export function getSearchKeyword() {
-	return request.get('user/search/keyword', {}, {
+	return request.get('user/index/search/keyword', {}, {
 		noAuth: true
 	});
 }
@@ -519,4 +519,40 @@ export function getSearchKeyword() {
 */
 export function setCouponReceive(couponId){
   return request.post('user/coupon/receive', { couponId: couponId});
+}
+
+
+/**
+ * 我的优惠券
+ * @param int types 0全部  1未使用 2已使用
+*/
+export function getUserCoupons(data){
+  return request.get('user/coupon/list',data)
+}
+
+/**
+ * 首页产品的轮播图和产品信息
+ * @param int type 
+ * 
+ */
+export function getGroomList(type, data) {
+	return request.get('user/index/product/' + type, data, {
+		noAuth: true
+	});
+}
+
+/**
+ * 获取收藏列表
+ * @param object data
+ */
+export function getCollectUserList(data) {
+	return request.get('user/collect/user', data)
+}
+
+/**
+ * 分享
+ * @returns {*}
+ */
+export function getShare() {
+  return request.get("user/index/share", {}, { noAuth: true });
 }

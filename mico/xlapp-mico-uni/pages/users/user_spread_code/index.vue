@@ -51,13 +51,11 @@
 	} from '@/utils/base64src.js'
 	import authorize from '@/components/Authorize';
 	import {
-		getQrcode
+		getQrcode,
+		imageBase64
 	} from '@/api/infra.js';
 	// #endif
 	import home from '@/components/home';
-	import {
-		imageBase64
-	} from "@/api/public";
 	export default {
 		components: {
 			// #ifdef MP

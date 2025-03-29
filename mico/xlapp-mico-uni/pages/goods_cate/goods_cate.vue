@@ -99,14 +99,12 @@
 		getCategoryList,
 		getProductDetail,
 		postCartAdd,
-		getProductslist
+		getProductslist,
+		getCartCounts
 	} from '@/api/store.js';
 	import {
 		goShopDetail
 	} from '@/libs/order.js'
-	import {
-		getCartCounts
-	} from '@/api/order.js';
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
 	import home from '@/components/home';
 	import productWindow from '@/components/productWindow';
@@ -159,14 +157,15 @@
 		},
 		onShow(){
 			let that = this;
-			this.$nextTick(() => {
-			    // 刷新购物车数量
-			    getCartCounts(true, 'sum').then(res => {
-			    	let cartCount = res.data.count;
-			    	that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-			    });
-			});
-			
+			if (that.isLogin) {
+				this.$nextTick(() => {
+				    // 刷新购物车数量
+				    getCartCounts(true, 'sum').then(res => {
+				    	let cartCount = res.data.count;
+				    	that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				    });
+				});
+			}
 		},
 		methods: {
 			infoScroll: function() {

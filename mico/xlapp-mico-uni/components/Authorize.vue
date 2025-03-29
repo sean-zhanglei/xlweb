@@ -21,7 +21,7 @@
 <script>
 	const app = getApp();
 	import Cache from '../utils/cache';
-	import { getLogo } from '../api/public';
+	import { getLogo } from '../api/infra';
 	import { LOGO_URL } from '../config/cache';
 	import { mapGetters } from 'vuex';
 	import Routine from '../libs/routine';

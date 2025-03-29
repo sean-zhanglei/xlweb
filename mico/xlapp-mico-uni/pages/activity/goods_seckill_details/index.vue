@@ -202,16 +202,14 @@
 	import authorize from '@/components/Authorize';
 	import { base64src } from '@/utils/base64src.js'
 	import {
-		getQrcode
+		getQrcode,
+		imageBase64
 	} from '@/api/infra.js';
 	// #endif
 	import parser from "@/components/jyf-parser/jyf-parser";
 	import home from '@/components/home/index.vue'
 	import countDown from '@/components/countDown';
 	import shareRedPackets from '@/components/shareRedPackets';
-	import {
-		imageBase64
-	} from "@/api/public";
 	import {
 		toLogin
 	} from '@/libs/login.js';

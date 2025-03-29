@@ -129,10 +129,10 @@
 	import {getMenuList} from '@/api/user.js';
 	import {orderData} from '@/api/order.js';
 	import {toLogin} from '@/libs/login.js';
-	import {getCity} from '@/api/api.js';
+	import {getCity} from '@/api/system.js';
 	import {
 		getCartCounts
-	} from '@/api/order.js';
+	} from '@/api/store.js';
 	import {mapGetters} from "vuex";
 	// #ifdef H5
 	import Auth from '@/libs/wechat';

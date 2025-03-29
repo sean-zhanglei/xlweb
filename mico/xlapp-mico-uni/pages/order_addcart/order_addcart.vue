@@ -146,16 +146,14 @@
 <script>
 	let app = getApp();
 	import {
-		getCartList,
+		getProductHot,
+		collectAll,
+		getProductDetail,
 		getCartCounts,
+		getCartList,
 		changeCartNum,
 		cartDel,
 		getResetCart
-	} from '@/api/order.js';
-	import {
-		getProductHot,
-		collectAll,
-		getProductDetail
 	} from '@/api/store.js';
 	import {
 		toLogin
@@ -276,12 +274,13 @@
 				this.selectCountPrice = 0.00;
 				this.cartCount = 0;
 				this.isShowAuth = false;
+				// 刷新购物车数量
+				getCartCounts(true, 'sum').then(res => {
+					let cartCount = res.data.count;
+					that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				});
 			};
-			// 刷新购物车数量
-			getCartCounts(true, 'sum').then(res => {
-				let cartCount = res.data.count;
-				that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-			});
+			
 		},
 		methods: {
 			// 授权关闭

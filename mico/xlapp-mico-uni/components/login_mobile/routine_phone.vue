@@ -20,7 +20,7 @@
 		getCodeApi,
 		getUserInfo
 	} from "@/api/user";
-	import { getLogo, getUserPhone } from '@/api/public';
+	import { getLogo, getUserPhone } from '@/api/infra';
 	export default{
 		name:'routine_phone',
 		props:{

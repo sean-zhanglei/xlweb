@@ -42,7 +42,7 @@
 <script>
 	import {
 		getUserCoupons
-	} from '@/api/store.js';
+	} from '@/api/user.js';
 	import {
 		toLogin
 	} from '@/libs/login.js';

@@ -210,22 +210,22 @@
 	let app = getApp();
 	import {
 		getIndexData,
-		getCoupons,
-		setCouponReceive
-	} from '@/api/api.js';
+		setCouponReceive,
+		getShare
+	} from '@/api/user.js';
+	import {
+		getCoupons
+	} from '@/api/store.js';
 	// #ifdef MP-WEIXIN
 	import {
 		getTemlIds
-	} from '@/api/api.js';
+	} from '@/api/infra.js';
 	// #endif
 	// #ifdef H5  
 	import {
 		follow
 	} from '@/api/public.js';
 	// #endif
-	import {
-		getShare
-	} from '@/api/public.js';
 	import a_seckill from './components/a_seckill';
 	import b_combination from './components/b_combination';
 	import c_bargain from './components/c_bargain';
@@ -248,14 +248,11 @@
 		getCategoryList,
 		getProductslist,
 		getProductHot,
-		getGroomList
+		getCartCounts
 	} from '@/api/store.js';
 	import {
-		getCartCounts
-	} from '@/api/order.js';
-	// import {
-	// 	setVisit
-	// } from '@/api/user.js'
+		getGroomList
+	} from '@/api/user.js'
 	import recommend from '@/components/recommend';
 	// #ifdef MP
 	import authorize from '@/components/Authorize';
@@ -266,7 +263,7 @@
 	// #ifndef MP
 	import {
 		kefuConfig
-	} from "@/api/public";
+	} from "@/api/infra.js";
 	import {
 		getWechatConfig
 	} from "@/api/public";
@@ -459,11 +456,13 @@
 			uni.setNavigationBarTitle({
 				title: self.site_name
 			});
-			// 刷新购物车数量
-			getCartCounts(true, 'sum').then(res => {
-				let cartCount = res.data.count;
-				self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-			});
+			if (self.isLogin) {
+				// 刷新购物车数量
+				getCartCounts(true, 'sum').then(res => {
+					let cartCount = res.data.count;
+					self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				});
+			}
 		},
 		methods: {
 			subscribeCallBack: function(e) {

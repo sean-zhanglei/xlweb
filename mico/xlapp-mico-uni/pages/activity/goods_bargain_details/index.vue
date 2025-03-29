@@ -297,7 +297,7 @@
 	} from '../../../api/activity.js';
 	import {
 		imageBase64
-	} from "@/api/public";
+	} from "@/api/infra";
 	import uQRCode from '@/js_sdk/Sansnn-uQRCode/uqrcode.js';
 	import {
 		postCartAdd

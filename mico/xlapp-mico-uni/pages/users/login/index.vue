@@ -65,7 +65,9 @@
 		registerVerify,
 		register,
 		// getCodeApi,
-		getUserInfo
+		getUserInfo,
+		appleLogin,
+		appAuth
 	} from "@/api/user";
 	import attrs, {
 		required,
@@ -76,8 +78,8 @@
 		validatorDefaultCatch
 	} from "@/utils/dialog";
 	import {
-		getLogo, appAuth, appleLogin
-	} from "@/api/public";
+		getLogo
+	} from "@/api/infra";
 	import {
 		VUE_APP_API_URL
 	} from "@/utils";

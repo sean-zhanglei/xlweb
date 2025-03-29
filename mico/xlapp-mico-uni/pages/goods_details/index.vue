@@ -285,12 +285,13 @@
 		getProductGood,
 		getReplyProduct,
 		getProductsTopBuy10list,
-		getCoupons
+		getCoupons,
+		getCartCounts
 	} from '@/api/store.js';
 	import { spread } from "@/api/user";
 	import {
-		getCartCounts
-	} from '@/api/order.js';
+		imageBase64
+	} from '@/api/infra.js';
 	import {
 		toLogin
 	} from '@/libs/login.js';
@@ -298,9 +299,6 @@
 	import {
 		mapGetters
 	} from "vuex";
-	import {
-		imageBase64
-	} from "@/api/public";
 	import productConSwiper from '@/components/productConSwiper';
 	import couponListWindow from '@/components/couponListWindow';
 	import productWindow from '@/components/productWindow';
@@ -317,7 +315,8 @@
 	} from '@/utils/base64src.js'
 	import authorize from '@/components/Authorize';
 	import {
-		getQrcode
+		getQrcode,
+		imageBase64
 	} from '@/api/infra.js';
 	// #endif
 	let app = getApp();
