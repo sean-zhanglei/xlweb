@@ -1,6 +1,5 @@
 package com.nbug.mico.common.token;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.utils.redis.RedisUtil;
@@ -46,15 +45,6 @@ public class AdminTokenComponent {
             return redisUtil.get(userKey);
         }
         return null;
-    }
-
-    /**
-     * 设置用户身份信息
-     */
-    public void setLoginUser(LoginUserVo loginUser) {
-        if (ObjectUtil.isNotNull(loginUser) && StrUtil.isNotEmpty(loginUser.getToken())) {
-            refreshToken(loginUser);
-        }
     }
 
     /**

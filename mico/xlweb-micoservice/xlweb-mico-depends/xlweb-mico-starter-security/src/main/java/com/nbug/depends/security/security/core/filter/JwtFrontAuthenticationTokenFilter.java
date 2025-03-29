@@ -35,14 +35,14 @@ public class JwtFrontAuthenticationTokenFilter extends OncePerRequestFilter {
             frontTokenComponent.verifyToken(loginUser);
             boolean result = frontTokenComponent.check(frontTokenComponent.getToken(request), request);
             if(! result){
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 // 将authentication信息放入到上下文对象中
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
                 // 额外设置到 request 中，用于 ApiAccessLogFilter 可以获取到用户编号；
                 // 原因是，Spring Security 的 Filter 在 ApiAccessLogFilter 后面，在它记录访问日志时，线上上下文已经没有用户编号等信息
-                WebFrameworkUtils.setLoginUserId(request, Long.valueOf(loginUser.getUser().getId()));
+                WebFrameworkUtils.setLoginUserId(request, Long.valueOf(loginUser.getFrontUser().getUid()));
                 WebFrameworkUtils.setLoginUserType(request, UserTypeEnum.MEMBER.getValue());
             }
         }

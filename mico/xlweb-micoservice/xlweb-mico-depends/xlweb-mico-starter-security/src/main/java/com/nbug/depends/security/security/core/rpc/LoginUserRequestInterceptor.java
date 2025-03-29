@@ -1,6 +1,7 @@
 package com.nbug.depends.security.security.core.rpc;
 
 import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
+import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.json.JsonUtils;
 import com.nbug.mico.common.vo.LoginUserVo;
 import feign.RequestInterceptor;
@@ -35,6 +36,7 @@ public class LoginUserRequestInterceptor implements RequestInterceptor {
             // feign 请求时，将 LoginUserVo 设置到 header 中，继续透传给被调用的服务
             // 缩小header 的大小，避免 header 过大
             requestTemplate.header(SecurityFrameworkUtils.LOGIN_USER_HEADER, userStr);
+            requestTemplate.header(Constants.HEADER_AUTHORIZATION_KEY, user.getToken());
         } catch (Exception ex) {
             log.error("[apply][序列化 LoginUser({}) 发生异常]", user, ex);
             throw ex;

@@ -3,6 +3,7 @@ package com.nbug.mico.common.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nbug.mico.common.model.system.SystemAdmin;
 import com.nbug.mico.common.model.system.SystemPermissions;
+import com.nbug.mico.common.model.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,6 +73,8 @@ public class LoginUserVo implements UserDetails {
      * 用户信息
      */
     private SystemAdmin user;
+
+    private User frontUser;
 
     public LoginUserVo() {
     }
@@ -225,6 +228,14 @@ public class LoginUserVo implements UserDetails {
 
     public void setUser(SystemAdmin user) {
         this.user = user;
+    }
+
+    public User getFrontUser() {
+        return frontUser;
+    }
+
+    public void setFrontUser(User frontUser) {
+        this.frontUser = frontUser;
     }
 
 }

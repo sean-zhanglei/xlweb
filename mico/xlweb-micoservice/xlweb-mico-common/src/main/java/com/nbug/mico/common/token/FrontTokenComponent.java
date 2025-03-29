@@ -1,12 +1,11 @@
 package com.nbug.mico.common.token;
 
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.nbug.mico.common.vo.LoginUserVo;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.model.user.User;
-import com.nbug.mico.common.utils.redis.RedisUtil;
 import com.nbug.mico.common.utils.RequestUtil;
+import com.nbug.mico.common.utils.redis.RedisUtil;
+import com.nbug.mico.common.vo.LoginUserVo;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -52,15 +51,6 @@ public class FrontTokenComponent {
     }
 
     /**
-     * 设置用户身份信息
-     */
-    public void setLoginUser(LoginUserVo loginUser) {
-        if (ObjectUtil.isNotNull(loginUser) && StrUtil.isNotEmpty(loginUser.getToken())) {
-            refreshToken(loginUser);
-        }
-    }
-
-    /**
      * 删除用户身份信息
      */
     public void delLoginUser(String token) {
@@ -77,8 +67,13 @@ public class FrontTokenComponent {
      * @return 令牌
      */
     public String createToken(User user) {
+        LoginUserVo loginUserVo = new LoginUserVo();
         String token = UUID.randomUUID().toString().replace("-", "");
-        redisUtil.set(getTokenKey(token), user.getUid(), Constants.TOKEN_EXPRESS_MINUTES, TimeUnit.MINUTES);
+        loginUserVo.setToken(token);
+        loginUserVo.setLoginTime(System.currentTimeMillis());
+        loginUserVo.setExpireTime(loginUserVo.getLoginTime() + expireTime * MILLIS_MINUTE);
+        loginUserVo.setFrontUser(user);
+        redisUtil.set(getTokenKey(token), loginUserVo, Constants.TOKEN_EXPRESS_MINUTES, TimeUnit.MINUTES);
         return token;
     }
 
@@ -146,7 +141,8 @@ public class FrontTokenComponent {
             return null;
 //            throw new XlwebException("登录信息已过期，请重新登录！");
         }
-        return redisUtil.get(getTokenKey(token));
+        LoginUserVo loginUserVo  = redisUtil.get(getTokenKey(token));
+        return loginUserVo.getFrontUser().getUid();
     }
 
     //路由在此处，则返回true，无论用户是否登录都可以访问
