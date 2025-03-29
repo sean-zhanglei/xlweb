@@ -628,9 +628,12 @@
 		getOrderDetail,
 		orderTake,
 		orderDel,
-		orderCancel,
-		qrcodeApi
+		orderCancel
 	} from '@/api/order.js';
+	
+	import {
+		qrcodeApi
+	} from '@/api/infra.js';
 	import {
 		openOrderRefundSubscribe
 	} from '@/utils/SubscribeMessage.js';

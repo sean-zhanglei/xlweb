@@ -17,7 +17,7 @@
 	import goodList from '@/components/goodList';
 	import home from '@/components/home';
 	import swipers from '@/components/swipers';
-	import { getGroomList } from '@/api/store.js';
+	import { getGroomList } from '@/api/user.js';
 	export default {
 		components: {
 			goodList,

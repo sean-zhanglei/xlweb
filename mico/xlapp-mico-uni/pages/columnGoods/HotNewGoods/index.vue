@@ -29,7 +29,7 @@
 <script>
 import emptyPage from '@/components/emptyPage.vue'
 import GoodList from "@/components/goodList";
-import { getGroomList } from "@/api/store";
+import { getGroomList } from "@/api/user.js";
 export default {
   name: "HotNewGoods",
   components: {

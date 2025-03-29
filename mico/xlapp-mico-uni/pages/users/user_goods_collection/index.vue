@@ -59,10 +59,12 @@
 
 <script>
 	import {
-		getCollectUserList,
 		getProductHot,
 		collectDelete
 	} from '@/api/store.js';
+	import {
+		getCollectUserList
+	} from '@/api/user.js';
 	import {
 		mapGetters
 	} from "vuex";
