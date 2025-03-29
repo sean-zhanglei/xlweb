@@ -52,7 +52,7 @@
 	import authorize from '@/components/Authorize';
 	import {
 		getQrcode
-	} from '@/api/api.js';
+	} from '@/api/infra.js';
 	// #endif
 	import home from '@/components/home';
 	import {

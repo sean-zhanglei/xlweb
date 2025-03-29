@@ -41,7 +41,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController("StoreOrderFrontController")
-@RequestMapping("api/front/order")
+@RequestMapping("order")
 @Tag(name = "应用后台 - 订单")
 public class OrderController {
 

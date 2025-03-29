@@ -29,9 +29,8 @@
 	import {
 		registerVerify,
 		bindingPhone,
-		verifyCode,
 		bindingVerify
-	} from '@/api/api.js';
+	} from '@/api/user.js';
 	import {
 		toLogin
 	} from '@/libs/login.js';
@@ -67,9 +66,6 @@
 		computed: mapGetters(['isLogin','userInfo']),
 		onLoad() {
 			if (this.isLogin) {
-				// verifyCode().then(res=>{
-				// 	this.$set(this, 'key', res.data.key)
-				// });
 			} else {
 				toLogin();
 			}

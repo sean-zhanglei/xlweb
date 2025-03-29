@@ -209,14 +209,16 @@
 	import Cache from '../../utils/cache';
 	let app = getApp();
 	import {
-		getIndexData,
-		getCoupons,
-		setCouponReceive
-	} from '@/api/api.js';
+		setCouponReceive,
+		getIndexData
+	} from '@/api/user.js';
+	import {
+		getCoupons
+	} from '@/api/store.js';
 	// #ifdef MP-WEIXIN
 	import {
 		getTemlIds
-	} from '@/api/api.js';
+	} from '@/api/infra.js';
 	// import {
 	// 	SUBSCRIBE_MESSAGE,
 	// 	TIPS_KEY

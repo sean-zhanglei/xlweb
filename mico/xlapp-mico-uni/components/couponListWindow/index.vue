@@ -50,7 +50,7 @@
 <script>
 	import {
 		setCouponReceive
-	} from '@/api/api.js';
+	} from '@/api/user.js';
 	export default {
 		props: {
 			//打开状态 0=领取优惠券,1=使用优惠券

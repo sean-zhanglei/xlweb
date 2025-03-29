@@ -50,9 +50,13 @@
 
 <script>
 	import {
-		getCoupons,
 		setCouponReceive
-	} from '@/api/api.js';
+	} from '@/api/user.js';
+	
+	import {
+		getCoupons
+	} from '@/api/store.js';
+	
 	import {
 		toLogin
 	} from '@/libs/login.js';

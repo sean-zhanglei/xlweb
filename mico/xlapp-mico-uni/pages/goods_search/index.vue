@@ -31,10 +31,13 @@
 
 <script>
 	import {
-		getSearchKeyword,
 		getProductslist,
 		getProductHot
 	} from '@/api/store.js';
+	
+	import {
+		getSearchKeyword
+	} from '@/api/user.js'
 	import goodList from '@/components/goodList';
 	import recommend from '@/components/recommend';
 	export default {

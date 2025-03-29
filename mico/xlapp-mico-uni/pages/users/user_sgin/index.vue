@@ -90,9 +90,6 @@
 		getSignList,
 		setSignIntegral
 	} from '@/api/user.js';
-	import {
-		setFormId
-	} from '@/api/api.js';
 	// #ifdef MP
 	import authorize from '@/components/Authorize';
 	// #endif

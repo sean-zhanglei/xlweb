@@ -50,7 +50,7 @@
 	import Loading from "@/components/Loading";
 	import {
 		storeListApi
-	} from "@/api/store";
+	} from "@/api/store.js";
 	import {
 		isWeixin
 	} from "@/utils/index";

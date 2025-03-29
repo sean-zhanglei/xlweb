@@ -38,7 +38,7 @@
 <script>
 	import {
 		getArticleDetails
-	} from '@/api/api.js';
+	} from '@/api/system.js';
 	import {
 		getProductDetail
 	} from '@/api/store.js';

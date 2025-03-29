@@ -211,7 +211,7 @@
 	} from '@/utils/SubscribeMessage.js';
 	import {
 		storeListApi
-	} from '@/api/store.js';
+	} from '@/api/system.js';
 	import {
 		CACHE_LONGITUDE,
 		CACHE_LATITUDE

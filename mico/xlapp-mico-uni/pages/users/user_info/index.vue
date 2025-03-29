@@ -74,11 +74,9 @@
 <script>
 	import {
 		userEdit,
-		getLogout
-	} from '@/api/user.js';
-	import {
+		logout,
 		switchH5Login
-	} from '@/api/api.js';
+	} from '@/api/user.js';
 	import {
 		toLogin
 	} from '@/libs/login.js';
@@ -138,7 +136,7 @@
 						content: '确认退出登录?',
 						success: function(res) {
 							if (res.confirm) {
-								getLogout()
+								logout()
 									.then(res => {
 										that.$store.commit("LOGOUT");
 										uni.reLaunch({

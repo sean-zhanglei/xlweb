@@ -284,12 +284,10 @@
 		getReplyConfig,
 		getProductGood,
 		getReplyProduct,
-		getProductsTopBuy10list
+		getProductsTopBuy10list,
+		getCoupons
 	} from '@/api/store.js';
 	import { spread } from "@/api/user";
-	import {
-		getCoupons
-	} from '@/api/api.js';
 	import {
 		getCartCounts
 	} from '@/api/order.js';
@@ -320,7 +318,7 @@
 	import authorize from '@/components/Authorize';
 	import {
 		getQrcode
-	} from '@/api/api.js';
+	} from '@/api/infra.js';
 	// #endif
 	let app = getApp();
 	export default {

@@ -52,7 +52,8 @@
 		getArticleList,
 		getArticleHotList,
 		getArticleBannerList
-	} from '@/api/api.js';
+	} from '@/api/system.js';
+	
 	import home from '@/components/home';
 	export default {
 		components: {

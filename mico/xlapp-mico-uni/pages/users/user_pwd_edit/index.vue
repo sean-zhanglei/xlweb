@@ -29,10 +29,8 @@
 <script>
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	import {
-		phoneRegisterReset,
-		registerVerify
-	} from '@/api/api.js';
-	import {
+		registerReset,
+		registerVerify,
 		getUserInfo
 	} from '@/api/user.js';
 	import {
@@ -145,7 +143,7 @@
 				if (!captcha) return that.$util.Tips({
 					title: '请输入验证码'
 				});
-				phoneRegisterReset({
+				registerReset({
 					account: that.userInfo.phone,
 					captcha: captcha,
 					password: password

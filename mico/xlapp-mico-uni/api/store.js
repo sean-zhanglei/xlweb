@@ -6,7 +6,7 @@ import request from "@/utils/request.js";
  * 
  */
 export function getProductDetail(id, type) {
-	return request.get('product/detail/' + id + '?type=' + type, {}, {
+	return request.get('store/product/detail/' + id + '?type=' + type, {}, {
 		noAuth: true
 	});
 }
@@ -17,12 +17,12 @@ export function getProductDetail(id, type) {
  */
 // #ifndef MP
 export function getProductCode(id) {
-	return request.get('product/code/' + id, {});
+	return request.get('store/product/code/' + id, {});
 }
 // #endif
 // #ifdef MP
 export function getProductCode(id) {
-	return request.get('product/code/' + id, {
+	return request.get('store/product/code/' + id, {
 		user_type: 'routine'
 	});
 }
@@ -34,7 +34,7 @@ export function getProductCode(id) {
  * @param string category product=普通产品,product_seckill=秒杀产品
  */
 export function collectAdd(id, category) {
-	return request.post('collect/add', {
+	return request.post('store/collect/add', {
 		id: id,
 		'category': category === undefined ? 'product' : category
 	});
@@ -45,7 +45,7 @@ export function collectAdd(id, category) {
  * @param int id
  */
 export function collectDel(proId) {
-	return request.post(`collect/cancel/${proId}`);
+	return request.post(`store/collect/cancel/${proId}`);
 }
 
 
@@ -54,7 +54,7 @@ export function collectDel(proId) {
  * @param string id
  */
 export function collectDelete(ids) {
-	return request.post(`collect/delete`,ids);
+	return request.post(`store/collect/delete`,ids);
 }
 
 /**
@@ -62,7 +62,7 @@ export function collectDelete(ids) {
  * 
  */
 export function postCartAdd(data) {
-	return request.post('cart/save', data, {});
+	return request.post('store/cart/save', data, {});
 }
 
 /**
@@ -70,7 +70,7 @@ export function postCartAdd(data) {
  * 
  */
 export function getCategoryList() {
-	return request.get('category', {}, {
+	return request.get('store/product/category', {}, {
 		noAuth: true
 	});
 }
@@ -80,7 +80,7 @@ export function getCategoryList() {
  * @param object data
  */
 export function getProductslist(data) {
-	return request.get('products', data, {
+	return request.get('store/product/list', data, {
 		noAuth: true
 	});
 }
@@ -90,7 +90,7 @@ export function getProductslist(data) {
  * @param object {}
  */
 export function getProductsTopBuy10list(productId) {
-	return request.get('products/top10buy-list/' + productId, {}, {
+	return request.get('store/product/top10buy-list/' + productId, {}, {
 		noAuth: true
 	});
 }
@@ -100,7 +100,7 @@ export function getProductsTopBuy10list(productId) {
  * 
  */
 export function getProductHot(page, limit) {
-	return request.get("product/hot", {
+	return request.get("store/product/hot", {
 		page: page === undefined ? 1 : page,
 		limit: limit === undefined ? 4 : limit
 	}, {
@@ -114,7 +114,7 @@ export function getProductHot(page, limit) {
  * @param string category 
  */
 export function collectAll(id, category) {
-	return request.post('collect/all', {
+	return request.post('store/collect/all', {
 		id: id,
 		category: category === undefined ? 'product' : category
 	});
@@ -126,7 +126,7 @@ export function collectAll(id, category) {
  * 
  */
 export function getGroomList(type, data) {
-	return request.get('index/product/' + type, data, {
+	return request.get('user/index/product/' + type, data, {
 		noAuth: true
 	});
 }
@@ -136,7 +136,7 @@ export function getGroomList(type, data) {
  * @param object data
  */
 export function getCollectUserList(data) {
-	return request.get('collect/user', data)
+	return request.get('user/collect/user', data)
 }
 
 /**
@@ -146,7 +146,7 @@ export function getCollectUserList(data) {
  * 
  */
 export function getReplyList(id, data) {
-	return request.get('reply/list/' + id, data,{
+	return request.get('store/reply/list/' + id, data,{
 		noAuth: true
 	})
 }
@@ -156,27 +156,9 @@ export function getReplyList(id, data) {
  * @param int id
  */
 export function getReplyConfig(id) {
-	return request.get('reply/config/' + id,{},{
+	return request.get('store/reply/config/' + id,{},{
 		noAuth: true
 	});
-}
-
-/**
- * 获取搜索关键字获取
- * 
- */
-export function getSearchKeyword() {
-	return request.get('search/keyword', {}, {
-		noAuth: true
-	});
-}
-
-/**
- * 门店列表
- * @returns {*}
- */
-export function storeListApi(data) {
-	return request.post("store/list", data, {}, 1);
 }
 
 
@@ -185,7 +167,7 @@ export function storeListApi(data) {
  * @param object data
  */
 export function getProductGood() {
-	return request.get('product/good',{},{ noAuth : true});
+	return request.get('store/product/good',{},{ noAuth : true});
 }
 
 /**
@@ -195,7 +177,23 @@ export function getProductGood() {
  * 
  */
 export function getReplyProduct(id) {
-	return request.get('reply/product/' + id, {},{
+	return request.get('store/reply/product/' + id, {},{
 		noAuth: true
 	})
+}
+
+/**
+ * 优惠券列表
+ * @param object data
+*/
+export function getCoupons(data){
+  return request.get('store/coupons/list',data,{noAuth:true})
+}
+
+/**
+ * 我的优惠券
+ * @param int types 0全部  1未使用 2已使用
+*/
+export function getUserCoupons(data){
+  return request.get('store/coupon/list',data)
 }

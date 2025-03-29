@@ -18,11 +18,9 @@
 		getCodeApi,
 		getUserInfo,
 		phoneSilenceAuth,
-		phoneWxSilenceAuth
-	} from "@/api/user";
-	import {
+		phoneWxSilenceAuth,
 		bindingPhone
-	} from '@/api/api.js'
+	} from "@/api/user";
 	import {
 		getUserPhone
 	} from '@/api/public';

@@ -64,7 +64,7 @@
 	} from '@/api/user.js';
 	import {
 		getCity
-	} from '@/api/api.js';
+	} from '@/api/system.js';
 	import {
 		toLogin
 	} from '@/libs/login.js';

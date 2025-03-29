@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
-@RequestMapping("api/front/order/pay")
+@RequestMapping("order/pay")
 @Tag(name = "应用后台 - 支付管理")
 public class OrderPayController {
 

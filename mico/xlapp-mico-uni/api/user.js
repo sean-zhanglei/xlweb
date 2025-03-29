@@ -1,27 +1,31 @@
 import request from "@/utils/request.js";
 import Cache from "@/utils/cache.js"
+
+/**
+ * 获取主页数据 无需授权
+ * 
+*/
+export function getIndexData()
+{
+  return request.get("user/index/info",{},{ noAuth : true});
+}
+
+
 /**
  * 获取用户信息
  * 
 */
 export function getUserInfo(){
-  return request.get('user');
+  return request.get('user/info');
 }
 
-/**
- * 设置用户分享
- * 
-*/
-export function userShare(){
-  return request.post('user/share');
-}
 
 /**
  * h5用户登录
  * @param data object 用户账号密码
  */
 export function loginH5(data) {
-  return request.post("login", data, { noAuth : true });
+  return request.post("user/login/account", data, { noAuth : true });
 }
 
 /**
@@ -29,14 +33,14 @@ export function loginH5(data) {
  * @param data object 用户手机号 也只能
  */
 export function loginMobile(data) {
-  return request.post("login/mobile", data, { noAuth : true });
+  return request.post("user/login/mobile", data, { noAuth : true });
 }
 
 /**
  * 验证码key
  */
 export function getCodeApi() {
-  return request.get("verify_code", {}, { noAuth: true });
+  return request.get("user/verify_code", {}, { noAuth: true });
 }
 
 /**
@@ -44,7 +48,7 @@ export function getCodeApi() {
  * @param data object 用户手机号
  */
 export function registerVerify(phone){
-  return request.post('sendCode', { phone: phone },{noAuth:true},1)
+  return request.post('user/login/sendCode', { phone: phone },{noAuth:true},1)
 }
 
 /**
@@ -52,7 +56,7 @@ export function registerVerify(phone){
  * @param data object 用户手机号 验证码 密码
  */
 export function register(data) {
-  return request.post("register", data, { noAuth : true });
+  return request.post("user/register", data, { noAuth : true });
 }
 
 /**
@@ -60,15 +64,60 @@ export function register(data) {
  * @param data object 用户手机号 验证码 密码
  */
 export function registerReset(data) {
-  return request.post("register/reset", data, { noAuth: true });
+  return request.post("user/register/reset", data, { noAuth: true });
 }
+
+
+/**
+ * 切换H5登录
+ * @param object data
+*/
+// #ifdef MP
+export function switchH5Login(){
+  return request.post('user/switch_h5', { 'from':'routine'});
+}
+// #endif
+
+/*
+ * h5切换公众号登录
+ * */
+// #ifdef H5
+export function switchH5Login() {
+  return request.post("user/switch_h5", { 'from': "wechat" });
+}
+// #endif
+
+/**
+ * 换绑手机号
+ * 
+*/
+export function bindingPhone(data){
+  return request.post('user/update/binding',data);
+}
+
+/**
+ * 换绑手机号校验
+ * 
+*/
+export function bindingVerify(data){
+  return request.post('user/update/binding/verify',data);
+}
+
+/**
+ * 退出登錄
+ * 
+*/
+export function logout(){
+  return request.get('user/login/logout');
+}
+
 
 /**
  * 获取用户中心菜单
  *
  */
 export function getMenuList() {
-  return request.get("menu/user");
+  return request.get("user/menu/user");
 }
 
 /*
@@ -122,28 +171,28 @@ export function userActivity(){
  * 余额明细（types|2=全部,1=支出,2=收入）
  * */
 export function getCommissionInfo(data) {
-  return request.get("spread/commission/detail", data);
+  return request.get("user/spread/commission/detail", data);
 }
 
 /*
  * 提现记录 getCountApi
  * */
 export function getRecordApi(q) {
-  return request.get("extract/record", q);
+  return request.get("user/extract/record", q);
 }
 
 /*
  * 提现总金额 
  * */
 export function getCountApi() {
-  return request.get("extract/totalMoney");
+  return request.get("user/extract/totalMoney");
 }
 
 /*
  * 积分记录
  * */
 export function getIntegralList(q) {
-  return request.get("integral/list", q);
+  return request.get("user/integral/list", q);
 }
 
 /**
@@ -160,7 +209,7 @@ export function spreadBanner(data){
  * @param object data
 */
 export function spreadPeople(data){
-  return request.get('spread/people',data);
+  return request.get('user/spread/people',data);
 }
 
 /**
@@ -169,14 +218,14 @@ export function spreadPeople(data){
  * @param int type
 */
 export function spreadCount(type){
-  return request.get('spread/count/'+type);
+  return request.get('user/spread/count/'+type);
 }
 
 /*
  * 推广数据 当前佣金 提现总金额
  * */
 export function getSpreadInfo() {
-  return request.get("commission");
+  return request.get("user/commission");
 }
 
 
@@ -186,21 +235,21 @@ export function getSpreadInfo() {
  * @param object data
 */
 export function spreadOrder(data){
-  return request.get('spread/order',data);
+  return request.get('user/spread/order',data);
 }
 
 /*
  * 获取推广人排行
  * */
 export function getRankList(q) {
-  return request.get("rank", q);
+  return request.get("user/rank", q);
 }
 
 /*
  * 获取佣金排名
  * */
 export function getBrokerageRank(q) {
-  return request.get("brokerage_rank", q);
+  return request.get("user/brokerage_rank", q);
 }
 
 /**
@@ -208,7 +257,7 @@ export function getBrokerageRank(q) {
  * @param object data
 */
 export function extractCash(data){
-  return request.post('extract/cash',data)
+  return request.post('user/extract/cash',data)
 }
 
 /**
@@ -216,7 +265,7 @@ export function extractCash(data){
  * 
 */
 export function extractBank(){
-  return request.get('extract/bank');
+  return request.get('user/extract/bank');
 }
 
 /**
@@ -249,7 +298,7 @@ export function userLevelDetection(){
  * @param object data
 */
 export function getAddressList(data){
-  return request.get('address/list',data);
+  return request.get('user/address/list',data);
 }
 
 /**
@@ -257,7 +306,7 @@ export function getAddressList(data){
  * @param int id
 */
 export function setAddressDefault(id){
-  return request.post('address/default/set',{id:id})
+  return request.post('user/address/default/set',{id:id})
 }
 
 /**
@@ -265,7 +314,7 @@ export function setAddressDefault(id){
  * @param object data
 */
 export function editAddress(data){
-  return request.post('address/edit',data);
+  return request.post('user/address/edit',data);
 }
 
 /**
@@ -274,7 +323,7 @@ export function editAddress(data){
  * 
 */
 export function delAddress(id){
-  return request.post('address/del',{id:id})
+  return request.post('user/address/del',{id:id})
 }
 
 /**
@@ -282,7 +331,7 @@ export function delAddress(id){
  * @param int id 
 */
 export function getAddressDetail(id){
-  return request.get('address/detail/'+id);
+  return request.get('user/address/detail/'+id);
 }
 
 /**
@@ -292,39 +341,32 @@ export function getAddressDetail(id){
 export function userEdit(data){
   return request.post('user/edit',data);
 }
-
-/*
- * 退出登录
- * */
-export function getLogout() {
-  return request.get("logout");
-}
 /**
  * 小程序充值
  * 
 */
 export function rechargeRoutine(data){
-  return request.post('recharge/routine',data)
+  return request.post('user/recharge/routine',data)
 }
 /*
  * 公众号充值
  * */
 export function rechargeWechat(data) {
-  return request.post("recharge/wechat", data);
+  return request.post("user/recharge/wechat", data);
 }
 
 /*
  * app微信充值
  * */
 export function appWechat(data) {
-  return request.post("recharge/wechat/app", data);
+  return request.post("user/recharge/wechat/app", data);
 }
 
 /*
  * 余额充值
  * */
 export function transferIn(data) {
-  return request.post("recharge/transferIn", data,{},1);
+  return request.post("user/recharge/transferIn", data,{},1);
 }
 
 /**
@@ -332,14 +374,14 @@ export function transferIn(data) {
  * 
 */
 export function getAddressDefault(){
-  return request.get('address/default');
+  return request.get('user/address/default');
 }
 
 /**
  * 充值金额选择
  */
 export function getRechargeApi() {
-  return request.get("recharge/index");
+  return request.get("user/recharge/index");
 }
 
 /**
@@ -415,28 +457,38 @@ export function getuserDalance()
  */
 export function getBillList(data)
 {
-	return request.get("recharge/bill/record",data);
+	return request.get("user/recharge/bill/record",data);
 }
 
 /*
  * 积分中心详情
  * */
 export function postIntegralUser() {
-  return request.get("integral/user");
+  return request.get("user/integral/user");
 }
 
 /*
  * 立即提现 冻结期、冻结佣金、可提现佣金、最低可提现金额
  * */
 export function extractUser() {
-  return request.get("extract/user");
+  return request.get("user/extract/user");
 }
 
 /*
  * 推广人统计页 推广人数（一级+二级）、一级人数、二级人数
  * */
 export function spreadPeoCount() {
-  return request.get("spread/people/count");
+  return request.get("user/spread/people/count");
+}
+
+/**
+ * 获取搜索关键字获取
+ * 
+ */
+export function getSearchKeyword() {
+	return request.get('user/search/keyword', {}, {
+		noAuth: true
+	});
 }
 
 /*
@@ -458,3 +510,13 @@ export function spreadPeoCount() {
 	    success: (res) => {}
 	});
 } */
+
+
+/**
+ * 领取优惠卷
+ * @param int couponId
+ * 
+*/
+export function setCouponReceive(couponId){
+  return request.post('user/coupon/receive', { couponId: couponId});
+}

@@ -203,7 +203,7 @@
 	import { base64src } from '@/utils/base64src.js'
 	import {
 		getQrcode
-	} from '@/api/api.js';
+	} from '@/api/infra.js';
 	// #endif
 	import parser from "@/components/jyf-parser/jyf-parser";
 	import home from '@/components/home/index.vue'
