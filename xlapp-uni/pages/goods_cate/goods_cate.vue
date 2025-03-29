@@ -159,14 +159,15 @@
 		},
 		onShow(){
 			let that = this;
-			this.$nextTick(() => {
-			    // 刷新购物车数量
-			    getCartCounts(true, 'sum').then(res => {
-			    	let cartCount = res.data.count;
-			    	that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-			    });
-			});
-			
+			if (that.isLogin) {
+				this.$nextTick(() => {
+					// 刷新购物车数量
+					getCartCounts(true, 'sum').then(res => {
+						let cartCount = res.data.count;
+						that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+					});
+				});
+			}
 		},
 		methods: {
 			infoScroll: function() {

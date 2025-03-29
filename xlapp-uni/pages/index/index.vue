@@ -463,11 +463,13 @@
 			uni.setNavigationBarTitle({
 				title: self.site_name
 			});
-			// 刷新购物车数量
-			getCartCounts(true, 'sum').then(res => {
-				let cartCount = res.data.count;
-				self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-			});
+			if (self.isLogin) {
+				// 刷新购物车数量
+				getCartCounts(true, 'sum').then(res => {
+					let cartCount = res.data.count;
+					self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				});
+			}
 		},
 		methods: {
 			subscribeCallBack: function(e) {
