@@ -157,8 +157,8 @@
 			getSignSysteam: function() {
 				let that = this;
 				getSignConfig().then(res => {
-					that.$set(that, 'signSystemList', res.data.list);
-					that.day = that.Rp(res.data.list.length);
+					that.$set(that, 'signSystemList', res.data);
+					that.day = that.Rp(res.data.length);
 				})
 			},
 
