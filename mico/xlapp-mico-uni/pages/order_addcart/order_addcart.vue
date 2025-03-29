@@ -4,7 +4,7 @@
 			<view class="header-status" :style="'height:' + (topHeight)"></view>
 		<!-- #endif -->
 		<view class='shoppingCart copy-data'>
-			<view class='labelNav acea-row row-around' :style="'margin-right:' + (searchMargin)">
+			<view class='labelNav acea-row row-around' :style="'padding-top:'+ (searchPaddingTop) + ';padding-right:' + (searchMargin)">
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>100%正品保证</view>
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>所有商品精挑细选</view>
 				<view class='item'><text class='iconfont icon-xuanzhong'></text>售后无忧</view>
@@ -180,6 +180,7 @@
 			return {
 				topHeight: '',
 				searchMargin: '',
+				searchPaddingTop: '',
 				cartCount: 0,
 				goodsHidden: false,
 				footerswitch: true,
@@ -221,15 +222,25 @@
 			};
 		},
 		computed: mapGetters(['isLogin']),
+		watch: {
+			tabBarBadges: {
+				handler(newVal) {
+					this.updateTabBarBadges(newVal);
+				},
+				deep: true
+			}
+		},
 		onLoad: function(options) {
 			let that = this;
 			// #ifdef MP
 			this.topHeight = app.globalData.statusBarHeight + 'px';
+			this.searchPaddingTop = app.globalData.statusBarHeight + app.globalData.mbHeight/2 + 'px';
 			this.searchMargin = app.globalData.mbPaddingRight + 'px';
 			// #endif
 			
 			// #ifndef MP
 			this.topHeight = '0rpx';
+			this.searchPaddingTop = '10rpx';
 			this.searchMargin = '30rpx'; // 30rpx
 			// #endif
 			if (that.isLogin == false) {
@@ -237,6 +248,7 @@
 			}
 		},
 		onShow: function() {
+			let that = this;
 			this.canShow = false
 			if (this.isLogin == true) {
 				this.hotPage = 1;
@@ -265,6 +277,11 @@
 				this.cartCount = 0;
 				this.isShowAuth = false;
 			};
+			// 刷新购物车数量
+			getCartCounts(true, 'sum').then(res => {
+				let cartCount = res.data.count;
+				that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+			});
 		},
 		methods: {
 			// 授权关闭
@@ -664,7 +681,6 @@
 				let that = this;
 				let status = false;
 				let item = that.cartList.valid[index];
-				item.cartNum = Number(item.cartNum) - 1;
 				if (item.cartNum < 1) status = true;
 				if (item.cartNum <= 1) {
 					item.cartNum = 1;
@@ -674,7 +690,11 @@
 					item.numAdd = false;
 				}
 				if (false == status) {
-					that.setCartNum(item.id, item.cartNum, function(data) {
+					let tmpCartNum = Number(item.cartNum) - 1;
+					that.setCartNum(item.id, tmpCartNum, function(data) {
+						if (Number(item.cartNum) > 1)
+						item.cartNum = Number(item.cartNum) - 1;
+						
 						that.cartList.valid[index] = item;
 						that.switchSelect();
 						that.getCartNum();
@@ -684,17 +704,25 @@
 			addCart: function(index) {
 				let that = this;
 				let item = that.cartList.valid[index];
-				item.cartNum = Number(item.cartNum) + 1;
 				let productInfo = item;
 				if (item.cartNum >= item.stock) {
 					item.cartNum = item.stock;
-					item.numAdd = true;
-					item.numSub = false;
-				} else {
 					item.numAdd = false;
-					item.numSub = false;
+					item.numSub = true;
+					that.$util.Tips({
+						title: "产品库存不足，请选择其它"
+					});
+					that.setCartNum(item.id, item.cartNum);
+					return;
+				} else {
+					item.numAdd = true;
+					item.numSub = true;
 				}
-				that.setCartNum(item.id, item.cartNum, function(data) {
+				let tmpCartNum = Number(item.cartNum) + 1;
+				that.setCartNum(item.id, tmpCartNum, function(data) {
+					if (Number(item.cartNum) < 99)
+					item.cartNum = Number(item.cartNum) + 1;
+					
 					that.cartList.valid[index] = item;
 					that.switchSelect();
 					that.getCartNum();
@@ -704,12 +732,20 @@
 				let that = this;
 				changeCartNum(cartId, cartNum).then(res => {
 					successCallback && successCallback(res.data);
+				}).catch(err =>{
+					if (err == "商品数量不能小于1大于99") // 不抛后端异常给用户，校验一下
+					that.$util.Tips({
+						title: err
+					});
+					console.error(err);
 				});
 			},
 			getCartNum: function() {
 				let that = this;
 				getCartCounts(true, 'sum').then(res => {
 					that.cartCount = res.data.count;
+					// 刷新购物车数量
+					that.$store.commit("SET_TABBAR_BADGE", '' + that.cartCount);
 				});
 			},
 			getCartData(data) {
@@ -789,6 +825,8 @@
 					that.loading = false;
 					that.canShow = true;
 					uni.hideLoading();
+					// 刷新购物车数量
+					that.$store.commit("SET_TABBAR_BADGE", '' + that.cartCount);
 				});
 			},
 			getInvalidList: function() {
@@ -925,7 +963,6 @@
 	}
 
 	.shoppingCart .labelNav {
-		padding: 30rpx 30rpx 0 30rpx;
 		font-size: 22rpx;
 		color: #fff;
 		position: fixed;
@@ -938,9 +975,14 @@
 
 		/* #ifdef H5 */
 		height: 178rpx;
+		padding: 30rpx 30rpx 0 30rpx;
 		/* #endif */
-		/* #ifdef MP-WEIXIN */
+		/* #ifdef MP  || MP-WEIXIN */
 		height: calc(178rpx + 47rpx + 45rpx);
+		padding-top: calc(47rpx + 45rpx);
+		padding-right: 30rpx;
+		padding-bottom: 0;
+		padding-left: 30rpx;
 		/* #endif */
 	}
 
