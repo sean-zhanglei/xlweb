@@ -1,12 +1,17 @@
 package com.nbug.depends.web.web.config;
 
-import com.nbug.mico.common.enums.WebFilterOrderEnum;
 import com.nbug.depends.web.web.core.filter.CacheRequestBodyFilter;
 import com.nbug.depends.web.web.core.filter.DemoFilter;
 import com.nbug.depends.web.web.core.handler.GlobalExceptionHandler;
 import com.nbug.depends.web.web.core.handler.GlobalResponseBodyHandler;
 import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
+import com.nbug.mico.common.enums.WebFilterOrderEnum;
+import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.module.infra.api.logger.ApiErrorLogApi;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -16,6 +21,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -26,10 +35,18 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.Filter;
+import java.nio.charset.StandardCharsets;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 @AutoConfiguration
 @EnableConfigurationProperties(WebProperties.class)
+@Slf4j
 public class XlwebWebAutoConfiguration implements WebMvcConfigurer {
 
     @Resource
@@ -126,7 +143,56 @@ public class XlwebWebAutoConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.build();
+        try {
+            // 创建一个信任所有证书的 TrustManager
+            TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        public X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        }
+
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        }
+                    }
+            };
+
+            // 初始化 SSLContext
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+            // 创建 HttpClient 并禁用主机名验证
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setSSLContext(sslContext)
+                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                    .build();
+
+            // 配置 RestTemplate 使用自定义 HttpClient
+            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
+            factory.setConnectTimeout(5000);
+            factory.setReadTimeout(5000);
+            factory.setConnectionRequestTimeout(5000);
+
+            RestTemplate restTemplate =  restTemplateBuilder.requestFactory(() -> factory).build();
+            restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+            restTemplate.getMessageConverters().add(new WxMappingJackson2HttpMessageConverter());
+            return restTemplate;
+        } catch (Exception e) {
+            log.error("[createRestTemplate][创建 自定义RestTemplate 失败，错误 reason({})]", e.getMessage(), e);
+            throw new XlwebException("创建 自定义RestTemplate 失败");
+        }
+    }
+
+    //解决微信返回json Content-Type 值却是 text/plain 的问题
+    public class WxMappingJackson2HttpMessageConverter extends MappingJackson2HttpMessageConverter {
+        public WxMappingJackson2HttpMessageConverter(){
+            List<MediaType> mediaTypes = new ArrayList<>();
+            mediaTypes.add(MediaType.TEXT_PLAIN);
+            mediaTypes.add(MediaType.TEXT_HTML);
+            setSupportedMediaTypes(mediaTypes);
+        }
     }
 
 }

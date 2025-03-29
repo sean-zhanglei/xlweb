@@ -74,7 +74,7 @@ public class SystemAttachmentServiceImpl extends ServiceImpl<SystemAttachmentDao
     @Override
     public String prefixImage(String path) {
         // 如果已经加过前缀，则跳过
-        if (path.contains("http") || path.contains("https")) {
+        if ((path.contains("http") || path.contains("https")) && path.contains(getCdnUrl())) {
             return path;
         } else {
             return path.replace(Constants.UPLOAD_TYPE_IMAGE + "/", getCdnUrl() + "/" + Constants.UPLOAD_TYPE_IMAGE + "/");
