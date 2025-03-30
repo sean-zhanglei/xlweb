@@ -105,6 +105,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-seata</artifactId>
+        </dependency>
+
         <!-- Registry 注册中心相关 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -117,9 +122,9 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.github.pagehelper</groupId>-->
-<!--            <artifactId>pagehelper-spring-boot-starter</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 </project>

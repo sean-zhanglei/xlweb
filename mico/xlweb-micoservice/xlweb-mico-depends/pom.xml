@@ -24,6 +24,7 @@
         <module>xlweb-mico-starter-security</module>
         <module>xlweb-mico-starter-web</module>
         <module>xlweb-mico-starter-tenant</module>
+        <module>xlweb-mico-starter-seata</module>
     </modules>
 
     <properties>

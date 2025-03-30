@@ -56,27 +56,27 @@ knife4j:
     language: zh_cn
 
 # MyBatis Plus 的配置项
-#mybatis-plus:
-#  mapper-locations: classpath*:mapper/*/*Mapper.xml #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
-#  type-aliases-package: ${xlweb.info.base-package-dal}
-#  configuration:
-#    # 配置slq打印日志
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
-#  global-config:
-#    db-config:
-#      id-type: NONE # “智能”模式，基于 IdTypeEnvironmentPostProcessor + 数据源的类型，自动适配成 AUTO、INPUT 模式。
-#      #      id-type: AUTO # 自增 ID，适合 MySQL 等直接自增的数据库
-#      #      id-type: INPUT # 用户输入 ID，适合 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库
-#      #      id-type: ASSIGN_ID # 分配 ID，默认使用雪花算法。注意，Oracle、PostgreSQL、Kingbase、DB2、H2 数据库时，需要去除实体类上的 @KeySequence 注解
-#      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
-#      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-#    banner: false # 关闭控制台的 Banner 打印
-#  encryptor:
-#    password: XDV71a+xqStEA3WH # 加解密的秘钥，可使用 https://www.imaegoo.com/2020/aes-key-generator/ 网站生成
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*/*Mapper.xml #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  type-aliases-package: ${xlweb.info.base-package-dal}
+  configuration:
+    # 配置slq打印日志
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
+  global-config:
+    db-config:
+      id-type: NONE # “智能”模式，基于 IdTypeEnvironmentPostProcessor + 数据源的类型，自动适配成 AUTO、INPUT 模式。
+      #      id-type: AUTO # 自增 ID，适合 MySQL 等直接自增的数据库
+      #      id-type: INPUT # 用户输入 ID，适合 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库
+      #      id-type: ASSIGN_ID # 分配 ID，默认使用雪花算法。注意，Oracle、PostgreSQL、Kingbase、DB2、H2 数据库时，需要去除实体类上的 @KeySequence 注解
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+    banner: false # 关闭控制台的 Banner 打印
+  encryptor:
+    password: XDV71a+xqStEA3WH # 加解密的秘钥，可使用 https://www.imaegoo.com/2020/aes-key-generator/ 网站生成
 
-#mybatis-plus-join:
-#  banner: false # 关闭控制台的 Banner 打印
+mybatis-plus-join:
+  banner: false # 关闭控制台的 Banner 打印
 
 # Spring Data Redis 配置
 spring:
@@ -204,3 +204,40 @@ logging:
   config: classpath:logback-spring.xml
   file:
     name: logs/${spring.application.name}.log # 日志文件名，全路径
+
+seata:
+  enabled: true
+  enable-auto-data-source-proxy: true
+  application-id: ${spring.application.name}
+  tx-service-group: my_test_tx_group
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+    disable-global-transaction: false
+  client:
+    rm:
+      # 是否上报成功状态
+      report-success-enable: true
+      # 重试次数
+      report-retry-count: 5
+  registry:
+    type: nacos  #使用nacos作为注册中心
+    nacos:
+      cluster: default
+      namespace: 6ace76b7-6dd7-4d4b-b75d-737aca2e24a7
+      server-addr: 127.0.0.1:8848  # nacos #注册中心IP:端口
+      application: seata-server # Seata服务名（应与seata-server实际注册的服务名一致）
+      group: SEATA_GROUP        # Seata分组名（应与seata-server实际注册的分组名一致）
+      username: nacos
+      password: nacos
+
+
+  config:
+    type: nacos
+    nacos:
+      serverAddr: 127.0.0.1:8848
+      namespace: 6ace76b7-6dd7-4d4b-b75d-737aca2e24a7
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+      dataId: seataServer.properties

@@ -22,6 +22,7 @@ import com.nbug.module.store.api.storeOrderStatus.StoreOrderStatusApi;
 import com.nbug.module.store.api.storeOrderTask.StoreOrderTaskApi;
 import com.nbug.module.store.api.storeProductReply.StoreProductReplyApi;
 import com.nbug.module.user.api.user.UserApi;
+import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,6 +266,7 @@ public class OrderTaskServiceImpl implements OrderTaskService {
     /**
      * 订单自动完成
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-autoComplete")
     @Override
     public void autoComplete() {
         // 查找所有收获状态订单

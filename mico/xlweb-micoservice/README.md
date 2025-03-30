@@ -11,8 +11,8 @@
 4. Loadbalancer 客户端负载均衡 3.1.8
 5. okhttp http客户端 11.10
 6. Sentinel 限流
-7. Seata 分布式事务
-8. PinPoint 调用链路监控
+7. Seata 分布式事务 2.1.0
+8. PinPoint 调用链路监控 暂时未引入，使用Skywalking
 9. xxl-job 定时任务 2.4.0
 10. redission 分布式缓存/队列 3.41.0
 11. MQ 消息队列 kafka 2.8.11 rabbit 2.4.17  rocketmq 2.3.1

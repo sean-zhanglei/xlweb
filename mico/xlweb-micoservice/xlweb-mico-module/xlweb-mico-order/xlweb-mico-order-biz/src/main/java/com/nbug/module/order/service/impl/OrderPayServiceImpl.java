@@ -74,6 +74,7 @@ import com.nbug.module.user.api.userLevel.UserLevelApi;
 import com.nbug.module.user.api.userToken.UserTokenApi;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,6 +185,7 @@ public class OrderPayServiceImpl implements OrderPayService {
      * 支付成功处理
      * @param storeOrder 订单
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-paySuccess")
     @Override
     public Boolean paySuccess(StoreOrder storeOrder) {
 
@@ -586,6 +588,7 @@ public class OrderPayServiceImpl implements OrderPayService {
      * @param storeOrder 订单
      * @return Boolean Boolean
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-yuePay")
     private Boolean yuePay(StoreOrder storeOrder) {
 
         // 用户余额扣除

@@ -11,6 +11,9 @@
     <packaging>jar</packaging>
 
     <name>xlweb-mico-starter-security</name>
+    <description>
+        Security：提供 安全校验支持
+    </description>
     <url>http://maven.apache.org</url>
 
     <properties>

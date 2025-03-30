@@ -98,6 +98,7 @@ import com.nbug.module.user.api.user.UserApi;
 import com.nbug.module.user.api.userAddress.UserAddressApi;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -245,6 +246,7 @@ public class OrderServiceImpl implements OrderService {
      * @param id Integer 订单id
      * @return 删除结果
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-orderDelete")
     @Override
     public Boolean delete(Integer id) {
         StoreOrder storeOrder = storeOrderApi.getById(id).getCheckedData();
@@ -335,6 +337,7 @@ public class OrderServiceImpl implements OrderService {
      * 订单退款申请
      * @param request OrderRefundApplyRequest 退款参数
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-refundApply")
     @Override
     public Boolean refundApply(OrderRefundApplyRequest request) {
         StoreOrder storeOrderPram = new StoreOrder();
@@ -949,6 +952,7 @@ public class OrderServiceImpl implements OrderService {
      * @param request 创建订单请求参数
      * @return MyRecord 订单编号
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-createOrder")
     @Override
     @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 5)
     public MyRecord createOrder(CreateOrderRequest request) {
@@ -1216,15 +1220,16 @@ public class OrderServiceImpl implements OrderService {
             }
 
             storeOrderApi.create(storeOrder);
-            storeOrderInfos.forEach(info -> info.setOrderId(storeOrder.getId()));
+            StoreOrder storeOrderNew = storeOrderApi.getByOderId(storeOrder.getOrderId()).getCheckedData();
+            storeOrderInfos.forEach(info -> info.setOrderId(storeOrderNew.getId()));
             // 优惠券修改
-            if (storeOrder.getCouponId() > 0) {
+            if (storeOrderNew.getCouponId() > 0) {
                 storeCouponUserApi.updateById(finalStoreCouponUser);
             }
             // 保存购物车商品详情
             storeOrderInfoApi.saveOrderInfos(storeOrderInfos);
             // 生成订单日志
-            storeOrderStatusApi.createLog(storeOrder.getId(), Constants.ORDER_STATUS_CACHE_CREATE_ORDER, "订单生成");
+            storeOrderStatusApi.createLog(storeOrderNew.getId(), Constants.ORDER_STATUS_CACHE_CREATE_ORDER, "订单生成");
 
             // 清除购物车数据
             if (CollUtil.isNotEmpty(orderInfoVo.getCartIdList())) {
@@ -1237,7 +1242,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // 加入自动未支付自动取消队列
-            redisUtil.lPush(Constants.ORDER_AUTO_CANCEL_KEY, storeOrder.getOrderId());
+            redisUtil.lPush(Constants.ORDER_AUTO_CANCEL_KEY, storeOrderNew.getOrderId());
         } catch (Exception e) {
             logger.error("订单生成失败", e);
             throw new XlwebException("订单生成失败");

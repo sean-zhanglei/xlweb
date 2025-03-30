@@ -78,6 +78,12 @@
 
             <dependency>
                 <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-seata</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.nbug</groupId>
                 <artifactId>xlweb-mico-infra-api</artifactId>
                 <version>${revision}</version>
             </dependency>
