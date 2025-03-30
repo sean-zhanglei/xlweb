@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -36,12 +37,12 @@ public interface UserIntegralRecordApi {
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "保存用户积分记录")
     @Parameter(name = "userIntegralRecords", description = "用户积分记录", required = true)
-    public CommonResult<Boolean> saveBatch(@RequestParam List<UserIntegralRecord> userIntegralRecords);
+    public CommonResult<Boolean> saveBatch(@RequestBody List<UserIntegralRecord> userIntegralRecords);
 
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新用户积分记录")
     @Parameter(name = "userIntegralRecords", description = "用户积分记录", required = true)
-    public CommonResult<Boolean> updateBatchById(@RequestParam List<UserIntegralRecord> userIntegralRecords);
+    public CommonResult<Boolean> updateBatchById(@RequestBody List<UserIntegralRecord> userIntegralRecords);
 
     @GetMapping(PREFIX + "/getIntegralBasic")
     @Operation(summary = "积分统计顶部")

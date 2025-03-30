@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -43,12 +44,12 @@ public interface UserBrokerageRecordApi {
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新用户佣金记录")
     @Parameter(name = "userBrokerageRecords", description = "用户佣金记录信息", required = true)
-    public CommonResult<Boolean> updateBatchById(@RequestParam List<UserBrokerageRecord> userBrokerageRecords);
+    public CommonResult<Boolean> updateBatchById(@RequestBody List<UserBrokerageRecord> userBrokerageRecords);
 
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存用户佣金记录")
     @Parameter(name = "userBrokerageRecords", description = "用户佣金记录信息", required = true)
-    public CommonResult<Boolean> saveBatch(@RequestParam List<UserBrokerageRecord> userBrokerageRecords);
+    public CommonResult<Boolean> saveBatch(@RequestBody List<UserBrokerageRecord> userBrokerageRecords);
 
 
     @GetMapping(PREFIX + "/getSpreadListByUid")

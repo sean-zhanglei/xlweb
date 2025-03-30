@@ -35,7 +35,7 @@ public interface UserBillApi {
     @PostMapping(PREFIX + "/save")
     @Operation(summary = "保存用户订单")
     @Parameter(name = "userBill", description = "用户订单信息", required = true)
-    public CommonResult<Boolean> save(@RequestParam UserBill userBill);
+    public CommonResult<Boolean> save(@RequestBody UserBill userBill);
 
     @PostMapping(PREFIX + "/saveRefundBill")
     @Operation(summary = "保存退款日志")
@@ -60,7 +60,7 @@ public interface UserBillApi {
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存用户订单")
     @Parameter(name = "billList", description = "用户订单信息", required = true)
-    public CommonResult<Boolean> saveBatch(@RequestParam List<UserBill> billList);
+    public CommonResult<Boolean> saveBatch(@RequestBody List<UserBill> billList);
 
     @GetMapping(PREFIX + "/getFlowRecord")
     @Operation(summary = "获取账单记录列表")

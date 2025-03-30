@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -31,6 +32,6 @@ public interface UserExperienceApi {
     @PostMapping(PREFIX + "/save")
     @Operation(summary = "保存用户经验记录")
     @Parameter(name = "userExperienceRecord", description = "用户经验记录", required = true)
-    public CommonResult<Boolean> save(@RequestParam UserExperienceRecord userExperienceRecord);
+    public CommonResult<Boolean> save(@RequestBody UserExperienceRecord userExperienceRecord);
 
 }

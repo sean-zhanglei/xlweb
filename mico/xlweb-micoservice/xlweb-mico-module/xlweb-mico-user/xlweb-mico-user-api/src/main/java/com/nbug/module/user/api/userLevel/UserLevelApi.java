@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -20,17 +20,17 @@ public interface UserLevelApi {
     @PostMapping(PREFIX + "/downLevel")
     @Operation(summary = "用户等级降级")
     @Parameter(name = "user", description = "用户", required = true)
-    public CommonResult<Boolean> downLevel(@RequestParam User user);
+    public CommonResult<Boolean> downLevel(@RequestBody User user);
 
 
     @PostMapping(PREFIX + "/upLevel")
     @Operation(summary = "用户等级升级")
     @Parameter(name = "user", description = "用户", required = true)
-    public CommonResult<Boolean> upLevel(@RequestParam User user);
+    public CommonResult<Boolean> upLevel(@RequestBody User user);
 
 
     @PostMapping(PREFIX + "/deleteByLevelId")
     @Operation(summary = "删除用户等级")
     @Parameter(name = "levelId", description = "用户等级id", required = true)
-    public CommonResult<Boolean> deleteByLevelId(@RequestParam Integer levelId);
+    public CommonResult<Boolean> deleteByLevelId(@RequestBody Integer levelId);
 }

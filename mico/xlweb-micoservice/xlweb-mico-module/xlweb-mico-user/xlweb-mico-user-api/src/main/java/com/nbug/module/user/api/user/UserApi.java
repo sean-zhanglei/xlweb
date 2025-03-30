@@ -46,7 +46,7 @@ public interface UserApi {
             @Parameter(name = "type", description = "类型", required = true)
     })
 
-    public CommonResult<Boolean> updateIntegral(@RequestParam User user,
+    public CommonResult<Boolean> updateIntegral(@RequestBody User user,
                                                 @RequestParam Integer integral,
                                                 @RequestParam String type);
 
@@ -63,7 +63,7 @@ public interface UserApi {
             @Parameter(name = "nowMoney", description = "现金", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> operationNowMoney(@SpringQueryMap Integer userId,
+    public CommonResult<Boolean> operationNowMoney(@RequestParam Integer userId,
                                                    @RequestParam BigDecimal price,
                                                    @RequestParam BigDecimal nowMoney,
                                                    @RequestParam String type);
@@ -88,7 +88,7 @@ public interface UserApi {
     @PostMapping(PREFIX + "/updateById")
     @Operation(summary = "更新用户ById")
     @Parameter(name = "user", description = "用户", required = true)
-    public CommonResult<Boolean> updateById(@RequestParam User user);
+    public CommonResult<Boolean> updateById(@RequestBody User user);
 
     @GetMapping(PREFIX + "/getMapListInUid")
     @Operation(summary = "根据用户id获取用户列表 map模式")
@@ -103,7 +103,7 @@ public interface UserApi {
             @Parameter(name = "price", description = "金额", required = true),
             @Parameter(name = "type", description = "类型", required = true)
     })
-    public CommonResult<Boolean> updateNowMoney(@RequestParam User user,
+    public CommonResult<Boolean> updateNowMoney(@RequestBody User user,
                                                 @RequestParam BigDecimal price,
                                                 @RequestParam String type);
 
@@ -111,12 +111,12 @@ public interface UserApi {
     @PostMapping(PREFIX + "/clearGroupByGroupId")
     @Operation(summary = "清空分组")
     @Parameter(name = "groupId", description = "分组id", required = true)
-    public CommonResult<Boolean> clearGroupByGroupId(@RequestParam String groupId);
+    public CommonResult<Boolean> clearGroupByGroupId(@RequestBody String groupId);
 
     @PostMapping(PREFIX + "/removeLevelByLevelId")
     @Operation(summary = "清除对应的用户等级")
     @Parameter(name = "levelId", description = "等级Id", required = true)
-    public CommonResult<Boolean> removeLevelByLevelId(@RequestParam Integer levelId);
+    public CommonResult<Boolean> removeLevelByLevelId(@RequestBody Integer levelId);
 
 
     @GetMapping(PREFIX + "/getAdminSpreadPeopleList")
@@ -171,5 +171,5 @@ public interface UserApi {
     @PostMapping(PREFIX + "/clearSpread")
     @Operation(summary = "根据用户id清除用户当前推广人")
     @Parameter(name = "userId", description = "用户id", required = true)
-    public CommonResult<Boolean> clearSpread(@SpringQueryMap Integer userId);
+    public CommonResult<Boolean> clearSpread(@RequestBody Integer userId);
 }
