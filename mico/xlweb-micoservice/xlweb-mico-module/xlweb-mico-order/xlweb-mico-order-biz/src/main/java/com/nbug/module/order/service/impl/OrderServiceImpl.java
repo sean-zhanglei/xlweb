@@ -104,8 +104,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -201,9 +199,6 @@ public class OrderServiceImpl implements OrderService {
     private SystemUserLevelApi systemUserLevelApi;
 
     @Autowired
-    private TransactionTemplate transactionTemplate;
-
-    @Autowired
     private SmsApi smsApi;
 
     @Autowired
@@ -273,13 +268,17 @@ public class OrderServiceImpl implements OrderService {
 
         //可以删除
         storeOrder.setIsDel(true);
-        Boolean execute = transactionTemplate.execute(e -> {
+        // 状态变化
+        try {
             storeOrderApi.updateById(storeOrder);
             //日志
             storeOrderStatusApi.createLog(storeOrder.getId(), "remove_order", "删除订单");
+
             return Boolean.TRUE;
-        });
-        return execute;
+        }catch (Exception e) {
+            logger.error("删除已完成订单失败", e);
+            throw new XlwebException("删除已完成订单失败");
+        }
     }
 
     /**
@@ -363,13 +362,11 @@ public class OrderServiceImpl implements OrderService {
         existStoreOrder.setRefundReasonWapImg(attachmentApi.clearPrefix(request.getReasonImage()).getCheckedData());
         existStoreOrder.setRefundPrice(BigDecimal.ZERO);
 
-        Boolean execute = transactionTemplate.execute(e -> {
+        // 状态变化
+        try {
             storeOrderApi.updateById(existStoreOrder);
             storeOrderStatusApi.createLog(existStoreOrder.getId(), Constants.ORDER_LOG_REFUND_APPLY, "用户申请退款原因：" + request.getText());
-            return Boolean.TRUE;
-        });
 
-        if (execute) {
             // 发送用户退款管理员提醒短信
             SystemNotification notification = notificationApi.getByMark(NotifyConstants.APPLY_ORDER_REFUND_ADMIN_MARK).getCheckedData();
             if (notification.getIsSms().equals(1)) {
@@ -383,9 +380,12 @@ public class OrderServiceImpl implements OrderService {
                     });
                 }
             }
+
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            logger.error("申请退款失败", e);
+            throw new XlwebException("申请退款失败");
         }
-        if (!execute) throw new XlwebException("申请退款失败");
-        return execute;
     }
 
     /**
@@ -393,7 +393,6 @@ public class OrderServiceImpl implements OrderService {
      * @param applyList OrderRefundApplyRequest 退款参数
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Boolean refundApplyTask(List<OrderRefundApplyRequest> applyList) {
         if (CollUtil.isEmpty(applyList)) {
             return false;
@@ -843,7 +842,7 @@ public class OrderServiceImpl implements OrderService {
      * @return PreOrderResponse
      */
     @Override
-    @Idempotent(keyResolver = UserIdempotentKeyResolver.class)
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 10)
     public MyRecord preOrder(PreOrderRequest request) {
         if (CollUtil.isEmpty(request.getOrderDetails())) {
             throw new XlwebException("预下单订单详情列表不能为空");
@@ -901,7 +900,7 @@ public class OrderServiceImpl implements OrderService {
         String key = "user_order:" + preOrderNo;
         boolean exists = redisUtil.exists(key);
         if (!exists) {
-            throw new XlwebException("预下单订单不存在");
+            throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
         OrderInfoVo orderInfoVo = JSONObject.parseObject(orderVoString, OrderInfoVo.class);
@@ -937,7 +936,7 @@ public class OrderServiceImpl implements OrderService {
         String key = "user_order:" + request.getPreOrderNo();
         boolean exists = redisUtil.exists(key);
         if (!exists) {
-            throw new XlwebException("预下单订单不存在");
+            throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
         OrderInfoVo orderInfoVo = JSONObject.parseObject(orderVoString, OrderInfoVo.class);
@@ -951,14 +950,14 @@ public class OrderServiceImpl implements OrderService {
      * @return MyRecord 订单编号
      */
     @Override
-    @Idempotent(keyResolver = UserIdempotentKeyResolver.class)
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 5)
     public MyRecord createOrder(CreateOrderRequest request) {
         User user = userApi.getInfoException().getCheckedData();
         // 通过缓存获取预下单对象
         String key = "user_order:" + request.getPreOrderNo();
         boolean exists = redisUtil.exists(key);
         if (!exists) {
-            throw new XlwebException("预下单订单不存在");
+            throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
         OrderInfoVo orderInfoVo = JSONObject.parseObject(orderVoString, OrderInfoVo.class);
@@ -1172,7 +1171,8 @@ public class OrderServiceImpl implements OrderService {
         }
         StoreCouponUser finalStoreCouponUser = storeCouponUser;
 
-        Boolean execute = transactionTemplate.execute(e -> {
+        // 状态变化
+        try {
             // 扣减库存
             // 需要根据是否活动商品，扣减不同的库存
             if (storeOrder.getSeckillId() > 0) {// 秒杀扣库存
@@ -1230,20 +1230,18 @@ public class OrderServiceImpl implements OrderService {
             if (CollUtil.isNotEmpty(orderInfoVo.getCartIdList())) {
                 storeCartApi.deleteCartByIds(orderInfoVo.getCartIdList());
             }
-            return Boolean.TRUE;
-        });
-        if (!execute) {
+
+            // 删除缓存订单
+            if (redisUtil.exists(key)) {
+                redisUtil.delete(key);
+            }
+
+            // 加入自动未支付自动取消队列
+            redisUtil.lPush(Constants.ORDER_AUTO_CANCEL_KEY, storeOrder.getOrderId());
+        } catch (Exception e) {
+            logger.error("订单生成失败", e);
             throw new XlwebException("订单生成失败");
         }
-
-        // 删除缓存订单
-        if (redisUtil.exists(key)) {
-            redisUtil.delete(key);
-        }
-
-        // 加入自动未支付自动取消队列
-        redisUtil.lPush(Constants.ORDER_AUTO_CANCEL_KEY, storeOrder.getOrderId());
-
         // 发送后台管理员下单提醒通知短信
         sendAdminOrderNotice(storeOrder.getOrderId());
 

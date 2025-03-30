@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -52,6 +53,6 @@ public interface StoreOrderInfoApi {
     @PostMapping(PREFIX + "/saveOrderInfos")
     @Operation(summary = "保存订单详情")
     @Parameter(name = "storeOrderInfos", description = "订单详情列表", required = true)
-    public CommonResult<Boolean> saveOrderInfos(@RequestParam List<StoreOrderInfo> storeOrderInfos);
+    public CommonResult<Boolean> saveOrderInfos(@RequestBody List<StoreOrderInfo> storeOrderInfos);
 
 }

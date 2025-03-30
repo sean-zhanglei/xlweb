@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public interface StorePinkApi {
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新ById")
     @Parameter(name = "storePinks", description = "拼团信息", required = true)
-    public CommonResult<Boolean> updateBatchById(@RequestParam List<StorePink> storePinks);
+    public CommonResult<Boolean> updateBatchById(@RequestBody List<StorePink> storePinks);
 
 
     @GetMapping(PREFIX + "/getCountByKid")
@@ -49,5 +50,5 @@ public interface StorePinkApi {
     @PostMapping(PREFIX + "/save")
     @Operation(summary = "保存")
     @Parameter(name = "storePink", description = "拼团信息", required = true)
-    public CommonResult<Boolean> save(@RequestParam StorePink storePink);
+    public CommonResult<Boolean> save(@RequestBody StorePink storePink);
 }

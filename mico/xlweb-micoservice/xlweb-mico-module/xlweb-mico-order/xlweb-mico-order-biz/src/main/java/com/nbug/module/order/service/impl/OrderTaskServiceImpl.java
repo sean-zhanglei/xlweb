@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -59,9 +58,6 @@ public class OrderTaskServiceImpl implements OrderTaskService {
 
     @Autowired
     private UserApi userApi;
-
-    @Autowired
-    private TransactionTemplate transactionTemplate;
 
     @Autowired
     private OrderPayService orderPayService;
@@ -276,7 +272,7 @@ public class OrderTaskServiceImpl implements OrderTaskService {
         if (CollUtil.isEmpty(orderList)) {
             return ;
         }
-        logger.info("OrderTaskServiceImpl.autoComplete | size:0");
+        logger.info("OrderTaskServiceImpl.autoComplete | size:{}", orderList.size());
 
         // 根据订单状态表判断订单是否可以自动完成
         for (StoreOrder order : orderList) {
@@ -338,16 +334,19 @@ public class OrderTaskServiceImpl implements OrderTaskService {
                 replyList.add(reply);
             }
             order.setStatus(Constants.ORDER_STATUS_INT_COMPLETE);
-            Boolean execute = transactionTemplate.execute(e -> {
-                storeOrderApi.updateById(order);
-                storeProductReplyApi.saveBatch(replyList);
-                return Boolean.TRUE;
-            });
-            if (execute) {
-                redisUtil.lPush(Constants.ORDER_TASK_REDIS_KEY_AFTER_COMPLETE_BY_USER, order.getId());
-            } else {
+            // 状态变化
+            try {
+                Boolean updateStatus = storeOrderApi.updateById(order).getCheckedData();
+                Boolean saveReplayStatus = storeProductReplyApi.saveBatch(replyList).getCheckedData();
+                if (updateStatus && saveReplayStatus) {// 同时成功才算成功
+                    redisUtil.lPush(Constants.ORDER_TASK_REDIS_KEY_AFTER_COMPLETE_BY_USER, order.getId());
+                } else {
+                    logger.error("订单自动完成：更新数据库失败，orderId = " + order.getId());
+                }
+            } catch (Exception e) {
                 logger.error("订单自动完成：更新数据库失败，orderId = " + order.getId());
             }
+
         }
     }
 }

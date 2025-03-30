@@ -42,7 +42,7 @@ public interface StoreOrderApi {
     @PostMapping(PREFIX + "/updateById")
     @Operation(summary = "更新订单ById")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> updateById(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> updateById(@RequestBody StoreOrder storeOrder);
 
 
     @GetMapping(PREFIX + "/getById")
@@ -50,10 +50,10 @@ public interface StoreOrderApi {
     @Parameter(name = "id", description = "id", required = true)
     public CommonResult<StoreOrder> getById(@RequestParam Integer id);
 
-    @GetMapping(PREFIX + "/getByEntityOne")
+    @PostMapping(PREFIX + "/getByEntityOne")
     @Operation(summary = "根据属性仅仅获取一条")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<StoreOrder> getByEntityOne(@RequestParam StoreOrder storeOrder);
+    public CommonResult<StoreOrder> getByEntityOne(@RequestBody StoreOrder storeOrder);
 
     @PostMapping(PREFIX + "/updateBatchById")
     @Operation(summary = "批量更新订单ById")
@@ -61,7 +61,7 @@ public interface StoreOrderApi {
             @Parameter(name = "storeOrders", description = "订单", required = true),
             @Parameter(name = "batchSize", description = "批量大小", required = true)
     })
-    public CommonResult<Boolean> updateBatchById(@RequestParam List<StoreOrder> storeOrders,
+    public CommonResult<Boolean> updateBatchById(@RequestBody List<StoreOrder> storeOrders,
                                                  @RequestParam Integer batchSize);
 
 
@@ -72,7 +72,7 @@ public interface StoreOrderApi {
             @Parameter(name = "status", description = "订单状态", required = true),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserOrderList(@SpringQueryMap Integer userId,
+    public CommonResult<List<StoreOrder>> getUserOrderList(@RequestParam Integer userId,
                                                            @RequestParam Integer status,
                                                            @SpringQueryMap PageParamRequest pageParamRequest);
 
@@ -99,7 +99,7 @@ public interface StoreOrderApi {
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建订单")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> create(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> create(@RequestBody StoreOrder storeOrder);
 
     @GetMapping(PREFIX + "/getUserCurrentDaySecKillOrders")
     @Operation(summary = "获取用户当前秒杀订单")
@@ -107,7 +107,7 @@ public interface StoreOrderApi {
             @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "seckillId", description = "秒杀id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders(@SpringQueryMap Integer userId,
+    public CommonResult<List<StoreOrder>> getUserCurrentDaySecKillOrders(@RequestParam Integer userId,
                                                                          @RequestParam Integer seckillId);
 
     @GetMapping(PREFIX + "/getByBargainOrder")
@@ -125,7 +125,7 @@ public interface StoreOrderApi {
             @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "bargainId", description = "砍价id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders(@SpringQueryMap Integer userId,
+    public CommonResult<List<StoreOrder>> getUserCurrentBargainOrders(@RequestParam Integer userId,
                                                                       @RequestParam Integer bargainId);
 
     @GetMapping(PREFIX + "/getUserCurrentCombinationOrders")
@@ -134,7 +134,7 @@ public interface StoreOrderApi {
             @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "combinationId", description = "拼团id", required = true)
     })
-    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(@SpringQueryMap Integer userId,
+    public CommonResult<List<StoreOrder>> getUserCurrentCombinationOrders(@RequestParam Integer userId,
                                                                           @RequestParam Integer combinationId);
 
 
@@ -160,10 +160,10 @@ public interface StoreOrderApi {
     public CommonResult<CommonPage<StoreOrderDetailResponse>> getAdminList(@RequestBody @Validated StoreOrderSearchRequest request,
                                                                            @SpringQueryMap PageParamRequest pageParamRequest);
 
-    @GetMapping(PREFIX + "/getInfoByEntity")
+    @PostMapping(PREFIX + "/getInfoByEntity")
     @Operation(summary = "获取订单信息")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<StoreOrder> getInfoByEntity(@RequestParam StoreOrder storeOrder);
+    public CommonResult<StoreOrder> getInfoByEntity(@RequestBody StoreOrder storeOrder);
 
     @GetMapping(PREFIX + "/getSpreadOrderTotalPriceByOrderList")
     @Operation(summary = "获取推广订单总金额")
@@ -176,7 +176,7 @@ public interface StoreOrderApi {
             @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "spreadId", description = "推广人id", required = true)
     })
-    public CommonResult<OrderBrokerageData> getBrokerageData(@SpringQueryMap Integer userId,
+    public CommonResult<OrderBrokerageData> getBrokerageData(@RequestParam Integer userId,
                                                              @RequestParam Integer spreadId);
 
     @GetMapping(PREFIX + "/getMapInOrderNo")
@@ -199,7 +199,7 @@ public interface StoreOrderApi {
             @Parameter(name = "userId", description = "用户id", required = true),
             @Parameter(name = "date", description = "时间", required = true)
     })
-    public CommonResult<Integer> getOrderCountByUidAndDate(@SpringQueryMap Integer userId,
+    public CommonResult<Integer> getOrderCountByUidAndDate(@RequestParam Integer userId,
                                                            @RequestParam String date);
 
     @GetMapping(PREFIX + "/findPaidListByUid")

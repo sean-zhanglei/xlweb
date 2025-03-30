@@ -11,7 +11,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public interface StoreProductReplyApi {
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存评论")
     @Parameter(name = "replyLists", description = "回复列表", required = true)
-    public CommonResult<Boolean> saveBatch(@RequestParam List<StoreProductReply> replyLists);
+    public CommonResult<Boolean> saveBatch(@RequestBody List<StoreProductReply> replyLists);
 
     @PostMapping(PREFIX + "/create")
     @Operation(summary = "创建评论")

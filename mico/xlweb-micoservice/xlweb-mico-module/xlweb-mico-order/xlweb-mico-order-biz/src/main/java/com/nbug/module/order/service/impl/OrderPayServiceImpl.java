@@ -79,7 +79,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -147,9 +146,6 @@ public class OrderPayServiceImpl implements OrderPayService {
 
     //订单类
     private StoreOrder order;
-
-    @Autowired
-    private TransactionTemplate transactionTemplate;
 
     @Autowired
     private RedisUtil redisUtil;
@@ -266,7 +262,8 @@ public class OrderPayServiceImpl implements OrderPayService {
             }
         }
 
-        Boolean execute = transactionTemplate.execute(e -> {
+        // 状态变化
+        try {
             //订单日志
             storeOrderStatusApi.createLog(storeOrder.getId(), Constants.ORDER_LOG_PAY_SUCCESS, Constants.ORDER_LOG_MESSAGE_PAY_SUCCESS);
 
@@ -297,10 +294,7 @@ public class OrderPayServiceImpl implements OrderPayService {
             if (storeOrder.getCombinationId() > 0) {
                 pinkProcessing(storeOrder);
             }
-            return Boolean.TRUE;
-        });
 
-        if (execute) {
             try {
                 SystemNotification payNotification = notificationApi.getByMark(NotifyConstants.PAY_SUCCESS_MARK).getCheckedData();
                 // 发送短信
@@ -335,11 +329,14 @@ public class OrderPayServiceImpl implements OrderPayService {
                 ylyApiApi.YlyPrint(storeOrder.getOrderId(),true);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                logger.error("短信、模板通知、优惠券或打印小票异常");
+                logger.error("短信、模板通知、优惠券或打印小票异常", e);
             }
+
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            logger.error("余额支付失败", e);
+            return Boolean.FALSE;
         }
-        return execute;
     }
 
     // 支持成功拼团后置处理
@@ -602,7 +599,8 @@ public class OrderPayServiceImpl implements OrderPayService {
         }
         storeOrder.setPaid(true);
         storeOrder.setPayTime(DateUtil.nowDateTime());
-        Boolean execute = transactionTemplate.execute(e -> {
+        // 状态变化
+        try {
             // 订单修改
             storeOrderApi.updateById(storeOrder);
             // 这里只扣除金额，账单记录在task中处理
@@ -670,9 +668,9 @@ public class OrderPayServiceImpl implements OrderPayService {
             }
 
             return Boolean.TRUE;
-        });
-        if (!execute) throw new XlwebException("余额支付订单失败");
-        return execute;
+        } catch (Exception e) {
+            throw new XlwebException("余额支付订单失败");
+        }
     }
 
     /**
@@ -1039,15 +1037,15 @@ public class OrderPayServiceImpl implements OrderPayService {
             }
         }
 
-        Boolean execute = transactionTemplate.execute(e -> {
-            if (CollUtil.isNotEmpty(couponUserList)) {
+        // 状态变化
+        if (CollUtil.isNotEmpty(couponUserList)) {
+            try {
                 storeCouponUserApi.saveBatch(couponUserList);
                 couponUserList.forEach(i -> storeCouponApi.deduction(i.getCouponId(), 1, couponMap.get(i.getCouponId())));
+            } catch (Exception e) {
+                logger.error(StrUtil.format("支付成功领取优惠券，更新数据库失败，订单编号：{}", storeOrder.getOrderId()));
             }
-            return Boolean.TRUE;
-        });
-        if (!execute) {
-            logger.error(StrUtil.format("支付成功领取优惠券，更新数据库失败，订单编号：{}", storeOrder.getOrderId()));
         }
+
     }
 }

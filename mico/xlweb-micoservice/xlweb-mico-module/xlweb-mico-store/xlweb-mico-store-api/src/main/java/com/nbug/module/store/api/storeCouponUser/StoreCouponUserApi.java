@@ -37,7 +37,7 @@ public interface StoreCouponUserApi {
     @PostMapping(PREFIX + "/updateById")
     @Operation(summary = "更新优惠券")
     @Parameter(name = "storeCouponUser", description = "更新优惠券", required = true)
-    public CommonResult<Boolean> updateById(@RequestParam StoreCouponUser storeCouponUser);
+    public CommonResult<Boolean> updateById(@RequestBody StoreCouponUser storeCouponUser);
 
     @PostMapping(PREFIX + "/paySuccessGiveAway")
     @Operation(summary = "支付成功赠送优惠券")
@@ -51,7 +51,7 @@ public interface StoreCouponUserApi {
     @PostMapping(PREFIX + "/saveBatch")
     @Operation(summary = "批量保存优惠券")
     @Parameter(name = "storeCouponUsers", description = "优惠券", required = true)
-    public CommonResult<Boolean> saveBatch(@RequestParam List<StoreCouponUser> storeCouponUsers);
+    public CommonResult<Boolean> saveBatch(@RequestBody List<StoreCouponUser> storeCouponUsers);
 
     @GetMapping(PREFIX + "/getUseCount")
     @Operation(summary = "获取可用优惠券数量")
@@ -64,7 +64,7 @@ public interface StoreCouponUserApi {
             @Parameter(name = "userId", description = "用户ID", required = true, example = "1024"),
             @Parameter(name = "pageParamRequest", description = "分页参数", required = true)
     })
-    public CommonResult<List<StoreCouponUser>> findListByUid(@SpringQueryMap Integer userId,
+    public CommonResult<List<StoreCouponUser>> findListByUid(@RequestParam Integer userId,
                                                              @SpringQueryMap PageParamRequest pageParamRequest);
 
     @GetMapping(PREFIX + "/getMyCouponList")

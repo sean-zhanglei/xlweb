@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @FeignClient(name = ApiConstants.NAME) // TODO NBUG：fallbackFactory =
@@ -21,26 +21,26 @@ public interface StoreOrderTaskApi {
     @PostMapping(PREFIX + "/cancelByUser")
     @Operation(summary = "取消订单任务")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> cancelByUser(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> cancelByUser(@RequestBody StoreOrder storeOrder);
 
     @PostMapping(PREFIX + "/refundOrder")
     @Operation(summary = "退款订单任务")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> refundOrder(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> refundOrder(@RequestBody StoreOrder storeOrder);
 
     @PostMapping(PREFIX + "/complete")
     @Operation(summary = "完成订单任务")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> complete(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> complete(@RequestBody StoreOrder storeOrder);
 
     @PostMapping(PREFIX + "/orderReceiving")
     @Operation(summary = "收货订单任务")
     @Parameter(name = "orderId", description = "订单Id", required = true)
-    public CommonResult<Boolean> orderReceiving(@RequestParam Integer orderId);
+    public CommonResult<Boolean> orderReceiving(@RequestBody Integer orderId);
 
     @PostMapping(PREFIX + "/autoCancel")
     @Operation(summary = "自动取消订单任务")
     @Parameter(name = "storeOrder", description = "订单", required = true)
-    public CommonResult<Boolean> autoCancel(@RequestParam StoreOrder storeOrder);
+    public CommonResult<Boolean> autoCancel(@RequestBody StoreOrder storeOrder);
 
 }
