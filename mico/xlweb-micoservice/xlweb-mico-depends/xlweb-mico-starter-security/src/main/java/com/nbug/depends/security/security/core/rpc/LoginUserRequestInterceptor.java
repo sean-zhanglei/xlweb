@@ -1,5 +1,6 @@
 package com.nbug.depends.security.security.core.rpc;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.nbug.depends.security.security.core.util.SecurityFrameworkUtils;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.json.JsonUtils;
@@ -8,6 +9,7 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.seata.core.context.RootContext;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -37,6 +39,13 @@ public class LoginUserRequestInterceptor implements RequestInterceptor {
             // 缩小header 的大小，避免 header 过大
             requestTemplate.header(SecurityFrameworkUtils.LOGIN_USER_HEADER, userStr);
             requestTemplate.header(Constants.HEADER_AUTHORIZATION_KEY, user.getToken());
+
+            // seata xid 传递
+            String xid = RootContext.getXID();
+            if (StringUtils.isNotBlank(xid)) {
+                requestTemplate.removeHeader(RootContext.KEY_XID);
+                requestTemplate.header(RootContext.KEY_XID, xid);
+            }
         } catch (Exception ex) {
             log.error("[apply][序列化 LoginUser({}) 发生异常]", user, ex);
             throw ex;

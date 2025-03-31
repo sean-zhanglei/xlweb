@@ -62,6 +62,8 @@ mybatis-plus:
   configuration:
     # 配置slq打印日志
     # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 配置禁止slq打印日志
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
     map-underscore-to-camel-case: true # 虽然默认为 true ，但是还是显示去指定下。
   global-config:
     db-config:
@@ -77,6 +79,7 @@ mybatis-plus:
 
 mybatis-plus-join:
   banner: false # 关闭控制台的 Banner 打印
+
 
 # Spring Data Redis 配置
 spring:

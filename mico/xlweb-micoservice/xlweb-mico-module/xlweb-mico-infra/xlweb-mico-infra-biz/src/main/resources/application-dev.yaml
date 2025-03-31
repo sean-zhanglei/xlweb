@@ -286,7 +286,8 @@ logging:
   level:
     io.swagger.*: error
     com.nbug.*: debug
-    org.springframework.boot.autoconfigure: ERROR
+    org.springframework.boot.autoconfigure: error
+    org.springframework.web: error
     com.baomidou.mybatisplus: error
   config: classpath:logback-spring.xml
   file:
