@@ -112,6 +112,13 @@
                 <artifactId>xlweb-mico-starter-protect</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <!-- Seata 相关 -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-seata</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

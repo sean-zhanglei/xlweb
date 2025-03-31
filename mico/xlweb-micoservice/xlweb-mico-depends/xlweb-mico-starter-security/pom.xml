@@ -61,6 +61,12 @@
             <artifactId>xlweb-mico-starter-rpc</artifactId>
         </dependency>
 
+        <!-- Seata 相关 -->
+        <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-seata</artifactId>
+        </dependency>
+
         <!-- 工具类相关 -->
         <dependency>
             <groupId>com.google.guava</groupId>

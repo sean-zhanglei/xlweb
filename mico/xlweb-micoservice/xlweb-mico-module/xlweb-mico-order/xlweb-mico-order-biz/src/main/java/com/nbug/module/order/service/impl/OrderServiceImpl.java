@@ -246,7 +246,7 @@ public class OrderServiceImpl implements OrderService {
      * @param id Integer 订单id
      * @return 删除结果
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-orderDelete")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-orderDelete", rollbackFor = Exception.class)
     @Override
     public Boolean delete(Integer id) {
         StoreOrder storeOrder = storeOrderApi.getById(id).getCheckedData();
@@ -337,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
      * 订单退款申请
      * @param request OrderRefundApplyRequest 退款参数
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-refundApply")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-refundApply", rollbackFor = Exception.class)
     @Override
     public Boolean refundApply(OrderRefundApplyRequest request) {
         StoreOrder storeOrderPram = new StoreOrder();
@@ -952,7 +952,7 @@ public class OrderServiceImpl implements OrderService {
      * @param request 创建订单请求参数
      * @return MyRecord 订单编号
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-createOrder")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-createOrder", rollbackFor = Exception.class)
     @Override
     @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 5)
     public MyRecord createOrder(CreateOrderRequest request) {

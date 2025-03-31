@@ -185,7 +185,7 @@ public class OrderPayServiceImpl implements OrderPayService {
      * 支付成功处理
      * @param storeOrder 订单
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-paySuccess")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-paySuccess", rollbackFor = Exception.class)
     @Override
     public Boolean paySuccess(StoreOrder storeOrder) {
 
@@ -588,7 +588,7 @@ public class OrderPayServiceImpl implements OrderPayService {
      * @param storeOrder 订单
      * @return Boolean Boolean
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-yuePay")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-yuePay", rollbackFor = Exception.class)
     private Boolean yuePay(StoreOrder storeOrder) {
 
         // 用户余额扣除

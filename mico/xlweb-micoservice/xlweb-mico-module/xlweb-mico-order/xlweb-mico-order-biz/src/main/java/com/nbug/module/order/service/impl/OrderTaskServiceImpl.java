@@ -266,7 +266,7 @@ public class OrderTaskServiceImpl implements OrderTaskService {
     /**
      * 订单自动完成
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-autoComplete")
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-autoComplete", rollbackFor = Exception.class)
     @Override
     public void autoComplete() {
         // 查找所有收获状态订单
