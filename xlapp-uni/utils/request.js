@@ -33,7 +33,7 @@ function baseRequest(url, method, data, {
 	}
 	if (store.state.app.token) header[TOKENNAME] = store.state.app.token;
 	return new Promise((reslove, reject) => {
-		Url=HTTP_REQUEST_URL||'http://api.front.hdq.xbdzz.cn'
+		Url=HTTP_REQUEST_URL
 		uni.request({
 			url: Url + '/api/front/' + url,
 			method: method || 'GET',
