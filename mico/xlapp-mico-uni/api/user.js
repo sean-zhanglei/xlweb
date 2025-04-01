@@ -556,3 +556,32 @@ export function getCollectUserList(data) {
 export function getShare() {
   return request.get("user/index/share", {}, { noAuth: true });
 }
+
+/**
+ * 添加收藏
+ * @param int id
+ * @param string category product=普通产品,product_seckill=秒杀产品
+ */
+export function collectAdd(id, category) {
+	return request.post('user/collect/add', {
+		id: id,
+		'category': category === undefined ? 'product' : category
+	});
+}
+
+/**
+ * 取消收藏产品
+ * @param int id
+ */
+export function collectDel(proId) {
+	return request.post(`user/collect/cancel/${proId}`);
+}
+
+
+/**
+ * 删除收藏产品
+ * @param string id
+ */
+export function collectDelete(ids) {
+	return request.post(`user/collect/delete`,ids);
+}

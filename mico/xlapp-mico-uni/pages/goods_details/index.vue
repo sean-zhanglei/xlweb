@@ -277,8 +277,6 @@
 	import store from '@/store';
 	import {
 		getProductDetail,
-		collectAdd,
-		collectDel,
 		postCartAdd,
 		getReplyList,
 		getReplyConfig,
@@ -288,7 +286,11 @@
 		getCoupons,
 		getCartCounts
 	} from '@/api/store.js';
-	import { spread } from "@/api/user";
+	import {
+		spread,
+		collectAdd,
+		collectDel,
+	} from "@/api/user";
 	import {
 		imageBase64
 	} from '@/api/infra.js';

@@ -189,8 +189,6 @@
 		seckillCode
 	} from '@/api/activity.js';
 	import {
-		collectAdd,
-		collectDel,
 		getReplyList,
 		getReplyConfig,
 		getProductsTopBuy10list
@@ -214,7 +212,11 @@
 		toLogin
 	} from '@/libs/login.js';
 	import { silenceBindingSpread } from "@/utils";
-	import { spread } from "@/api/user";
+	import { 
+		spread,
+		collectAdd,
+		collectDel,
+	} from "@/api/user";
 	export default {
 		data() {
 			return {

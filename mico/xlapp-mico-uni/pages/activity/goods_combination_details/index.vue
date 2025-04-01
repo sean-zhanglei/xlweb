@@ -259,8 +259,6 @@
 	} from '@/api/activity.js';
 	import {
 		postCartAdd,
-		collectAdd,
-		collectDel,
 		getReplyList,
 		getReplyConfig,
 		getReplyProduct
@@ -274,7 +272,11 @@
 	import {
 		getProductCode
 	} from '@/api/store.js'
-	import { spread } from "@/api/user";
+	import { 
+		spread,
+		collectAdd,
+		collectDel
+	} from "@/api/user";
 	export default {
 		components: {
 			shareRedPackets,

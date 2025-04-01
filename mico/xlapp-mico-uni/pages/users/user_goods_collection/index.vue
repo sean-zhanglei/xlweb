@@ -59,11 +59,11 @@
 
 <script>
 	import {
-		getProductHot,
-		collectDelete
+		getProductHot
 	} from '@/api/store.js';
 	import {
-		getCollectUserList
+		getCollectUserList,
+		collectDelete
 	} from '@/api/user.js';
 	import {
 		mapGetters
