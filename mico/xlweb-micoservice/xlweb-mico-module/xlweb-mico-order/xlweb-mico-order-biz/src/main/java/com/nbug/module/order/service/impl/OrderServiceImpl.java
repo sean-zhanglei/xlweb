@@ -908,8 +908,12 @@ public class OrderServiceImpl implements OrderService {
     public PreOrderResponse loadPreOrder(String preOrderNo) {
         // 通过缓存获取预下单对象
         String key = "user_order:" + preOrderNo;
-        boolean exists = redisUtil.exists(key);
-        if (!exists) {
+        try {
+            boolean exists = redisUtil.exists(key);
+            if (! exists) {
+                throw new XlwebException("订单已存在，请勿重复下单");
+            }
+        } catch (Exception e) {
             throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
@@ -944,8 +948,12 @@ public class OrderServiceImpl implements OrderService {
     public ComputedOrderPriceResponse computedOrderPrice(OrderComputedPriceRequest request) {
         // 通过缓存获取预下单对象
         String key = "user_order:" + request.getPreOrderNo();
-        boolean exists = redisUtil.exists(key);
-        if (!exists) {
+        try {
+            boolean exists = redisUtil.exists(key);
+            if (! exists) {
+                throw new XlwebException("订单已存在，请勿重复下单");
+            }
+        } catch (Exception e) {
             throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
@@ -966,8 +974,12 @@ public class OrderServiceImpl implements OrderService {
         User user = userApi.getInfoException().getCheckedData();
         // 通过缓存获取预下单对象
         String key = "user_order:" + request.getPreOrderNo();
-        boolean exists = redisUtil.exists(key);
-        if (!exists) {
+        try {
+            boolean exists = redisUtil.exists(key);
+            if (! exists) {
+                throw new XlwebException("订单已存在，请勿重复下单");
+            }
+        } catch (Exception e) {
             throw new XlwebException("订单已存在，请勿重复下单");
         }
         String orderVoString = redisUtil.get(key).toString();
@@ -1243,9 +1255,13 @@ public class OrderServiceImpl implements OrderService {
                 storeCartApi.deleteCartByIds(orderInfoVo.getCartIdList()).getCheckedData();
             }
 
-            // 删除缓存订单
-            if (redisUtil.exists(key)) {
-                redisUtil.delete(key);
+            try {
+                // 删除缓存订单
+                if (redisUtil.exists(key)) {
+                    redisUtil.delete(key);
+                }
+            } catch (Exception e) {
+                throw new XlwebException("删除缓存订单失败");
             }
 
             // 加入自动未支付自动取消队列

@@ -1,5 +1,6 @@
 package com.nbug.mico.common.utils.redis;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Component
+@Slf4j
 public class RedisUtil {
 
     @Resource
@@ -38,7 +40,7 @@ public class RedisUtil {
             }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.debug("redisTemplate.expire error", e);
             return false;
         }
     }
@@ -58,12 +60,7 @@ public class RedisUtil {
      * @return true 存在 false 不存在
      */
     public boolean exists(String key){
-        try {
-            return redisTemplate.hasKey(key);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return redisTemplate.hasKey(key);
     }
 
     /**
@@ -82,14 +79,8 @@ public class RedisUtil {
      * @param key string key
      * @param value string value
      */
-    public boolean set(String key, Object value) {
-        try {
-            redisTemplate.opsForValue().set(key, value);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     /**
@@ -99,17 +90,11 @@ public class RedisUtil {
      * @param expireTime Long 过期时间
      * @return boolean
      */
-    public boolean set(String key, Object value, Long expireTime) {
-        try {
-            if (expireTime > 0) {
-                redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
-            } else {
-                set(key, value);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public void set(String key, Object value, Long expireTime) {
+        if (expireTime > 0) {
+            redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
+        } else {
+            set(key, value);
         }
     }
 
@@ -121,14 +106,8 @@ public class RedisUtil {
      * @param timeUnit TimeUnit 时间格式
      * @return boolean
      */
-    public boolean set(String key, Object value, Long expireTime, TimeUnit timeUnit) {
-        try {
-            redisTemplate.opsForValue().set(key, value, expireTime, timeUnit);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void set(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, expireTime, timeUnit);
     }
 
     /**
