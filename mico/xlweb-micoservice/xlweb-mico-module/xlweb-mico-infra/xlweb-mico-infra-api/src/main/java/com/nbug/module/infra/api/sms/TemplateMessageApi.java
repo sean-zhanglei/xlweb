@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -26,7 +27,7 @@ public interface TemplateMessageApi {
             @Parameter(name = "openId", description = "用户openId", required = true)
     })
     public CommonResult<String> pushTemplateMessage(@RequestParam Integer templateId,
-                                                    @RequestParam HashMap<String, String> temMap,
+                                                    @RequestBody HashMap<String, String> temMap,
                                                     @RequestParam String openId);
 
     @PostMapping(PREFIX + "/pushMiniTemplateMessage")
@@ -37,7 +38,7 @@ public interface TemplateMessageApi {
             @Parameter(name = "openId", description = "用户openId", required = true)
     })
     public CommonResult<String> pushMiniTemplateMessage(@RequestParam Integer templateId,
-                                                        @RequestParam HashMap<String, String> temMap,
+                                                        @RequestBody HashMap<String, String> temMap,
                                                         @RequestParam String openId);
 
 }

@@ -37,7 +37,7 @@ public interface WechatNewApi {
             @Parameter(name = "wxRefundVo", description = "微信退款参数", required = true),
             @Parameter(name = "path", description = "退款路径", required = true)
     })
-    public CommonResult<WxRefundResponseVo> payRefund(@RequestParam WxRefundVo wxRefundVo,
+    public CommonResult<WxRefundResponseVo> payRefund(@Validated @RequestBody WxRefundVo wxRefundVo,
                                                       @RequestParam String path);
 
     @GetMapping(PREFIX + "/miniAuthCode")
