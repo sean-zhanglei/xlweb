@@ -267,29 +267,29 @@ public class OrderPayServiceImpl implements OrderPayService {
         // 状态变化
         try {
             //订单日志
-            storeOrderStatusApi.createLog(storeOrder.getId(), Constants.ORDER_LOG_PAY_SUCCESS, Constants.ORDER_LOG_MESSAGE_PAY_SUCCESS);
+            storeOrderStatusApi.createLog(storeOrder.getId(), Constants.ORDER_LOG_PAY_SUCCESS, Constants.ORDER_LOG_MESSAGE_PAY_SUCCESS).getCheckedData();
 
             // 用户信息变更
-            userApi.updateById(user);
+            userApi.updateById(user).getCheckedData();
 
             //资金变动
-            userBillApi.saveBatch(billList);
+            userBillApi.saveBatch(billList).getCheckedData();
 
             // 积分记录
-            userIntegralRecordApi.saveBatch(integralList);
+            userIntegralRecordApi.saveBatch(integralList).getCheckedData();
 
             // 经验记录
-            userExperienceApi.save(experienceRecord);
+            userExperienceApi.save(experienceRecord).getCheckedData();
 
             //经验升级
-            userLevelApi.upLevel(user);
+            userLevelApi.upLevel(user).getCheckedData();
 
             // 佣金记录
             if (CollUtil.isNotEmpty(recordList)) {
                 recordList.forEach(temp -> {
                     temp.setLinkId(storeOrder.getOrderId());
                 });
-                userBrokerageRecordApi.saveBatch(recordList);
+                userBrokerageRecordApi.saveBatch(recordList).getCheckedData();
             }
 
             // 如果是拼团订单进行拼团后置处理
@@ -302,7 +302,7 @@ public class OrderPayServiceImpl implements OrderPayService {
                 // 发送短信
                 if (StrUtil.isNotBlank(user.getPhone()) && payNotification.getIsSms().equals(1)) {
                     SmsTemplate smsTemplate = smsTemplateApi.getDetail(payNotification.getSmsId()).getCheckedData();
-                    smsApi.sendPaySuccess(user.getPhone(), storeOrder.getOrderId(), storeOrder.getPayPrice(), smsTemplate.getTempKey());
+                    smsApi.sendPaySuccess(user.getPhone(), storeOrder.getOrderId(), storeOrder.getPayPrice(), smsTemplate.getTempKey()).getCheckedData();
                 }
 
                 // 发送用户支付成功管理员提醒短信
@@ -314,7 +314,7 @@ public class OrderPayServiceImpl implements OrderPayService {
                         SmsTemplate smsTemplate = smsTemplateApi.getDetail(payAdminNotification.getSmsId()).getCheckedData();
                         // 发送短信
                         systemAdminList.forEach(admin -> {
-                            smsApi.sendOrderPaySuccessNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey());
+                            smsApi.sendOrderPaySuccessNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()).getCheckedData();
                         });
                     }
                 }
@@ -328,7 +328,7 @@ public class OrderPayServiceImpl implements OrderPayService {
                 autoSendCoupons(storeOrder);
 
                 // 根据配置 打印小票
-                ylyApiApi.YlyPrint(storeOrder.getOrderId(),true);
+                ylyApiApi.YlyPrint(storeOrder.getOrderId(),true).getCheckedData();
 
             } catch (Exception e) {
                 logger.error("短信、模板通知、优惠券或打印小票异常", e);
@@ -336,7 +336,7 @@ public class OrderPayServiceImpl implements OrderPayService {
 
             return Boolean.TRUE;
         } catch (Exception e) {
-            logger.error("余额支付失败", e);
+            logger.error("支付成功后续任务执行失败，即将重试", e);
             return Boolean.FALSE;
         }
     }
@@ -588,7 +588,6 @@ public class OrderPayServiceImpl implements OrderPayService {
      * @param storeOrder 订单
      * @return Boolean Boolean
      */
-    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-yuePay", rollbackFor = Exception.class)
     private Boolean yuePay(StoreOrder storeOrder) {
 
         // 用户余额扣除
@@ -605,12 +604,12 @@ public class OrderPayServiceImpl implements OrderPayService {
         // 状态变化
         try {
             // 订单修改
-            storeOrderApi.updateById(storeOrder);
+            storeOrderApi.updateById(storeOrder).getCheckedData();
             // 这里只扣除金额，账单记录在task中处理
-            userApi.updateNowMoney(user, storeOrder.getPayPrice(), "sub");
+            userApi.updateNowMoney(user, storeOrder.getPayPrice(), "sub").getCheckedData();
             // 扣除积分
             if (storeOrder.getUseIntegral() > 0) {
-                userApi.updateIntegral(user, storeOrder.getUseIntegral(), "sub");
+                userApi.updateIntegral(user, storeOrder.getUseIntegral(), "sub").getCheckedData();
             }
             // 添加支付成功redis队列
             redisUtil.lPush(TaskConstants.ORDER_TASK_PAY_SUCCESS_AFTER, storeOrder.getOrderId());
@@ -664,10 +663,10 @@ public class OrderPayServiceImpl implements OrderPayService {
                 storePink.setIsTpl(false);
                 storePink.setIsRefund(false);
                 storePink.setStatus(1);
-                storePinkApi.save(storePink);
+                storePinkApi.save(storePink).getCheckedData();
                 // 如果是开团，需要更新订单数据
                 storeOrder.setPinkId(storePink.getId());
-                storeOrderApi.updateById(storeOrder);
+                storeOrderApi.updateById(storeOrder).getCheckedData();
             }
 
             return Boolean.TRUE;
@@ -684,6 +683,7 @@ public class OrderPayServiceImpl implements OrderPayService {
      * 1.微信支付拉起微信预支付，返回前端调用微信支付参数，在之后需要调用微信支付查询接口
      * 2.余额支付，更改对应信息后，加入支付成功处理task
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-payment", rollbackFor = Exception.class)
     @Override
     public OrderPayResultResponse payment(OrderPayRequest orderPayRequest, String ip) {
         StoreOrder storeOrder = storeOrderApi.getByOderId(orderPayRequest.getOrderNo()).getCheckedData();
@@ -991,7 +991,7 @@ public class OrderPayServiceImpl implements OrderPayService {
             temMap.put("keyword1", storeOrder.getPayPrice().toString());
             temMap.put("keyword2", storeOrder.getOrderId());
             temMap.put(Constants.WE_CHAT_TEMP_KEY_END, "欢迎下次再来！");
-            templateMessageApi.pushTemplateMessage(payNotification.getWechatId(), temMap, userToken.getToken());
+            templateMessageApi.pushTemplateMessage(payNotification.getWechatId(), temMap, userToken.getToken()).getCheckedData();
             return;
         }
         if (storeOrder.getIsChannel().equals(Constants.ORDER_PAY_CHANNEL_PROGRAM) && payNotification.getIsRoutine().equals(1)) {
@@ -1007,7 +1007,7 @@ public class OrderPayServiceImpl implements OrderPayService {
             temMap.put("character_string3", storeOrder.getOrderId());
             temMap.put("amount9", storeOrder.getPayPrice().toString() + "元");
             temMap.put("thing6", "您的订单已支付成功");
-            templateMessageApi.pushMiniTemplateMessage(payNotification.getRoutineId(), temMap, userToken.getToken());
+            templateMessageApi.pushMiniTemplateMessage(payNotification.getRoutineId(), temMap, userToken.getToken()).getCheckedData();
         }
     }
 
@@ -1043,8 +1043,8 @@ public class OrderPayServiceImpl implements OrderPayService {
         // 状态变化
         if (CollUtil.isNotEmpty(couponUserList)) {
             try {
-                storeCouponUserApi.saveBatch(couponUserList);
-                couponUserList.forEach(i -> storeCouponApi.deduction(i.getCouponId(), 1, couponMap.get(i.getCouponId())));
+                storeCouponUserApi.saveBatch(couponUserList).getCheckedData();
+                couponUserList.forEach(i -> storeCouponApi.deduction(i.getCouponId(), 1, couponMap.get(i.getCouponId())).getCheckedData());
             } catch (Exception e) {
                 logger.error(StrUtil.format("支付成功领取优惠券，更新数据库失败，订单编号：{}", storeOrder.getOrderId()));
             }

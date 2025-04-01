@@ -58,6 +58,7 @@ spring:
         test-on-borrow: false
         test-on-return: false
       primary: master
+      seata: true # 是否开启seata代理，默认false
       datasource:
         master:
           url: jdbc:mysql://127.0.0.1:3306/xlweb_mico_user?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true&rewriteBatchedStatements=true # MySQL Connector/J 8.X 连接的示例

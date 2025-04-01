@@ -272,9 +272,9 @@ public class OrderServiceImpl implements OrderService {
         storeOrder.setIsDel(true);
         // 状态变化
         try {
-            storeOrderApi.updateById(storeOrder);
+            storeOrderApi.updateById(storeOrder).getCheckedData();
             //日志
-            storeOrderStatusApi.createLog(storeOrder.getId(), "remove_order", "删除订单");
+            storeOrderStatusApi.createLog(storeOrder.getId(), "remove_order", "删除订单").getCheckedData();
 
             return Boolean.TRUE;
         }catch (Exception e) {
@@ -367,8 +367,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 状态变化
         try {
-            storeOrderApi.updateById(existStoreOrder);
-            storeOrderStatusApi.createLog(existStoreOrder.getId(), Constants.ORDER_LOG_REFUND_APPLY, "用户申请退款原因：" + request.getText());
+            storeOrderApi.updateById(existStoreOrder).getCheckedData();
+            storeOrderStatusApi.createLog(existStoreOrder.getId(), Constants.ORDER_LOG_REFUND_APPLY, "用户申请退款原因：" + request.getText()).getCheckedData();
 
             // 发送用户退款管理员提醒短信
             SystemNotification notification = notificationApi.getByMark(NotifyConstants.APPLY_ORDER_REFUND_ADMIN_MARK).getCheckedData();
@@ -379,7 +379,7 @@ public class OrderServiceImpl implements OrderService {
                     SmsTemplate smsTemplate = smsTemplateApi.getDetail(notification.getSmsId()).getCheckedData();
                     // 发送短信
                     systemAdminList.forEach(admin -> {
-                        smsApi.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey());
+                        smsApi.sendOrderRefundApplyNotice(admin.getPhone(), existStoreOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()).getCheckedData();
                     });
                 }
             }
@@ -1182,58 +1182,58 @@ public class OrderServiceImpl implements OrderService {
             if (storeOrder.getSeckillId() > 0) {// 秒杀扣库存
                 MyRecord skuRecord = skuRecordList.get(0);
                 // 秒杀商品扣库存
-                storeSeckillApi.operationStock(skuRecord.getInt("activityId"), skuRecord.getInt("num"), "sub");
+                storeSeckillApi.operationStock(skuRecord.getInt("activityId"), skuRecord.getInt("num"), "sub").getCheckedData();
                 // 秒杀商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_SECKILL);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_SECKILL).getCheckedData();
                 // 普通商品口库存
                 storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub");
                 // 普通商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL).getCheckedData();
             } else if (storeOrder.getBargainId() > 0) {// 砍价扣库存
                 MyRecord skuRecord = skuRecordList.get(0);
                 // 砍价商品扣库存
-                storeBargainApi.operationStock(skuRecord.getInt("activityId"), skuRecord.getInt("num"), "sub");
+                storeBargainApi.operationStock(skuRecord.getInt("activityId"), skuRecord.getInt("num"), "sub").getCheckedData();
                 // 砍价商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_BARGAIN);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_BARGAIN).getCheckedData();
                 // 普通商品口库存
-                storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub");
+                storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub").getCheckedData();
                 // 普通商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL).getCheckedData();
             } else if (storeOrder.getCombinationId() > 0) {// 拼团扣库存
                 MyRecord skuRecord = skuRecordList.get(0);
                 // 拼团商品扣库存
                 Boolean operationStock = storeCombinationApi.operationStock(skuRecord.getInt("activityId"), skuRecord.getInt("num"), "sub").getCheckedData();
-                System.out.println("拼团商品扣库存operationStock " + operationStock);
+                logger.debug("拼团商品扣库存operationStock " + operationStock);
                 // 拼团商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_PINGTUAN);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("activityAttrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_PINGTUAN).getCheckedData();
                 // 普通商品口库存
-                storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub");
+                storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub").getCheckedData();
                 // 普通商品规格扣库存
-                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL);
+                storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL).getCheckedData();
             } else { // 普通商品
                 for (MyRecord skuRecord : skuRecordList) {
                     // 普通商品口库存
-                    storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub");
+                    storeProductApi.operationStock(skuRecord.getInt("productId"), skuRecord.getInt("num"), "sub").getCheckedData();
                     // 普通商品规格扣库存
-                    storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL);
+                    storeProductAttrValueApi.operationStock(skuRecord.getInt("attrValueId"), skuRecord.getInt("num"), "sub", Constants.PRODUCT_TYPE_NORMAL).getCheckedData();
                 }
             }
 
-            storeOrderApi.create(storeOrder);
+            storeOrderApi.create(storeOrder).getCheckedData();
             StoreOrder storeOrderNew = storeOrderApi.getByOderId(storeOrder.getOrderId()).getCheckedData();
             storeOrderInfos.forEach(info -> info.setOrderId(storeOrderNew.getId()));
             // 优惠券修改
             if (storeOrderNew.getCouponId() > 0) {
-                storeCouponUserApi.updateById(finalStoreCouponUser);
+                storeCouponUserApi.updateById(finalStoreCouponUser).getCheckedData();
             }
             // 保存购物车商品详情
-            storeOrderInfoApi.saveOrderInfos(storeOrderInfos);
+            storeOrderInfoApi.saveOrderInfos(storeOrderInfos).getCheckedData();
             // 生成订单日志
-            storeOrderStatusApi.createLog(storeOrderNew.getId(), Constants.ORDER_STATUS_CACHE_CREATE_ORDER, "订单生成");
+            storeOrderStatusApi.createLog(storeOrderNew.getId(), Constants.ORDER_STATUS_CACHE_CREATE_ORDER, "订单生成").getCheckedData();
 
             // 清除购物车数据
             if (CollUtil.isNotEmpty(orderInfoVo.getCartIdList())) {
-                storeCartApi.deleteCartByIds(orderInfoVo.getCartIdList());
+                storeCartApi.deleteCartByIds(orderInfoVo.getCartIdList()).getCheckedData();
             }
 
             // 删除缓存订单

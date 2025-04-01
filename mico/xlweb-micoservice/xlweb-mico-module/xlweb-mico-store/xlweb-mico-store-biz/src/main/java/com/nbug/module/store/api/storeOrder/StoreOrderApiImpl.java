@@ -11,6 +11,7 @@ import com.nbug.mico.common.response.StoreOrderDetailResponse;
 import com.nbug.mico.common.response.SystemWriteOffOrderResponse;
 import com.nbug.mico.common.vo.MyRecord;
 import com.nbug.module.store.service.StoreOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ import static com.nbug.mico.common.pojo.CommonResult.success;
 
 @RestController // 提供 RESTful API 接口，给 Feign 调用
 @Validated
+@Slf4j
 public class StoreOrderApiImpl implements StoreOrderApi {
 
     @Resource

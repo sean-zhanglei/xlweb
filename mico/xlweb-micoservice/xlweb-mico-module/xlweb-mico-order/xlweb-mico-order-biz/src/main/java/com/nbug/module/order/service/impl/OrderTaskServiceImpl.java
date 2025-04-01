@@ -195,7 +195,7 @@ public class OrderTaskServiceImpl implements OrderTaskService {
                     redisUtil.lPush(redisKey, data);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("OrderTaskServiceImpl.orderPaySuccessAfter | 订单支付成功后置处理失败，orderNo: " + data);
                 redisUtil.lPush(redisKey, data);
             }
         }
@@ -344,9 +344,11 @@ public class OrderTaskServiceImpl implements OrderTaskService {
                     redisUtil.lPush(Constants.ORDER_TASK_REDIS_KEY_AFTER_COMPLETE_BY_USER, order.getId());
                 } else {
                     logger.error("订单自动完成：更新数据库失败，orderId = " + order.getId());
+                    throw new XlwebException("订单自动完成：更新数据库失败，orderId = " + order.getId());
                 }
             } catch (Exception e) {
                 logger.error("订单自动完成：更新数据库失败，orderId = " + order.getId());
+                throw new XlwebException("订单自动完成：更新数据库失败，orderId = " + order.getId());
             }
 
         }
