@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -19,10 +21,10 @@ public interface SystemStoreApi {
 
     String PREFIX = ApiConstants.PREFIX + "/systemStore";
 
-    @GetMapping(PREFIX + "/getByCondition")
+    @PostMapping(PREFIX + "/getByCondition")
     @Operation(summary = "根据条件获取自提地址")
     @Parameter(name = "systemStore", description = "自提地址", required = true)
-    public CommonResult<SystemStore> getByCondition(@RequestParam SystemStore systemStore);
+    public CommonResult<SystemStore> getByCondition(@RequestBody SystemStore systemStore);
 
     @GetMapping(PREFIX + "/getMapInId")
     @Operation(summary = "根据id获取自提地址集合")

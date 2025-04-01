@@ -814,7 +814,7 @@
 			pay_open: function() {
 				this.pay_close = true;
 				this.pay_order_id = this.orderInfo.orderId;
-				this.totalPrice = this.orderInfo.payPrice;
+				this.totalPrice = this.orderInfo.payPrice + '';
 			},
 			/**
 			 * 支付成功回调

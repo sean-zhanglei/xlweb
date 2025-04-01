@@ -308,7 +308,7 @@
 				cartInfo: [],
 				priceGroup: {},
 				animated: false,
-				totalPrice: 0,
+				totalPrice: '0',
 				integralRatio: "0",
 				pagesUrl: "",
 				orderKey: "",

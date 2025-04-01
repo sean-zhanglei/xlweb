@@ -126,7 +126,7 @@
 			goPay(pay_price, order_id) {
 				this.$set(this, 'pay_close', true);
 				this.$set(this, 'pay_order_id', order_id);
-				this.$set(this, 'totalPrice', pay_price);
+				this.$set(this, 'totalPrice', pay_price + '');
 			},
 			/**
 			 * 事件回调
