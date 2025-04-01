@@ -288,6 +288,8 @@ public class OrderServiceImpl implements OrderService {
      * @param request 请求参数
      * @return Boolean
      */
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 2)
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-reply", rollbackFor = Exception.class)
     @Override
     public Boolean reply(StoreProductReplyAddRequest request) {
         if (StrUtil.isBlank(request.getOrderNo())) {
@@ -300,6 +302,8 @@ public class OrderServiceImpl implements OrderService {
      * 订单收货
      * @param id Integer 订单id
      */
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 2)
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-take", rollbackFor = Exception.class)
     @Override
     public Boolean take(Integer id) {
         StoreOrder storeOrder = orderUtils.getInfoById(id);
@@ -320,6 +324,8 @@ public class OrderServiceImpl implements OrderService {
      * 订单取消
      * @param id Integer 订单id
      */
+    @Idempotent(keyResolver = UserIdempotentKeyResolver.class, timeout = 2)
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-cancel", rollbackFor = Exception.class)
     @Override
     public Boolean cancel(Integer id) {
         StoreOrder storeOrder = orderUtils.getInfoById(id);
@@ -395,6 +401,7 @@ public class OrderServiceImpl implements OrderService {
      * 订单退款申请Task使用
      * @param applyList OrderRefundApplyRequest 退款参数
      */
+    @GlobalTransactional(timeoutMills = 300000, name = "spring-seata-tx-refundApplyTask", rollbackFor = Exception.class)
     @Override
     public Boolean refundApplyTask(List<OrderRefundApplyRequest> applyList) {
         if (CollUtil.isEmpty(applyList)) {
@@ -437,7 +444,7 @@ public class OrderServiceImpl implements OrderService {
             // 发送用户退款管理员提醒短信
             if (notification.getIsSms().equals(1) && CollUtil.isNotEmpty(systemAdminList)) {
                 // 发送短信
-                systemAdminList.forEach(admin -> smsApi.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()));
+                systemAdminList.forEach(admin -> smsApi.sendOrderRefundApplyNotice(admin.getPhone(), storeOrder.getOrderId(), admin.getRealName(), smsTemplate.getTempKey()).getCheckedData());
             }
         }
 
