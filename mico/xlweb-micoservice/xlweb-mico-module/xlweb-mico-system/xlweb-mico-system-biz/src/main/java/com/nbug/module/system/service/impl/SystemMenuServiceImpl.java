@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.model.system.SystemMenu;
 import com.nbug.mico.common.request.SystemMenuRequest;
@@ -35,8 +36,6 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
 
     @Autowired
     private RedisUtil redisUtil;
-
-    private static final String CACHE_LIST_KEY = "menuList";
 
     /**
      * 通过权限获取管理员可访问目录
@@ -103,7 +102,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         BeanUtils.copyProperties(request, systemMenu);
         boolean save = save(systemMenu);
         if (save) {
-            redisUtil.delete(CACHE_LIST_KEY);
+            redisUtil.delete(Constants.CACHE_LIST_KEY);
         }
         return save;
     }
@@ -120,7 +119,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         if ("A".equals(systemMenu.getMenuType())) {
             boolean update = updateById(systemMenu);
             if (update) {
-                redisUtil.delete(CACHE_LIST_KEY);
+                redisUtil.delete(Constants.CACHE_LIST_KEY);
             }
             return update;
         }
@@ -128,7 +127,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         if (CollUtil.isEmpty(childList)) {
             boolean update = updateById(systemMenu);
             if (update) {
-                redisUtil.delete(CACHE_LIST_KEY);
+                redisUtil.delete(Constants.CACHE_LIST_KEY);
             }
             return update;
         }
@@ -136,7 +135,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         childList.add(systemMenu);
         boolean updateBatch = updateBatchById(childList);
         if (updateBatch) {
-            redisUtil.delete(CACHE_LIST_KEY);
+            redisUtil.delete(Constants.CACHE_LIST_KEY);
         }
         return updateBatch;
     }
@@ -161,7 +160,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         BeanUtils.copyProperties(request, systemMenu);
         boolean update = updateById(systemMenu);
         if (update) {
-            redisUtil.delete(CACHE_LIST_KEY);
+            redisUtil.delete(Constants.CACHE_LIST_KEY);
         }
         return update;
     }
@@ -191,7 +190,7 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
         systemMenu.setIsShow(!systemMenu.getIsShow());
         boolean update = updateById(systemMenu);
         if (update) {
-            redisUtil.delete(CACHE_LIST_KEY);
+            redisUtil.delete(Constants.CACHE_LIST_KEY);
         }
         return update;
     }
@@ -201,13 +200,13 @@ public class SystemMenuServiceImpl extends ServiceImpl<SystemMenuDao, SystemMenu
      */
     @Override
     public List<SystemMenu> getCacheList() {
-        if (redisUtil.exists(CACHE_LIST_KEY)) {
-            return redisUtil.get(CACHE_LIST_KEY);
+        if (redisUtil.exists(Constants.CACHE_LIST_KEY)) {
+            return redisUtil.get(Constants.CACHE_LIST_KEY);
         }
         LambdaQueryWrapper<SystemMenu> lqw = Wrappers.lambdaQuery();
         lqw.eq(SystemMenu::getIsDelte, false);
         List<SystemMenu> systemMenuList = dao.selectList(lqw);
-        redisUtil.set(CACHE_LIST_KEY, systemMenuList);
+        redisUtil.set(Constants.CACHE_LIST_KEY, systemMenuList);
         return systemMenuList;
     }
 

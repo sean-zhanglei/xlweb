@@ -118,11 +118,11 @@ public class Constants {
     public static final String ARTICLE_BANNER_LIMIT = "news_slides_limit";
 
     //城市数据 redis key
-    public static final String CITY_LIST = "city_list";
+    public static final String CITY_LIST = "system::city_list";
     //城市数据 tree redis key
-    public static final String CITY_LIST_TREE = "city_list_tree";
+    public static final String CITY_LIST_TREE = "system::city_list_tree";
     //城市数据 tree redis key
-    public static final String CITY_LIST_LEVEL_1 = "city_list_level_1";
+    public static final String CITY_LIST_LEVEL_1 = "system::city_list_level_1";
 
     //商品库存变动队列key
     public static final String PRODUCT_STOCK_UPDATE = "product_stock_update";
@@ -142,7 +142,9 @@ public class Constants {
     public static final String WE_CHAT_MESSAGE_INDUSTRY_KEY = "we_chat_message_industry";
 
     //config表数据redis
-    public static final String CONFIG_LIST = "config_list"; //配置列表
+    public static final String CONFIG_LIST = "system::config_list"; //配置列表
+
+    public static final String CACHE_LIST_KEY = "system::menuList";
 
 
     //快递信息缓存
