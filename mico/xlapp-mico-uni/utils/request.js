@@ -31,7 +31,11 @@ function baseRequest(url, method, data, {
 			});
 		}
 	}
-	if (store.state.app.token) header[TOKENNAME] = store.state.app.token;
+	if (store.state.app.token) { 
+		header[TOKENNAME] = store.state.app.token;
+	} else {
+		delete header[TOKENNAME];
+	}
 	return new Promise((reslove, reject) => {
 		Url=HTTP_REQUEST_URL
 		uni.request({

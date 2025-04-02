@@ -162,7 +162,8 @@ public class FrontTokenComponent {
                 "api/front/user/index/color/config",
 
                 "api/front/index/get/version",
-                "api/front/image/domain"
+                "api/front/image/domain",
+                "api/front/user/index/info"
         };
 
         return ArrayUtils.contains(routerList, uri);
