@@ -149,7 +149,7 @@
 			    */
 			    uploadpic:function(){
 			      let that=this;
-				  that.$util.uploadImageOne({url:'user/upload/image',name:'multipart', model:"product", pid:1}, function(res){
+				  that.$util.uploadImageOne({name:'multipart', model:"product", pid:1}, function(res){
 					  that.refund_reason_wap_imgPath.push(res.data.url);
 				  });
 			    },

@@ -439,7 +439,7 @@ export default {
 			sizeType = opt.sizeType || ['compressed'],
 			sourceType = opt.sourceType || ['album', 'camera'],
 			is_load = opt.is_load || true,
-			uploadUrl = opt.url || '',
+			uploadUrl = opt.url || '', // 未使用
 			inputName = opt.name || 'pics',
 			pid = opt.pid,
 			model = opt.model;
@@ -453,7 +453,7 @@ export default {
 				uni.showLoading({
 					title: '图片上传中',
 				});
-				let urlPath = HTTP_ADMIN_URL + '/api/admin/upload/image' + "?model=" + model + "&pid=" + pid
+				let urlPath = HTTP_ADMIN_URL + '/api/front/infra/user/upload/image' + "?model=" + model + "&pid=" + pid
 				let localPath = res.tempFilePaths[0];
 				uni.uploadFile({
 					url: urlPath,

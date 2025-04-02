@@ -301,7 +301,7 @@
 		},
 		data: function() {
 			return {
-				url: `${HTTP_REQUEST_URL}/api/upload/image`,
+				url: `${HTTP_REQUEST_URL}/api/front/infra/user/upload/image`,
 				headers: {
 					"Authori-zation": "Bearer " + this.$store.state.app.token
 				},
