@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageInfo;
 import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import com.nbug.mico.common.constants.CategoryConstants;
@@ -153,8 +154,9 @@ public class ProductServiceImpl implements ProductService {
     public CommonPage<IndexProductResponse> getCategoryProductList(ProductListRequest request, PageParamRequest pageParamRequest) {
         // 按用户UID缓存
         Long userId = WebFrameworkUtils.getLoginUserId();
-        if (redisUtil.exists(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_DATA_LIST)) {
-            return redisUtil.get(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_DATA_LIST);
+        String key = userId + "::" + CategoryConstants.CATEGORY_PRODUCT_DATA_LIST + SecureUtil.md5(SecureUtil.md5(request.toString()) + SecureUtil.md5(pageParamRequest.toString()));
+        if (redisUtil.exists(key)) {
+            return redisUtil.get(key);
         } else {
             ProductRequest searchRequest = new ProductRequest();
             BeanUtils.copyProperties(searchRequest, request);
@@ -179,8 +181,8 @@ public class ProductServiceImpl implements ProductService {
             BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
 
             // 6 分钟缓存 避免批量失效增加【1-2） 分钟随机值
-            redisUtil.set(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_DATA_LIST, productResponseCommonPage, 6L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
-            return redisUtil.get(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_DATA_LIST);
+            redisUtil.set(key, productResponseCommonPage, 6L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
+            return redisUtil.get(key);
         }
     }
 
@@ -190,10 +192,11 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public CommonPage<IndexProductResponse> getList(ProductRequest request, PageParamRequest pageRequest) {
-        // 按用户UID缓存
+        // 按用户UID+参数缓存
         Long userId = WebFrameworkUtils.getLoginUserId();
-        if (redisUtil.exists(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_MORE_DATA_LIST)) {
-            return redisUtil.get(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_MORE_DATA_LIST);
+        String key = userId + "::" + CategoryConstants.CATEGORY_PRODUCT_MORE_DATA_LIST + SecureUtil.md5(SecureUtil.md5(request.toString()) + SecureUtil.md5(pageRequest.toString()));
+        if (redisUtil.exists(key)) {
+            return redisUtil.get(key);
         } else {
             List<StoreProduct> storeProductList = storeProductService.findH5List(request, pageRequest);
             if (CollUtil.isEmpty(storeProductList)) {
@@ -251,8 +254,8 @@ public class ProductServiceImpl implements ProductService {
             }
             CommonPage<IndexProductResponse> productResponseCommonPage = CommonPage.restPage(productResponseArrayList);
             // 60 * 2 分钟缓存 避免批量失效增加【1-2） 分钟随机值
-            redisUtil.set(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_MORE_DATA_LIST, productResponseCommonPage, 60L * 2 + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
-            return redisUtil.get(userId + "::" + CategoryConstants.CATEGORY_PRODUCT_MORE_DATA_LIST);
+            redisUtil.set(key, productResponseCommonPage, 60L * 2 + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
+            return redisUtil.get(key);
         }
     }
 
@@ -337,8 +340,9 @@ public class ProductServiceImpl implements ProductService {
     public CommonPage<IndexProductResponse> getHotProductList(PageParamRequest pageRequest) {
         // 按用户UID缓存
         Long userId = WebFrameworkUtils.getLoginUserId();
-        if (redisUtil.exists(userId + "::" + ProductConstants.HOT_PRODUCT)) {
-            return redisUtil.get(userId + "::" + ProductConstants.HOT_PRODUCT);
+        String key = userId + "::" + ProductConstants.HOT_PRODUCT + SecureUtil.md5(pageRequest.toString());
+        if (redisUtil.exists(key)) {
+            return redisUtil.get(key);
         } else {
             List<StoreProduct> storeProductList = storeProductService.getIndexProduct(Constants.INDEX_HOT_BANNER, pageRequest);
             if (CollUtil.isEmpty(storeProductList)) {
@@ -393,8 +397,8 @@ public class ProductServiceImpl implements ProductService {
             CommonPage<IndexProductResponse> productResponseCommonPage = CommonPage.restPage(productResponseArrayList);
             BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
             // 10 分钟缓存 避免批量失效增加【1-2） 分钟随机值
-            redisUtil.set(userId + "::" + ProductConstants.HOT_PRODUCT, productResponseCommonPage, 10L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
-            return redisUtil.get(userId + "::" + ProductConstants.HOT_PRODUCT);
+            redisUtil.set(key, productResponseCommonPage, 10L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
+            return redisUtil.get(key);
         }
     }
 
