@@ -151,6 +151,15 @@ public class RedisUtil {
     }
 
     /**
+     * 哈希存在
+     * @param key string key
+     * @param hashKey Object hashKey
+     */
+    public Boolean hmHasKey(String key, Object hashKey) {
+        return redisTemplate.opsForHash().hasKey(key, hashKey);
+    }
+
+    /**
      * 哈希数量
      * @param key string key
      */
@@ -198,6 +207,19 @@ public class RedisUtil {
     public List<Object> lRange(String k, long l, long l1) {
         ListOperations<String, Object> list = redisTemplate.opsForList();
         return list.range(k, l, l1);
+    }
+
+    /**
+     * 集合添加
+     * @param key string key
+     * @param value Object value
+     * @param expireTime Long 过期时间
+     * @param timeUnit TimeUnit 时间格式
+     */
+    public void add(String key, Object value, Long expireTime, TimeUnit timeUnit) {
+        SetOperations<String, Object> set = redisTemplate.opsForSet();
+        set.add(key, value);
+        redisTemplate.expire(key, expireTime, timeUnit);
     }
 
     /**

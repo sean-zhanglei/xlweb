@@ -6,7 +6,9 @@ import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.request.PageParamRequest;
 import com.nbug.mico.common.request.StoreProductSearchRequest;
 import com.nbug.mico.common.response.ProductActivityItemResponse;
+import com.nbug.mico.common.response.ProductDetailResponse;
 import com.nbug.mico.common.response.StoreProductResponse;
+import com.nbug.module.store.service.ProductService;
 import com.nbug.module.store.service.StoreProductService;
 import com.nbug.module.store.util.delete.ProductUtils;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,9 @@ public class StoreProductApiImpl implements StoreProductApi {
 
     @Resource
     private StoreProductService storeProductService;
+
+    @Resource
+    private ProductService productService;
 
     @Resource
     private ProductUtils productUtils;
@@ -52,6 +57,11 @@ public class StoreProductApiImpl implements StoreProductApi {
     @Override
     public CommonResult<StoreProduct> getById(Integer id) {
         return success(storeProductService.getById(id));
+    }
+
+    @Override
+    public CommonResult<ProductDetailResponse> getDetail(Integer id, String type) {
+        return success(productService.getDetail(id, type));
     }
 
     /**

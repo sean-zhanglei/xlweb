@@ -39,4 +39,9 @@ public class UserConstants {
      * 首页商品列表 key
      */
     public static final String INDEX_PRODUCT = "INDEX_PRODUCT";
+
+    /**
+     * 首页商品详情 key
+     */
+    public static final String INDEX_PRODUCT_DETAIL = "INDEX_PRODUCT_DETAIL";
 }

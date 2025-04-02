@@ -160,7 +160,6 @@
 			uploadpic: function() {
 				let that = this;
 				that.$util.uploadImageOne({
-					url: 'user/upload/image',
 					name: 'multipart',
 					model: "maintain",
 					pid: 0

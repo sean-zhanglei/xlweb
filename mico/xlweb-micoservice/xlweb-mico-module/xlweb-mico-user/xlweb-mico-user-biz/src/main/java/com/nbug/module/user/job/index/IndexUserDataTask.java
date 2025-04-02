@@ -5,12 +5,14 @@ import cn.hutool.crypto.SecureUtil;
 import com.nbug.depends.tenant.core.aop.TenantIgnore;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.constants.UserConstants;
+import com.nbug.mico.common.model.product.StoreProduct;
 import com.nbug.mico.common.page.CommonPage;
 import com.nbug.mico.common.request.PageParamRequest;
 import com.nbug.mico.common.response.IndexInfoResponse;
 import com.nbug.mico.common.response.IndexProductResponse;
 import com.nbug.mico.common.utils.date.DateUtil;
 import com.nbug.mico.common.utils.redis.RedisUtil;
+import com.nbug.module.store.api.storeProduct.StoreProductApi;
 import com.nbug.module.system.api.config.ConfigApi;
 import com.nbug.module.system.api.systemGroupData.SystemGroupDataApi;
 import com.nbug.module.user.service.IndexService;
@@ -19,10 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 首页商品首页数据同步task
+ * 首页商品数据同步task
 
  */
 @Component
@@ -34,6 +38,9 @@ public class IndexUserDataTask {
 
     @Autowired
     private SystemGroupDataApi systemGroupDataApi;
+
+    @Autowired
+    private StoreProductApi storeProductApi;
 
     @Autowired
     private ConfigApi configApi;
@@ -105,6 +112,45 @@ public class IndexUserDataTask {
             log.info("IndexUserDataTask.task 首页商品数据预热完成" + " | msg : " + "IndexUserDataTask.task");
         } catch (Exception e) {
             log.error("IndexUserDataTask.task" + " | msg : " + e.getMessage());
+        }
+
+    }
+
+    @XxlJob("indexProductDetailDataJob")
+    @TenantIgnore
+    // @TenantJob // 多租户
+    // @Scheduled(fixedDelay = 10000 * 60L) //10分钟同步一次数据
+    public void initProductDetail() {
+        log.info("---IndexProductDetailDataTask task------produce Data with fixed rate task: Execution Time - {}", DateUtil.nowDateTime());
+        try {
+            // 【1 精品推荐 2 热门榜单 3首发新品 4促销单品】
+            PageParamRequest pageParamRequest = new PageParamRequest();
+            pageParamRequest.setLimit(10);
+            CommonPage<IndexProductResponse> indexProductResponseCommonPageType_1 =  indexService.findIndexProductList(1, pageParamRequest);
+            CommonPage<IndexProductResponse> indexProductResponseCommonPageType_2 =  indexService.findIndexProductList(2, pageParamRequest);
+            CommonPage<IndexProductResponse> indexProductResponseCommonPageType_3 =  indexService.findIndexProductList(3, pageParamRequest);
+            CommonPage<IndexProductResponse> indexProductResponseCommonPageType_4 =  indexService.findIndexProductList(4, pageParamRequest);
+            // 去重
+            Set<IndexProductResponse> sets = new HashSet<>();
+            sets.addAll(indexProductResponseCommonPageType_1.getList());
+            sets.addAll(indexProductResponseCommonPageType_2.getList());
+            sets.addAll(indexProductResponseCommonPageType_3.getList());
+            sets.addAll(indexProductResponseCommonPageType_4.getList());
+
+            for (IndexProductResponse indexProductResponse: sets
+                 ) {
+                StoreProduct storeProduct = storeProductApi.getById(indexProductResponse.getId()).getCheckedData();
+                // 首页商品数据缓存 10分钟 随机秒数[1,60) 避免缓存雪崩
+                redisUtil.hmSet("index::" + UserConstants.INDEX_PRODUCT_DETAIL + ":normal", String.valueOf(indexProductResponse.getId()), storeProduct);
+                boolean success = redisUtil.expire("index::" + UserConstants.INDEX_PRODUCT_DETAIL + ":normal", 60L * 10 + RandomUtil.randomInt(1, 60));
+                if (! success) {
+                    redisUtil.hmDelete("index::" + UserConstants.INDEX_PRODUCT_DETAIL + ":normal", String.valueOf(indexProductResponse.getId()));
+                    log.error("IndexProductDetailDataTask.task 首页商品详情数据预热失败" + " | msg : " + "IndexProductDetailDataTask.task");
+                }
+            }
+            log.info("IndexProductDetailDataTask.task 首页商品详情数据预热完成" + " | msg : " + "IndexProductDetailDataTask.task");
+        } catch (Exception e) {
+            log.error("IndexProductDetailDataTask.task" + " | msg : " + e.getMessage());
         }
 
     }

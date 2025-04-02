@@ -6,6 +6,7 @@ import com.nbug.mico.common.pojo.CommonResult;
 import com.nbug.mico.common.request.PageParamRequest;
 import com.nbug.mico.common.request.StoreProductSearchRequest;
 import com.nbug.mico.common.response.ProductActivityItemResponse;
+import com.nbug.mico.common.response.ProductDetailResponse;
 import com.nbug.mico.common.response.StoreProductResponse;
 import com.nbug.module.store.enums.ApiConstants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +51,14 @@ public interface StoreProductApi {
     @Operation(summary = "根据id获取商品信息")
     @Parameter(name = "id", description = "商品Id", required = true)
     public CommonResult<StoreProduct> getById(@RequestParam Integer id);
+
+    @GetMapping(PREFIX + "/getDetail")
+    @Operation(summary = "获取商品详情")
+    @Parameters({
+            @Parameter(name = "id", description = "商品Id", required = true),
+            @Parameter(name = "type", description = "商品类型", required = true)
+    })
+    public CommonResult<ProductDetailResponse> getDetail(@RequestParam Integer id, @RequestParam(value = "type", defaultValue = "normal") String type);
 
 
     @GetMapping(PREFIX + "/getSecondaryCategoryByProductId")

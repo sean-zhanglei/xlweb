@@ -12,6 +12,7 @@ import com.nbug.mico.common.constants.CategoryConstants;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.constants.ProductConstants;
 import com.nbug.mico.common.constants.SysConfigConstants;
+import com.nbug.mico.common.constants.UserConstants;
 import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.model.order.StoreOrder;
 import com.nbug.mico.common.model.order.StoreOrderInfo;
@@ -55,6 +56,7 @@ import com.nbug.module.user.api.userVisitRecord.UserVisitRecordApi;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -467,74 +469,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 获取商品详情
-     * @param id 商品编号
-     * @param type normal-正常，video-视频
-     * @return 商品详情信息
+     * 异步记录访问记录
+     * @param storeProduct
      */
-    @Override
-    public ProductDetailResponse getDetail(Integer id, String type) {
-        // 获取用户
-        User user = userApi.getInfo().getCheckedData();
-        SystemUserLevel userLevel = null;
-        if (ObjectUtil.isNotNull(user) && user.getLevel() > 0) {
-            userLevel = systemUserLevelApi.getByLevelId(user.getLevel()).getCheckedData();
-        }
-
-        ProductDetailResponse productDetailResponse = new ProductDetailResponse();
-        // 查询商品
-        StoreProduct storeProduct = storeProductService.getH5Detail(id);
-        if (ObjectUtil.isNotNull(userLevel)) {
-            storeProduct.setVipPrice(storeProduct.getPrice());
-        }
-        productDetailResponse.setProductInfo(storeProduct);
-
-        // 获取商品规格
-        List<StoreProductAttr> attrList = attrService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
-        // 根据制式设置attr属性
-        productDetailResponse.setProductAttr(attrList);
-
-        // 根据制式设置sku属性
-        HashMap<String, Object> skuMap = new HashMap<>();
-        List<StoreProductAttrValue> storeProductAttrValues = storeProductAttrValueService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
-        for (StoreProductAttrValue storeProductAttrValue : storeProductAttrValues) {
-            StoreProductAttrValueResponse atr = new StoreProductAttrValueResponse();
-            BeanUtils.copyProperties(storeProductAttrValue, atr);
-            // 设置会员价
-            if (ObjectUtil.isNotNull(userLevel)) {
-                atr.setVipPrice(atr.getPrice());
-            }
-            skuMap.put(atr.getSuk(), atr);
-        }
-        productDetailResponse.setProductValue(skuMap);
-
-        // 用户收藏、分销返佣
-        if (ObjectUtil.isNotNull(user)) {
-            // 查询用户是否收藏收藏
-            user = userApi.getInfo().getCheckedData();
-            productDetailResponse.setUserCollect(storeProductRelationService.getLikeOrCollectByUser(user.getUid(), id,false).size() > 0);
-            // 判断是否开启分销
-            String brokerageFuncStatus = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_BROKERAGE_FUNC_STATUS).getCheckedData();
-            if (brokerageFuncStatus.equals(Constants.COMMON_SWITCH_OPEN)) {// 分销开启
-                // 判断是否开启气泡
-                String isBubble = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_STORE_BROKERAGE_IS_BUBBLE).getCheckedData();
-                if (isBubble.equals(Constants.COMMON_SWITCH_OPEN)) {
-                    productDetailResponse.setPriceName(getPacketPriceRange(storeProduct.getIsSub(), storeProductAttrValues, user.getIsPromoter()));
-                }
-            }
-        } else {
-            productDetailResponse.setUserCollect(false);
-        }
-        // 商品活动
-        List<ProductActivityItemResponse> activityAllH5 = productUtils.getProductAllActivity(storeProduct);
-        productDetailResponse.setActivityAllH5(activityAllH5);
-
-        // 商品浏览量+1
-        StoreProduct updateProduct = new StoreProduct();
-        updateProduct.setId(id);
-        updateProduct.setBrowse(storeProduct.getBrowse() + 1);
-        storeProductService.updateById(updateProduct);
-
+    @Async
+    public void asyncVisitLog(StoreProduct storeProduct) {
+        // 这部分可以异步执行
         // 保存用户访问记录
         if (userApi.getUserId().getCheckedData() > 0) {
             UserVisitRecord visitRecord = new UserVisitRecord();
@@ -544,7 +484,143 @@ public class ProductServiceImpl implements ProductService {
             userVisitRecordApi.save(visitRecord);
         }
 
-        return productDetailResponse;
+        // 商品浏览量+1
+        StoreProduct updateProduct = new StoreProduct();
+        updateProduct.setId(storeProduct.getId());
+        updateProduct.setBrowse(storeProduct.getBrowse() + 1);
+        storeProductService.updateById(updateProduct);
+    }
+
+    /**
+     * 获取商品详情
+     * @param id 商品编号
+     * @param type normal-正常，video-视频
+     * @return 商品详情信息
+     */
+    @Override
+    public ProductDetailResponse getDetail(Integer id, String type) {
+        String key = "index::" + UserConstants.INDEX_PRODUCT_DETAIL + ":" + type;
+        if (redisUtil.exists(key) && redisUtil.hmHasKey(key, String.valueOf(id))) {
+            // 查询商品
+            // 由于涉及到用户信息，所以此处缓存效果一般 TODO
+            StoreProduct storeProduct = (StoreProduct)redisUtil.hmGet(key, String.valueOf(id));
+
+            // 获取用户
+            User user = userApi.getInfo().getCheckedData();
+            SystemUserLevel userLevel = null;
+            if (ObjectUtil.isNotNull(user) && user.getLevel() > 0) {
+                userLevel = systemUserLevelApi.getByLevelId(user.getLevel()).getCheckedData();
+            }
+            if (ObjectUtil.isNotNull(userLevel)) {
+                storeProduct.setVipPrice(storeProduct.getPrice());
+            }
+
+            ProductDetailResponse productDetailResponse = new ProductDetailResponse();
+            productDetailResponse.setProductInfo(storeProduct);
+
+            // 获取商品规格
+            List<StoreProductAttr> attrList = attrService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
+            // 根据制式设置attr属性
+            productDetailResponse.setProductAttr(attrList);
+
+            // 根据制式设置sku属性
+            HashMap<String, Object> skuMap = new HashMap<>();
+            List<StoreProductAttrValue> storeProductAttrValues = storeProductAttrValueService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
+            for (StoreProductAttrValue storeProductAttrValue : storeProductAttrValues) {
+                StoreProductAttrValueResponse atr = new StoreProductAttrValueResponse();
+                BeanUtils.copyProperties(storeProductAttrValue, atr);
+                // 设置会员价
+                if (ObjectUtil.isNotNull(userLevel)) {
+                    atr.setVipPrice(atr.getPrice());
+                }
+                skuMap.put(atr.getSuk(), atr);
+            }
+            productDetailResponse.setProductValue(skuMap);
+            // 用户收藏、分销返佣
+            if (ObjectUtil.isNotNull(user)) {
+                // 查询用户是否收藏收藏
+                user = userApi.getInfo().getCheckedData();
+                productDetailResponse.setUserCollect(storeProductRelationService.getLikeOrCollectByUser(user.getUid(), id,false).size() > 0);
+                // 判断是否开启分销
+                String brokerageFuncStatus = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_BROKERAGE_FUNC_STATUS).getCheckedData();
+                if (brokerageFuncStatus.equals(Constants.COMMON_SWITCH_OPEN)) {// 分销开启
+                    // 判断是否开启气泡
+                    String isBubble = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_STORE_BROKERAGE_IS_BUBBLE).getCheckedData();
+                    if (isBubble.equals(Constants.COMMON_SWITCH_OPEN)) {
+                        productDetailResponse.setPriceName(getPacketPriceRange(storeProduct.getIsSub(), storeProductAttrValues, user.getIsPromoter()));
+                    }
+                }
+            } else {
+                productDetailResponse.setUserCollect(false);
+            }
+            // 商品活动
+            List<ProductActivityItemResponse> activityAllH5 = productUtils.getProductAllActivity(storeProduct);
+            productDetailResponse.setActivityAllH5(activityAllH5);
+
+            asyncVisitLog(storeProduct);
+
+            return productDetailResponse;
+
+        } else {
+            // 获取用户
+            User user = userApi.getInfo().getCheckedData();
+            SystemUserLevel userLevel = null;
+            if (ObjectUtil.isNotNull(user) && user.getLevel() > 0) {
+                userLevel = systemUserLevelApi.getByLevelId(user.getLevel()).getCheckedData();
+            }
+
+            ProductDetailResponse productDetailResponse = new ProductDetailResponse();
+            // 查询商品
+            StoreProduct storeProduct = storeProductService.getH5Detail(id);
+            if (ObjectUtil.isNotNull(userLevel)) {
+                storeProduct.setVipPrice(storeProduct.getPrice());
+            }
+            productDetailResponse.setProductInfo(storeProduct);
+
+            // 获取商品规格
+            List<StoreProductAttr> attrList = attrService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
+            // 根据制式设置attr属性
+            productDetailResponse.setProductAttr(attrList);
+
+            // 根据制式设置sku属性
+            HashMap<String, Object> skuMap = new HashMap<>();
+            List<StoreProductAttrValue> storeProductAttrValues = storeProductAttrValueService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
+            for (StoreProductAttrValue storeProductAttrValue : storeProductAttrValues) {
+                StoreProductAttrValueResponse atr = new StoreProductAttrValueResponse();
+                BeanUtils.copyProperties(storeProductAttrValue, atr);
+                // 设置会员价
+                if (ObjectUtil.isNotNull(userLevel)) {
+                    atr.setVipPrice(atr.getPrice());
+                }
+                skuMap.put(atr.getSuk(), atr);
+            }
+            productDetailResponse.setProductValue(skuMap);
+
+            // 用户收藏、分销返佣
+            if (ObjectUtil.isNotNull(user)) {
+                // 查询用户是否收藏收藏
+                user = userApi.getInfo().getCheckedData();
+                productDetailResponse.setUserCollect(storeProductRelationService.getLikeOrCollectByUser(user.getUid(), id,false).size() > 0);
+                // 判断是否开启分销
+                String brokerageFuncStatus = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_BROKERAGE_FUNC_STATUS).getCheckedData();
+                if (brokerageFuncStatus.equals(Constants.COMMON_SWITCH_OPEN)) {// 分销开启
+                    // 判断是否开启气泡
+                    String isBubble = configApi.getValueByKey(SysConfigConstants.CONFIG_KEY_STORE_BROKERAGE_IS_BUBBLE).getCheckedData();
+                    if (isBubble.equals(Constants.COMMON_SWITCH_OPEN)) {
+                        productDetailResponse.setPriceName(getPacketPriceRange(storeProduct.getIsSub(), storeProductAttrValues, user.getIsPromoter()));
+                    }
+                }
+            } else {
+                productDetailResponse.setUserCollect(false);
+            }
+            // 商品活动
+            List<ProductActivityItemResponse> activityAllH5 = productUtils.getProductAllActivity(storeProduct);
+            productDetailResponse.setActivityAllH5(activityAllH5);
+
+            asyncVisitLog(storeProduct);
+
+            return productDetailResponse;
+        }
     }
 
     /**
