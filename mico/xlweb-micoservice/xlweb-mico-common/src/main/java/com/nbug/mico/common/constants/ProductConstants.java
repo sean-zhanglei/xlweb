@@ -29,4 +29,18 @@ public class ProductConstants {
     /** 商品活动类型——拼团商品文字 */
     public static final String PRODUCT_TYPE_PINGTUAN_STR= "拼团";
 
+    /**
+     * 优选商品推荐key
+     */
+    public static final String GOOD_PRODUCT = "GOOD_PRODUCT";
+    /**
+     * 获取热门推荐商品列表 key
+     */
+    public static final String HOT_PRODUCT = "HOT_PRODUCT";
+
+    /**
+     * 获取排行榜商品列表 key
+     */
+    public static final String LEADER_BOARD_PRODUCT = "LEADER_BOARD_PRODUCT";
+
 }

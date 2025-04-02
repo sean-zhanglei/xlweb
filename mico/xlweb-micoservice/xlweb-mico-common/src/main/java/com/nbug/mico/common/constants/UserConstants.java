@@ -24,4 +24,9 @@ public class UserConstants {
     public static final Integer USER_TOKEN_TYPE_ROUTINE = 2;
     /** 用户Token类型——unionid */
     public static final Integer USER_TOKEN_TYPE_UNIONID = 3;
+
+    /**
+     * 商品热搜关键字 key
+     */
+    public static final String USER_HOT_KEYWORDS = "USER_HOT_KEYWORDS";
 }

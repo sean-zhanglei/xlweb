@@ -26,4 +26,17 @@ public class CategoryConstants {
     /** 分类类型-秒杀配置 */
     public static final Integer CATEGORY_TYPE_SECKILL = 7;
 
+    /**
+     * 分类缓存key
+     */
+    public static final String CATEGORY_DATA = "CATEGORY_DATA";
+    /**
+     * 分类列表缓存key
+     */
+    public static final String CATEGORY_PRODUCT_DATA_LIST = "CATEGORY_PRODUCT_DATA_LIST";
+    /**
+     * 分类更多列表缓存key
+     */
+    public static final String CATEGORY_PRODUCT_MORE_DATA_LIST = "CATEGORY_PRODUCT_MORE_DATA_LIST";
+
 }

@@ -3,10 +3,13 @@ package com.nbug.module.user.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.constants.SysConfigConstants;
 import com.nbug.mico.common.constants.SysGroupDataConstants;
+import com.nbug.mico.common.constants.UserConstants;
 import com.nbug.mico.common.exception.XlwebException;
 import com.nbug.mico.common.model.product.StoreProduct;
 import com.nbug.mico.common.model.record.UserVisitRecord;
@@ -18,6 +21,7 @@ import com.nbug.mico.common.response.IndexInfoResponse;
 import com.nbug.mico.common.response.IndexProductResponse;
 import com.nbug.mico.common.response.ProductActivityItemResponse;
 import com.nbug.mico.common.utils.XlwebUtil;
+import com.nbug.mico.common.utils.redis.RedisUtil;
 import com.nbug.mico.common.vo.MyRecord;
 import com.nbug.module.store.api.storeProduct.StoreProductApi;
 import com.nbug.module.system.api.config.ConfigApi;
@@ -32,6 +36,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
 * IndexServiceImpl 接口实现
@@ -54,6 +59,9 @@ public class IndexServiceImpl implements IndexService {
 
     @Autowired
     private UserVisitRecordService userVisitRecordService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      * 首页数据
@@ -99,7 +107,16 @@ public class IndexServiceImpl implements IndexService {
      */
     @Override
     public List<HashMap<String, Object>> hotKeywords() {
-        return systemGroupDataApi.getListMapByGid(SysGroupDataConstants.GROUP_DATA_ID_INDEX_KEYWORDS).getCheckedData();
+        // 按用户UID缓存
+        Long userId = WebFrameworkUtils.getLoginUserId();
+        if (redisUtil.exists(userId + "::" + UserConstants.USER_HOT_KEYWORDS)) {
+            return redisUtil.get(userId + "::" + UserConstants.USER_HOT_KEYWORDS);
+        } else {
+            List<HashMap<String, Object>> list = systemGroupDataApi.getListMapByGid(SysGroupDataConstants.GROUP_DATA_ID_INDEX_KEYWORDS).getCheckedData();
+            // 60 分钟缓存 避免批量失效增加【1-60） 分钟随机值
+            redisUtil.set(userId + "::" + UserConstants.USER_HOT_KEYWORDS, list, 60L + RandomUtil.randomInt(1, 60), TimeUnit.MINUTES);
+            return redisUtil.get(userId + "::" + UserConstants.USER_HOT_KEYWORDS);
+        }
     }
 
     /**
