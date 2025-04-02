@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.nbug.depends.web.web.core.util.WebFrameworkUtils;
 import com.nbug.mico.common.constants.Constants;
 import com.nbug.mico.common.constants.SysConfigConstants;
@@ -69,36 +70,57 @@ public class IndexServiceImpl implements IndexService {
      */
     @Override
     public IndexInfoResponse getIndexInfo() {
-        IndexInfoResponse indexInfoResponse = new IndexInfoResponse();
-        indexInfoResponse.setBanner(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_BANNER).getCheckedData()); //首页banner滚动图
-        indexInfoResponse.setMenus(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_MENU).getCheckedData()); //导航模块
-        indexInfoResponse.setRoll(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_NEWS_BANNER).getCheckedData()); //首页滚动新闻
+        String key = "index::" + UserConstants.USER_INDEX_INFO;
+        if (redisUtil.exists(key)) {
+            // 保存用户访问记录
+            UserVisitRecord visitRecord = new UserVisitRecord();
+            visitRecord.setDate(DateUtil.date().toString("yyyy-MM-dd"));
+            visitRecord.setUid(userService.getUserId());
+            visitRecord.setVisitType(1);
+            userVisitRecordService.save(visitRecord);
+            IndexInfoResponse indexInfoResponse = (IndexInfoResponse) redisUtil.get(key);
+            User user = userService.getInfo();
+            if (ObjectUtil.isNotNull(user) && user.getSubscribe()) {
+                indexInfoResponse.setSubscribe(user.getSubscribe());
+            }
+            // 2 分钟缓存 避免批量失效增加【1,2） 分钟随机值
+            redisUtil.set(key, indexInfoResponse, 2L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
+            return redisUtil.get(key);
+        } else {
+            IndexInfoResponse indexInfoResponse = new IndexInfoResponse();
+            indexInfoResponse.setBanner(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_BANNER).getCheckedData()); //首页banner滚动图
+            indexInfoResponse.setMenus(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_MENU).getCheckedData()); //导航模块
+            indexInfoResponse.setRoll(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_NEWS_BANNER).getCheckedData()); //首页滚动新闻
 
-        indexInfoResponse.setLogoUrl(configApi.getValueByKey(Constants.CONFIG_KEY_SITE_LOGO).getCheckedData());// 企业logo地址
-        indexInfoResponse.setYzfUrl(configApi.getValueByKey(Constants.CONFIG_KEY_YZF_H5_URL).getCheckedData());// 云智服H5 url
-        indexInfoResponse.setConsumerHotline(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_HOTLINE).getCheckedData());// 客服电话
-        indexInfoResponse.setTelephoneServiceSwitch(configApi.getValueByKey(Constants.CONFIG_KEY_TELEPHONE_SERVICE_SWITCH).getCheckedData());// 客服电话服务
-        indexInfoResponse.setCategoryPageConfig(configApi.getValueByKey(Constants.CONFIG_CATEGORY_CONFIG).getCheckedData());// 商品分类页配置
-        indexInfoResponse.setIsShowCategory(configApi.getValueByKey(Constants.CONFIG_IS_SHOW_CATEGORY).getCheckedData());// 是否隐藏一级分类
-        indexInfoResponse.setExplosiveMoney(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_EX_BANNER).getCheckedData());//首页超值爆款
-        indexInfoResponse.setHomePageSaleListStyle(configApi.getValueByKey(Constants.CONFIG_IS_PRODUCT_LIST_STYLE).getCheckedData());// 首页商品列表模板配置
+            indexInfoResponse.setLogoUrl(configApi.getValueByKey(Constants.CONFIG_KEY_SITE_LOGO).getCheckedData());// 企业logo地址
+            indexInfoResponse.setYzfUrl(configApi.getValueByKey(Constants.CONFIG_KEY_YZF_H5_URL).getCheckedData());// 云智服H5 url
+            indexInfoResponse.setConsumerHotline(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_HOTLINE).getCheckedData());// 客服电话
+            indexInfoResponse.setTelephoneServiceSwitch(configApi.getValueByKey(Constants.CONFIG_KEY_TELEPHONE_SERVICE_SWITCH).getCheckedData());// 客服电话服务
+            indexInfoResponse.setCategoryPageConfig(configApi.getValueByKey(Constants.CONFIG_CATEGORY_CONFIG).getCheckedData());// 商品分类页配置
+            indexInfoResponse.setIsShowCategory(configApi.getValueByKey(Constants.CONFIG_IS_SHOW_CATEGORY).getCheckedData());// 是否隐藏一级分类
+            indexInfoResponse.setExplosiveMoney(systemGroupDataApi.getListMapByGid(Constants.GROUP_DATA_ID_INDEX_EX_BANNER).getCheckedData());//首页超值爆款
+            indexInfoResponse.setHomePageSaleListStyle(configApi.getValueByKey(Constants.CONFIG_IS_PRODUCT_LIST_STYLE).getCheckedData());// 首页商品列表模板配置
 
-        indexInfoResponse.setConsumerWelcomeTitle(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME_TITLE).getCheckedData());// 欢迎语标题
-        indexInfoResponse.setConsumerWelcome(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME).getCheckedData());// 欢迎语
+            indexInfoResponse.setConsumerWelcomeTitle(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME_TITLE).getCheckedData());// 欢迎语标题
+            indexInfoResponse.setConsumerWelcome(configApi.getValueByKey(Constants.CONFIG_KEY_CONSUMER_WELCOME).getCheckedData());// 欢迎语
 
-        indexInfoResponse.setSubscribe(false);
-        User user = userService.getInfo();
-        if(ObjectUtil.isNotNull(user) && user.getSubscribe()) {
-            indexInfoResponse.setSubscribe(user.getSubscribe());
+            indexInfoResponse.setSubscribe(false);
+            User user = userService.getInfo();
+            if (ObjectUtil.isNotNull(user) && user.getSubscribe()) {
+                indexInfoResponse.setSubscribe(user.getSubscribe());
+            }
+
+            // 保存用户访问记录
+            UserVisitRecord visitRecord = new UserVisitRecord();
+            visitRecord.setDate(DateUtil.date().toString("yyyy-MM-dd"));
+            visitRecord.setUid(userService.getUserId());
+            visitRecord.setVisitType(1);
+            userVisitRecordService.save(visitRecord);
+
+            // 2 分钟缓存 避免批量失效增加【1,2） 分钟随机值
+            redisUtil.set(key, indexInfoResponse, 2L + RandomUtil.randomInt(1, 2), TimeUnit.MINUTES);
+            return redisUtil.get(key);
         }
-
-        // 保存用户访问记录
-        UserVisitRecord visitRecord = new UserVisitRecord();
-        visitRecord.setDate(DateUtil.date().toString("yyyy-MM-dd"));
-        visitRecord.setUid(userService.getUserId());
-        visitRecord.setVisitType(1);
-        userVisitRecordService.save(visitRecord);
-        return indexInfoResponse;
     }
 
     /**
@@ -144,62 +166,70 @@ public class IndexServiceImpl implements IndexService {
      */
     @Override
     public CommonPage<IndexProductResponse> findIndexProductList(Integer type, PageParamRequest pageParamRequest) {
-        if (type < Constants.INDEX_RECOMMEND_BANNER || type > Constants.INDEX_BENEFIT_BANNER) {
-            return CommonPage.restPage(new ArrayList<>());
-        }
-        List<StoreProduct> storeProductList = storeProductApi.getIndexProduct(type, pageParamRequest).getCheckedData();
-        if(CollUtil.isEmpty(storeProductList)) {
-            return CommonPage.restPage(new ArrayList<>());
-        }
-        CommonPage<StoreProduct> storeProductCommonPage = CommonPage.restPage(storeProductList);
-
-        List<IndexProductResponse> productResponseArrayList = new ArrayList<>();
-        for (StoreProduct storeProduct : storeProductList) {
-            IndexProductResponse productResponse = new IndexProductResponse();
-            List<Integer> activityList = XlwebUtil.stringToArrayInt(storeProduct.getActivity());
-            // 活动类型默认：直接跳过
-            if (activityList.get(0).equals(Constants.PRODUCT_TYPE_NORMAL)) {
-                BeanUtils.copyProperties(storeProduct, productResponse);
-                productResponseArrayList.add(productResponse);
-                continue;
+        String key = "index::" + UserConstants.INDEX_PRODUCT + ":type:" + type + ":"  + SecureUtil.md5(pageParamRequest.toString());
+        if (redisUtil.exists(key)) {
+            return redisUtil.get(key);
+        } else {
+            if (type < Constants.INDEX_RECOMMEND_BANNER || type > Constants.INDEX_BENEFIT_BANNER) {
+                return CommonPage.restPage(new ArrayList<>());
             }
-            // 根据参与活动添加对应商品活动标示
-            HashMap<Integer, ProductActivityItemResponse> activityByProduct =
-                    storeProductApi.getActivityByProduct(storeProduct.getId(), storeProduct.getActivity()).getCheckedData();
-            if (CollUtil.isNotEmpty(activityByProduct)) {
-                for (Integer activity : activityList) {
-                    if (activity.equals(Constants.PRODUCT_TYPE_NORMAL)) {
-                        break;
-                    }
-                    if (activity.equals(Constants.PRODUCT_TYPE_SECKILL)) {
-                        ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_SECKILL);
-                        if (ObjectUtil.isNotNull(itemResponse)) {
-                            productResponse.setActivityH5(itemResponse);
+            List<StoreProduct> storeProductList = storeProductApi.getIndexProduct(type, pageParamRequest).getCheckedData();
+            if (CollUtil.isEmpty(storeProductList)) {
+                return CommonPage.restPage(new ArrayList<>());
+            }
+            CommonPage<StoreProduct> storeProductCommonPage = CommonPage.restPage(storeProductList);
+
+            List<IndexProductResponse> productResponseArrayList = new ArrayList<>();
+            for (StoreProduct storeProduct : storeProductList) {
+                IndexProductResponse productResponse = new IndexProductResponse();
+                List<Integer> activityList = XlwebUtil.stringToArrayInt(storeProduct.getActivity());
+                // 活动类型默认：直接跳过
+                if (activityList.get(0).equals(Constants.PRODUCT_TYPE_NORMAL)) {
+                    BeanUtils.copyProperties(storeProduct, productResponse);
+                    productResponseArrayList.add(productResponse);
+                    continue;
+                }
+                // 根据参与活动添加对应商品活动标示
+                HashMap<Integer, ProductActivityItemResponse> activityByProduct =
+                        storeProductApi.getActivityByProduct(storeProduct.getId(), storeProduct.getActivity()).getCheckedData();
+                if (CollUtil.isNotEmpty(activityByProduct)) {
+                    for (Integer activity : activityList) {
+                        if (activity.equals(Constants.PRODUCT_TYPE_NORMAL)) {
                             break;
                         }
-                    }
-                    if (activity.equals(Constants.PRODUCT_TYPE_BARGAIN)) {
-                        ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_BARGAIN);
-                        if (ObjectUtil.isNotNull(itemResponse)) {
-                            productResponse.setActivityH5(itemResponse);
-                            break;
+                        if (activity.equals(Constants.PRODUCT_TYPE_SECKILL)) {
+                            ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_SECKILL);
+                            if (ObjectUtil.isNotNull(itemResponse)) {
+                                productResponse.setActivityH5(itemResponse);
+                                break;
+                            }
                         }
-                    }
-                    if (activity.equals(Constants.PRODUCT_TYPE_PINGTUAN)) {
-                        ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_PINGTUAN);
-                        if (ObjectUtil.isNotNull(itemResponse)) {
-                            productResponse.setActivityH5(itemResponse);
-                            break;
+                        if (activity.equals(Constants.PRODUCT_TYPE_BARGAIN)) {
+                            ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_BARGAIN);
+                            if (ObjectUtil.isNotNull(itemResponse)) {
+                                productResponse.setActivityH5(itemResponse);
+                                break;
+                            }
+                        }
+                        if (activity.equals(Constants.PRODUCT_TYPE_PINGTUAN)) {
+                            ProductActivityItemResponse itemResponse = activityByProduct.get(Constants.PRODUCT_TYPE_PINGTUAN);
+                            if (ObjectUtil.isNotNull(itemResponse)) {
+                                productResponse.setActivityH5(itemResponse);
+                                break;
+                            }
                         }
                     }
                 }
+                BeanUtils.copyProperties(storeProduct, productResponse);
+                productResponseArrayList.add(productResponse);
             }
-            BeanUtils.copyProperties(storeProduct, productResponse);
-            productResponseArrayList.add(productResponse);
+            CommonPage<IndexProductResponse> productResponseCommonPage = CommonPage.restPage(productResponseArrayList);
+            BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
+
+            // 首页商品数据缓存 2分钟 随机秒数[1,60) 避免缓存雪崩
+            redisUtil.set(key, productResponseCommonPage, 60L * 2 + RandomUtil.randomInt(1, 60), TimeUnit.SECONDS);
+            return redisUtil.get(key);
         }
-        CommonPage<IndexProductResponse> productResponseCommonPage = CommonPage.restPage(productResponseArrayList);
-        BeanUtils.copyProperties(storeProductCommonPage, productResponseCommonPage, "list");
-        return productResponseCommonPage;
     }
 
     /**

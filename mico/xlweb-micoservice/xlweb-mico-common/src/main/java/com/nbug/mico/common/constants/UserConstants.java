@@ -29,4 +29,14 @@ public class UserConstants {
      * 商品热搜关键字 key
      */
     public static final String USER_HOT_KEYWORDS = "USER_HOT_KEYWORDS";
+
+    /**
+     * 首页数据 key
+     */
+    public static final String USER_INDEX_INFO = "USER_INDEX_INFO";
+
+    /**
+     * 首页商品列表 key
+     */
+    public static final String INDEX_PRODUCT = "INDEX_PRODUCT";
 }
