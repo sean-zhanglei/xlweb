@@ -25,6 +25,7 @@
         <module>xlweb-mico-starter-web</module>
         <module>xlweb-mico-starter-tenant</module>
         <module>xlweb-mico-starter-seata</module>
+        <module>xlweb-mico-starter-websockets</module>
     </modules>
 
     <properties>
@@ -111,6 +112,13 @@
                 <groupId>com.nbug</groupId>
                 <artifactId>xlweb-mico-starter-protect</artifactId>
                 <version>${revision}</version>
+            </dependency>
+
+            <!-- tenant -->
+            <dependency>
+                <groupId>com.nbug</groupId>
+                <artifactId>xlweb-mico-starter-tenant</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <!-- Seata 相关 -->

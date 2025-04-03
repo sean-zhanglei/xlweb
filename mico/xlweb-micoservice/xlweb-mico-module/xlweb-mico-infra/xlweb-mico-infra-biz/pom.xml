@@ -115,6 +115,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.nbug</groupId>
+            <artifactId>xlweb-mico-starter-websockets</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId> <!-- 代码生成器，使用它解析表结构 -->
         </dependency>
