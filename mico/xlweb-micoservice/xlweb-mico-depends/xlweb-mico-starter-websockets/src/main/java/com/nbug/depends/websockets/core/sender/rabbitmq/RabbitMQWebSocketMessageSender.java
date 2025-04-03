@@ -4,6 +4,8 @@ import com.nbug.depends.websockets.core.sender.AbstractWebSocketMessageSender;
 import com.nbug.depends.websockets.core.sender.WebSocketMessageSender;
 import com.nbug.depends.websockets.core.session.WebSocketSessionManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
@@ -56,7 +58,31 @@ public class RabbitMQWebSocketMessageSender extends AbstractWebSocketMessageSend
         RabbitMQWebSocketMessage mqMessage = new RabbitMQWebSocketMessage()
                 .setSessionId(sessionId).setUserId(userId).setUserType(userType)
                 .setMessageType(messageType).setMessageContent(messageContent);
-        rabbitTemplate.convertAndSend(topicExchange.getName(), null, mqMessage);
+        // 发送消息，但不自动确认
+        MessagePostProcessor messagePostProcessor = message -> {
+            // 这里可以自定义消息属性，例如设置消息的持久化等
+            message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            return message;
+        };
+        // rabbitTemplate.setMandatory(true); // 开启消息确认，已经通过配置参数实现
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            if (! ack) {
+                log.error("[sendRabbitMQMessage][发送消息({}) 进入交换机失败，原因：{}，消息：{}]",
+                        correlationData != null ? correlationData.getId() : "null", cause, mqMessage);
+                // 失败重试3次 + 持久化DB/Redis + 通过定时任务重新发送
+            } else {
+                log.info("[sendRabbitMQMessage][发送消息({}) 已经成功进入交换机]", mqMessage);
+            }
+        });
+        rabbitTemplate.setReturnsCallback((returnedMessage) -> {
+            String message = String.format("消息体: %s, 回复码: %d, 回复文本: %s, 交换机: %s, 路由键: %s",
+                    returnedMessage.getMessage(), returnedMessage.getReplyCode(),
+                    returnedMessage.getReplyText(), returnedMessage.getExchange(),
+                    returnedMessage.getRoutingKey());
+            log.error("[sendRabbitMQMessage][发送消息进入队列失败] {}", message);
+            // 失败重试3次 + 持久化DB/Redis + 通过定时任务重新发送
+        });
+        rabbitTemplate.convertAndSend(topicExchange.getName(), null, mqMessage, messagePostProcessor);
     }
 
 }

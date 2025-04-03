@@ -99,7 +99,7 @@
 				<orderGoods :evaluate='evaluate' :productType="orderInfo.type" :orderId="order_id" :ids="id" :uniId="uniId" :cartInfo="cartInfo"
 					:jump="true"></orderGoods>
 				<!-- #ifndef MP -->
-				<div class="goodCall borRadius14" @click="kefuClick">
+				<div class="goodCall borRadius14" @click="goGoodCall">
 					<span class="iconfont icon-kefu"></span><span>联系客服</span>
 				</div>
 				<!-- #endif -->
