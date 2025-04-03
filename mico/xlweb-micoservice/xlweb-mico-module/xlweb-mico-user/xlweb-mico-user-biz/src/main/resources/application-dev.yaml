@@ -186,7 +186,7 @@ xlweb:
       - /api/front/** #front 全部接口放开
 
   websocket:
-    enable: true # websocket的开关
+    enable: false # websocket的开关
     path: /user/ws # 路径
     sender-type: local # 消息发送的类型，可选值为 local、redis、rocketmq、kafka、rabbitmq
     #    sender-rocketmq:
