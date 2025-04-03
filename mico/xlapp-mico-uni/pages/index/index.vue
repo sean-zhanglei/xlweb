@@ -681,20 +681,23 @@
 			},
 			// 精品推荐
 			getGroomList(onloadH) {
-				this.loading = true
-				let type = this.goodType;
-				if (!this.goodScroll) return
+				let that = this;
+				that.loading = true
+				let type = that.goodType;
+				if (!that.goodScroll) return
 				if (onloadH) {
-					this.iSshowH = true
+					that.iSshowH = true
 				}
-				getGroomList(type, this.params).then(({
+				getGroomList(type, that.params).then(({
 					data
 				}) => {
 					// this.iSshowH = false
-					// this.loading = false
-					this.goodScroll = data.list.length >= this.params.limit
-					this.params.page++
-					this.tempArr = this.tempArr.concat(data.list)
+					that.loading = false
+					if (data) {
+						that.goodScroll = data.list.length >= that.params.limit
+						that.params.page++
+						that.tempArr = that.tempArr.concat(data.list)
+					}
 				})
 			},
 			/**
@@ -709,9 +712,11 @@
 					that.hotPage,
 					that.hotLimit,
 				).then(res => {
-					that.hotPage++
-					that.hotScroll = res.data.list.length < that.hotLimit
-					that.hostProduct = that.hostProduct.concat(res.data.list)
+					if (res && res.data) {
+						that.hotPage++
+						that.hotScroll = res.data.list.length < that.hotLimit
+						that.hostProduct = that.hostProduct.concat(res.data.list)
+					}
 				});
 			},
 			/**
