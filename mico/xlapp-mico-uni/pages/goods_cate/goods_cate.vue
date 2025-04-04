@@ -96,6 +96,9 @@
 
 <script>
 	import {
+		toLogin
+	} from '@/libs/login.js';
+	import {
 		getCategoryList,
 		getProductDetail,
 		postCartAdd,
@@ -163,7 +166,9 @@
 				    getCartCounts(true, 'sum').then(res => {
 				    	let cartCount = res.data.count;
 				    	that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
-				    });
+				    }).catch(e =>{
+						    toLogin();
+            });
 				});
 			}
 		},

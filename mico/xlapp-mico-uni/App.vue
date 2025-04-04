@@ -1,5 +1,6 @@
 <script>
 	import {
+		toLogin,
 		checkLogin
 	} from "./libs/login";
 	import {
@@ -215,6 +216,8 @@
 					getCartCounts(true, 'sum').then(res => {
 						let cartCount = res.data.count;
 						that.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+					}).catch(e => {
+						toLogin();
 					});
 				});
 			}

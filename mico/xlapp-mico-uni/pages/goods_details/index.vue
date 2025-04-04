@@ -1116,7 +1116,7 @@
 			 * 获取购物车数量
 			 * @param boolean 是否展示购物车动画和重置属性
 			 */
-			getCartCount: function(isAnima) {
+      getCartCount: function(isAnima) {
 				let that = this;
 				const isLogin = that.isLogin;
 				if (isLogin) {
@@ -1129,6 +1129,8 @@
 								that.animated = false;
 							}, 500);
 						}
+					}).catch(e =>{
+						toLogin();
 					});
 				}
 			},

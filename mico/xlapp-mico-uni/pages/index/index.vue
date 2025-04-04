@@ -209,6 +209,9 @@
 	import Cache from '../../utils/cache';
 	let app = getApp();
 	import {
+		toLogin
+	} from '@/libs/login.js';
+	import {
 		getIndexData,
 		setCouponReceive,
 		getShare
@@ -461,6 +464,8 @@
 				getCartCounts(true, 'sum').then(res => {
 					let cartCount = res.data.count;
 					self.$store.commit("SET_TABBAR_BADGE", '' + cartCount);
+				}).catch(e => {
+					toLogin();
 				});
 			}
 		},
