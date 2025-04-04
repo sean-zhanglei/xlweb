@@ -63,6 +63,7 @@ public class RabbitMQWebSocketMessageSender extends AbstractWebSocketMessageSend
         MessagePostProcessor messagePostProcessor = message -> {
             // 这里可以自定义消息属性，例如设置消息的持久化等
             message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            message.getMessageProperties().setExpiration("100000"); // 设置消息过期时间10s，单位毫秒
             return message;
         };
         // rabbitTemplate.setMandatory(true); // 开启消息确认，已经通过配置参数实现

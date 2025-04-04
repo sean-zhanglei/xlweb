@@ -1,5 +1,6 @@
 package com.nbug.depends.websockets.core.sender.rabbitmq;
 
+import com.nbug.mico.common.constants.WebSocketConstants;
 import com.nbug.mico.common.utils.redis.RedisUtil;
 import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +72,7 @@ public class RabbitMQWebSocketMessageConsumer {
             log.error("死信队列消费失败：" + message, e);
             // 记录死信队列消费失败
             // 1.记录失败信息
-            redisUtil.lPush("WEBSOCKET::RABBITMQ_DEAD_MESSAGE", message);
+            redisUtil.lPush(WebSocketConstants.WEBSOCKET_RABBITMQ_DEAD_MESSAGE, message);
             // 2.Nack 丢掉消息
             channel.basicNack(deliveryTag, false,false);
         }
