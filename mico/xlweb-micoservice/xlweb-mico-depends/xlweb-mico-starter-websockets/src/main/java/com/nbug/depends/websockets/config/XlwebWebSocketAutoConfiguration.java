@@ -18,9 +18,14 @@ import com.nbug.depends.websockets.core.sender.rocketmq.RocketMQWebSocketMessage
 import com.nbug.depends.websockets.core.session.WebSocketSessionHandlerDecorator;
 import com.nbug.depends.websockets.core.session.WebSocketSessionManager;
 import com.nbug.depends.websockets.core.session.WebSocketSessionManagerImpl;
+import com.rabbitmq.client.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.api.RabbitListenerErrorHandler;
+import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,6 +39,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * WebSocket 自动配置
@@ -44,6 +50,7 @@ import java.util.List;
 @EnableWebSocket // 开启 websocket
 @ConditionalOnProperty(prefix = "xlweb.websocket", value = "enable", matchIfMissing = true) // 允许使用 xlweb.websocket.enable=false 禁用 websocket
 @EnableConfigurationProperties(WebSocketProperties.class)
+@Slf4j
 public class XlwebWebSocketAutoConfiguration {
 
     @Bean
@@ -81,6 +88,39 @@ public class XlwebWebSocketAutoConfiguration {
     public WebSocketAuthorizeRequestsCustomizer webSocketAuthorizeRequestsCustomizer(WebSocketProperties webSocketProperties) {
         return new WebSocketAuthorizeRequestsCustomizer(webSocketProperties);
     }
+
+    @Bean(name = "rabbitMQWebSocketMessageConsumerErrorHandler")
+    public RabbitListenerErrorHandler rabbitListenerErrorHandler() {
+        return (amqpMessage, message, exception) -> {
+            try {
+                // 空值检查
+                if (message == null || amqpMessage == null) {
+                    log.error("Consumer Received null message or AMQP message in RabbitMQ consumer.");
+                    return null;
+                }
+                // 获取消息内容
+                String messageContent = message.getPayload().toString();
+                // 异常处理
+                if (exception != null) {
+                    log.error("Consumer Error processing RabbitMQ message: {}, 拒绝消息，不重新排队", messageContent, exception);
+                    // 消费失败处理，重新消费或者直接丢弃
+                }
+                Channel channel = message.getHeaders().get(AmqpHeaders.CHANNEL, Channel.class);
+                if (Objects.nonNull(channel))
+                    channel.basicReject(amqpMessage.getMessageProperties().getDeliveryTag(), false); // 拒绝消息，不重新排队
+                return false;
+            } catch (Exception e) {
+                log.error("Consumer Unexpected error occurred while processing RabbitMQ message.", e);
+                return null;
+            }
+        };
+    }
+
+    @Bean(name = "rabbitJackson2JsonMessageConverter")
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
 
     // ==================== Sender 相关 ====================
 
@@ -147,6 +187,16 @@ public class XlwebWebSocketAutoConfiguration {
         public RabbitMQWebSocketMessageConsumer rabbitMQWebSocketMessageConsumer(
                 RabbitMQWebSocketMessageSender rabbitMQWebSocketMessageSender) {
             return new RabbitMQWebSocketMessageConsumer(rabbitMQWebSocketMessageSender);
+        }
+
+        /**
+         * 创建 Dead Topic Exchange
+         */
+        @Bean
+        public TopicExchange websocketDeadTopicExchange(@Value("${xlweb.websocket.sender-rabbitmq.dead-letter-exchange}") String exchange) {
+            return new TopicExchange(exchange,
+                    true,  // durable: 是否持久化
+                    false);  // exclusive: 是否排它
         }
 
         /**

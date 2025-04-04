@@ -8,6 +8,7 @@ import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 
 /**
  * 基于 RabbitMQ 的 {@link WebSocketMessageSender} 实现类
@@ -82,6 +83,7 @@ public class RabbitMQWebSocketMessageSender extends AbstractWebSocketMessageSend
             log.error("[sendRabbitMQMessage][发送消息进入队列失败] {}", message);
             // 失败重试3次 + 持久化DB/Redis + 通过定时任务重新发送
         });
+        rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.convertAndSend(topicExchange.getName(), null, mqMessage, messagePostProcessor);
     }
 
