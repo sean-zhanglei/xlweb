@@ -1,5 +1,8 @@
-# standalone  单体版本
+xlweb 社区团购 CopyRight@nbug.com 2024  
 
+![](https://xl.nbug.top/xlwebimage/product/home.jpg)
+
+# standalone  单体版本
 # 环境
 1. Java Jdk1.8
 2. Redis 5+
