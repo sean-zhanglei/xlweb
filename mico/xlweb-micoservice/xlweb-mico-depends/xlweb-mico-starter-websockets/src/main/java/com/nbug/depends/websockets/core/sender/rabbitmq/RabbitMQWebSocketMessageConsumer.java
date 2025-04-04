@@ -125,7 +125,7 @@ public class RabbitMQWebSocketMessageConsumer {
             channel.basicAck(deliveryTag, false);
         } else {
             channel.basicNack(deliveryTag, false, true);
-            log.error("[onMessage][消费消息失败，进入死信队列，消息：{}]", message);
+            log.error("[onMessage][消费消息失败，重新消费消息：{}]", message);
         }
 
         // 2.抛出异常，触发自动重试acknowledge-mode=auto，重试多次依旧失败进入死信队列
