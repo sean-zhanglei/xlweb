@@ -57,3 +57,7 @@ ADD COLUMN `pickup_time` VARCHAR(100) NULL DEFAULT '' AFTER `delivery_time`;
 1. nacos、xxl-job
 2. gateway
 3. infra-service、system-server、user-service、order-service、store-service
+
+
+
+# mico-ddd 微服务领域建模版本
