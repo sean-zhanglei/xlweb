@@ -1,14 +1,14 @@
-xlweb ÉçÇøÍÅ¹º CopyRight@nbug.com 2024  
+## xlweb ç¤¾åŒºå›¢è´­ CopyRight@nbug.com 2024  
 
 ![](https://xl.nbug.top/xlwebimage/product/home.jpg)
 
-# standalone  µ¥Ìå°æ±¾
-# »·¾³
+# standalone  å•ä½“ç‰ˆæœ¬
+# ç¯å¢ƒ
 1. Java Jdk1.8
 2. Redis 5+
 3. Mysql 5.7+
 
-# JavaÏîÄ¿¿ò¼Ü
+# Javaé¡¹ç›®æ¡†æ¶
 1. SpringBoot 2.2.6.RELEASE
 2. Maven 3.6.1
 3. Swagger 2.9.2
@@ -21,31 +21,31 @@ ADD COLUMN `pickup_time` VARCHAR(100) NULL DEFAULT '' AFTER `delivery_time`;
 
 
 
-# mico Î¢·şÎñ°æ±¾
+# mico å¾®æœåŠ¡ç‰ˆæœ¬
 
 
-# »·¾³
+# ç¯å¢ƒ
 1. Java Jdk1.8
-2. Redis 5+ ²âÊÔ°æ±¾7
-3. Mysql 5.7+  ²âÊÔ°æ±¾8.0.18
-4. Flyway ×îºóÖ§³ÖMysqlµÄ°æ±¾ 8.2.0  ×îĞÂ°æ±¾ÇëÊ¹ÓÃ²å¼şÌæ´ú https://github.com/flyway/flyway/releases/tag/v9.22.1
+2. Redis 5+ æµ‹è¯•ç‰ˆæœ¬7
+3. Mysql 5.7+  æµ‹è¯•ç‰ˆæœ¬8.0.18
+4. Flyway æœ€åæ”¯æŒMysqlçš„ç‰ˆæœ¬ 8.2.0  æœ€æ–°ç‰ˆæœ¬è¯·ä½¿ç”¨æ’ä»¶æ›¿ä»£ https://github.com/flyway/flyway/releases/tag/v9.22.1
 
-# Î¢·şÎñ×é¼ş
-1. SpringCloudGateWay Íø¹Ø 3.1.9
-2. Nacos ×¢²áÅäÖÃÖĞĞÄ 2.2.4-OEM ¿Í»§¶Ë 2021.0.6.2
-3. OpenFeign ·Ö²¼Ê½µ÷ÓÃ 3.1.9
-4. Loadbalancer ¿Í»§¶Ë¸ºÔØ¾ùºâ 3.1.8
-5. okhttp http¿Í»§¶Ë 11.10
-6. Sentinel ÏŞÁ÷
-7. Seata ·Ö²¼Ê½ÊÂÎñ 2.1.0
-8. PinPoint µ÷ÓÃÁ´Â·¼à¿Ø ÔİÊ±Î´ÒıÈë£¬Ê¹ÓÃSkywalking
-9. xxl-job ¶¨Ê±ÈÎÎñ 2.4.0
-10. redission ·Ö²¼Ê½»º´æ/¶ÓÁĞ 3.41.0
-11. MQ ÏûÏ¢¶ÓÁĞ kafka 2.8.11 rabbit 2.4.17  rocketmq 2.3.1
+# å¾®æœåŠ¡ç»„ä»¶
+1. SpringCloudGateWay ç½‘å…³ 3.1.9
+2. Nacos æ³¨å†Œé…ç½®ä¸­å¿ƒ 2.2.4-OEM å®¢æˆ·ç«¯ 2021.0.6.2
+3. OpenFeign åˆ†å¸ƒå¼è°ƒç”¨ 3.1.9
+4. Loadbalancer å®¢æˆ·ç«¯è´Ÿè½½å‡è¡¡ 3.1.8
+5. okhttp httpå®¢æˆ·ç«¯ 11.10
+6. Sentinel é™æµ
+7. Seata åˆ†å¸ƒå¼äº‹åŠ¡ 2.1.0
+8. PinPoint è°ƒç”¨é“¾è·¯ç›‘æ§ æš‚æ—¶æœªå¼•å…¥ï¼Œä½¿ç”¨Skywalking
+9. xxl-job å®šæ—¶ä»»åŠ¡ 2.4.0
+10. redission åˆ†å¸ƒå¼ç¼“å­˜/é˜Ÿåˆ— 3.41.0
+11. MQ æ¶ˆæ¯é˜Ÿåˆ— kafka 2.8.11 rabbit 2.4.17  rocketmq 2.3.1
 12. Skywalking 8.9.0
 
 
-# JavaÏîÄ¿¿ò¼Ü
+# Javaé¡¹ç›®æ¡†æ¶
 1. SpringBoot 2.7.18
 2. SpringCloud 2021.0.9
 3. SpringCloud Alibaba 2021.0.6.2
@@ -56,11 +56,11 @@ ADD COLUMN `pickup_time` VARCHAR(100) NULL DEFAULT '' AFTER `delivery_time`;
 7. guava 33.4.0-jre
 8. Junit 4.12
 
-# Æô¶¯Ë³Ğò
-1. nacos¡¢xxl-job
+# å¯åŠ¨é¡ºåº
+1. nacosã€xxl-job
 2. gateway
-3. infra-service¡¢system-server¡¢user-service¡¢order-service¡¢store-service
+3. infra-serviceã€system-serverã€user-serviceã€order-serviceã€store-service
 
 
 
-# mico-ddd Î¢·şÎñÁìÓò½¨Ä£°æ±¾
+# mico-ddd å¾®æœåŠ¡é¢†åŸŸå»ºæ¨¡ç‰ˆæœ¬
